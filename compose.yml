@@ -37,10 +37,8 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: Movies
 
-    ports:
-      - '5432:5432'
     volumes:
-      - db_data:/var/lib/postgressql/data
+      - db_data:/var/lib/postgresql/data
 
     networks:
       - backend_network

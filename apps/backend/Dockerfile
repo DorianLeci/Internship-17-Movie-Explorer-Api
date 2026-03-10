@@ -9,10 +9,10 @@ RUN npm install
 
 COPY . .
 
-RUN chown -R node:node /app
+# RUN chown -R node:node /app
 
-USER node
+# USER node
 
 EXPOSE 3000
 
-CMD ["npm","run","dev"]
+CMD ["npm","run","start:dev"]

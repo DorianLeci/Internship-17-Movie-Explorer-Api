@@ -8,9 +8,9 @@ RUN npm install
 
 COPY . .
 
-RUN chown -R node:node /app
+# RUN chown -R node:node /app
 
-USER node
+# USER node
 
 EXPOSE 5173
 

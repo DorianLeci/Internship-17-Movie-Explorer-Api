@@ -1,4 +1,6 @@
-import { Genres, SortField, SortOrder } from '@movie-explorer/types';
+import Genres from '@enums/Genres';
+import SortField from '@enums/SortField';
+import SortOrder from '@enums/SortOrder';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 

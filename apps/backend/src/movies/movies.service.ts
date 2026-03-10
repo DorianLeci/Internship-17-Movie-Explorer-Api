@@ -1,6 +1,6 @@
-import { SortOrder } from '@movie-explorer/types';
+import SortOrder from '@enums/SortOrder';
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '@prisma/prisma.service';
 import { FindMoviesDto } from './dto/find-movies.dto';
 
 @Injectable()
@@ -22,7 +22,7 @@ export class MoviesService {
       where,
       orderBy,
       include: {
-        genres: true,
+        favorite: true,
       },
     });
   }

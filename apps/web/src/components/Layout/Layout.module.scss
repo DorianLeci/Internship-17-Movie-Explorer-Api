@@ -1,0 +1,96 @@
+@use '../../styles/variables.scss' as vars;
+
+container {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 35px 20px;
+  background: #4c228f;
+  background: linear-gradient(
+    180deg,
+    rgba(76, 34, 143, 1) 0%,
+    rgba(113, 65, 196, 1) 100%
+  );
+}
+
+.header h1 {
+  position: relative;
+  z-index: 0;
+  color: white;
+  text-shadow: 4px 4px 4px black;
+
+  &::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    left: 110%;
+    width: 120px;
+    aspect-ratio: 1/1;
+    mask-image: url('../../assets/images/film-movie-reel-icon.svg');
+    background-color: vars.$color-peach;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    opacity: 0.5;
+    transform: translate(-50%, -50%);
+  }
+}
+.nav {
+  display: flex;
+  gap: 1rem;
+  font-size: 24px;
+}
+
+.link {
+  position: relative;
+  z-index: 0;
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  text-shadow: 4px 0px 2px black;
+  transition:
+    color 0.3s ease,
+    text-shadow 0.3s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: 0px;
+    bottom: 2px;
+    width: 100%;
+    height: 5px;
+    opacity: 0;
+    background-color: vars.$color-aqua;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s ease;
+  }
+
+  &:hover {
+    text-shadow:
+      0 0 4px white,
+      4px 2px 4px black;
+  }
+
+  &.active {
+    position: relative;
+
+    &::after {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+  }
+}
+
+.main {
+  background: vars.$bg-dark;
+}

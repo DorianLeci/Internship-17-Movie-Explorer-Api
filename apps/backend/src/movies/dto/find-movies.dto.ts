@@ -1,8 +1,8 @@
-import Genres from '@enums/Genres';
 import SortField from '@enums/SortField';
 import SortOrder from '@enums/SortOrder';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { GenreEnum } from '../../../generated/prisma/enums';
 
 export class FindMoviesDto {
   @ApiProperty({ required: false, enum: SortField })
@@ -15,10 +15,10 @@ export class FindMoviesDto {
   @IsString()
   search?: string;
 
-  @ApiProperty({ required: false, enum: Genres })
+  @ApiProperty({ required: false, enum: GenreEnum })
   @IsOptional()
-  @IsEnum(Genres)
-  genre?: Genres;
+  @IsEnum(GenreEnum)
+  genre?: GenreEnum;
 
   @ApiProperty({ required: false, enum: SortOrder })
   @IsOptional()

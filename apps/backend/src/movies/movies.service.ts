@@ -7,7 +7,7 @@ import { FindMoviesDto } from './dto/find-movies.dto';
 export class MoviesService {
   constructor(private prisma: PrismaService) {}
 
-  findMovies(query: FindMoviesDto) {
+  async findMovies(query: FindMoviesDto) {
     const where: any = {};
     if (query.search)
       where.title = { contains: query.search, mode: 'insensitive' };

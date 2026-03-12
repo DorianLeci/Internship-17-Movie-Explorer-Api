@@ -13,6 +13,28 @@ enum CrewRole{
   WRITER
   EDITOR
   COMPOSER
+  CINEMATOGRAPHER
+}
+
+enum GenreEnum{
+  ACTION
+  ADVENTURE
+  ANIMATION
+  COMEDY
+  CRIME
+  DOCUMENTARY
+  DRAMA
+  FAMILY
+  FANTASY
+  HISTORY
+  HORROR
+  MUSIC
+  MYSTERY
+  ROMANCE
+  SCI_FI
+  THRILLER
+  WAR
+  WESTERN
 }
 
 model Movie{
@@ -44,30 +66,30 @@ model Favorite{
 
 model Genre{
   id Int @id @default(autoincrement())
-  name String
+  name GenreEnum @unique
   movies Movie[] @relation("MovieGenres")
 }
 
 model TopCast{
   id Int @id @default(autoincrement())
-  firstName String
-  lastName String
   character String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  actorId Int
   movieId Int
   movie Movie @relation(fields: [movieId], references: [id])
+  actor Actor @relation(fields: [actorId],references: [id])
 }
 
 model TopCrew{
   id Int @id @default(autoincrement())
-  firstName String
-  lastName String
   role CrewRole
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  crewMemberId Int
   movieId Int
   movie Movie @relation(fields: [movieId], references: [id])
+  crewMember CrewMember @relation(fields: [crewMemberId],references: [id])
 }
 
 model Review{
@@ -78,4 +100,22 @@ model Review{
   updatedAt DateTime @updatedAt  
   movieId Int
   movie Movie @relation(fields: [movieId], references: [id])  
+}
+
+model Actor{
+  id Int @id @default(autoincrement())
+  firstName String
+  lastName String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  topCast TopCast[]
+}
+
+model CrewMember{
+  id Int @id @default(autoincrement())
+  firstName String
+  lastName String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt  
+  topCrew TopCrew[]
 }

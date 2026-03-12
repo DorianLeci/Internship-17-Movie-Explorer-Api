@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { useFavorites } from '../../hooks/useFavorites';
-import { Spinner } from '../../components/Spinner/Spinner';
-import { ErrorCard } from '../../components/ErrorCard/ErrorCard';
 import { EmptyStateCard } from '../../components/EmptyStateCard/EmptyStateCard';
+import { ErrorCard } from '../../components/ErrorCard/ErrorCard';
 import { MovieCard } from '../../components/MovieCard/MovieCard';
-import styles from './FavoriteMoviesPage.module.scss';
+import { Spinner } from '../../components/Spinner/Spinner';
+import { useFavorites } from '../../hooks/useFavorites';
 import { useSpinner } from '../../hooks/useSpinner';
+import styles from './FavoriteMoviesPage.module.scss';
 
 export const FavoriteMoviesPage = () => {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
+import { API_KEY, BASE_URL } from '../api';
 import type { Movie } from '../types/Movie';
-import { API_KEY, BASE_URL } from '../api/config';
 
 interface FetchState {
   data: Movie[] | null;

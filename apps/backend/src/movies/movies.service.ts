@@ -15,7 +15,7 @@ export class MoviesService {
     if (query.genre) where.genres = { some: { name: query.genre } };
 
     const orderBy = query.sortBy
-      ? { [query.sortBy]: query.sortOrder || SortOrder.ASC }
+      ? { [query.sortBy]: query.sortOrder || SortOrder.DESC }
       : { popularity: SortOrder.DESC };
 
     return this.prisma.movie.findMany({

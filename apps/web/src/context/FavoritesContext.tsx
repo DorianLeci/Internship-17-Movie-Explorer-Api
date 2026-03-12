@@ -1,7 +1,7 @@
 import { createContext, useCallback, type ReactNode } from 'react';
-import type { FavoritesContextType } from '../types/FavoritesContextType';
-import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useFavoriteMovies } from '../hooks/useFavoriteMovies';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import type { FavoritesContextType } from '../types/FavoritesContextType';
 
 const STORAGE_KEY = 'favorites';
 

@@ -1,36 +1,19 @@
+import { useAllMovies } from '@api/allMovies';
+import { useMovies } from 'hooks/useMovies';
+import { useNavigate } from 'react-router-dom';
 import { ErrorCard } from '../../components/ErrorCard/ErrorCard';
 import { MovieCard } from '../../components/MovieCard/MovieCard';
-import { Spinner } from '../../components/Spinner/Spinner';
-import { useRef } from 'react';
-import { useMovies } from '../../hooks/useMovies';
-import styles from './MoviesPage.module.scss';
-import { useInfiniteScroll } from '../../hooks/useInfiniteScroll';
 import { MovieSearch } from '../../components/MovieSearch/MovieSearch';
-import { EmptyStateCard } from '../../components/EmptyStateCard/EmptyStateCard';
 import { MovieSort } from '../../components/MovieSort/MovieSort';
-import { useNavigate } from 'react-router-dom';
+import { Spinner } from '../../components/Spinner/Spinner';
 import { useSpinner } from '../../hooks/useSpinner';
+import styles from './MoviesPage.module.scss';
 
-export const MoviesPage = () => {
+const MoviesPage = () => {
   const navigate = useNavigate();
-  const { browse, search, filters } = useMovies();
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
-  const activeState = filters.query ? search : browse;
-
-  const moviesToRender = activeState.moviesState.movies;
-  const loading = activeState.loading;
-  const error = activeState.error;
-  const refetch = activeState.refetch;
-  const loadMore = activeState.loadMore;
-
-  const showSpinner = useSpinner({ loading });
-
-  useInfiniteScroll({
-    containerRef,
-    callback: () => loadMore(),
-    canLoadMore: !loading,
-  });
+  const { filter } = useMovies();
+  const { data: movies, isLoading, isError, refetch } = useAllMovies(filter);
+  const showSpinner = useSpinner({ loading: isLoading });
 
   return (
     <div className={styles.wrapper}>
@@ -39,22 +22,12 @@ export const MoviesPage = () => {
         <MovieSort />
       </div>
 
-      <div className={styles.container} ref={containerRef}>
+      <div className={styles.container}>
         {showSpinner && <Spinner text="Loading movies..." />}
-        {!showSpinner && error && (
-          <ErrorCard message={error} onRetry={refetch} />
+        {!showSpinner && isError && (
+          <ErrorCard message={'Error'} onRetry={refetch} />
         )}
-        {filters.debouncedQuery !== '' &&
-          !showSpinner &&
-          !error &&
-          moviesToRender.length === 0 && (
-            <EmptyStateCard
-              title="No films found for"
-              subtitle="Try adjusting your keywords"
-              query={filters.debouncedQuery}
-            />
-          )}
-        {moviesToRender.map((movie) => (
+        {movies?.map((movie) => (
           <MovieCard
             key={movie.id}
             movie={movie}
@@ -65,3 +38,5 @@ export const MoviesPage = () => {
     </div>
   );
 };
+
+export default MoviesPage;

@@ -1,44 +1,73 @@
+import type { MovieFilter } from '@tstypes/MovieFilter';
+import type { Genres } from 'enums /Genres';
+import type SortField from 'enums /SortField';
+import type SortOrder from 'enums /SortOrder';
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+  type ReactNode,
+} from 'react';
+import { useSearchParams } from 'react-router-dom';
 import type { MovieContextType } from '../types/MovieContextType';
-import { createContext, useState, type ReactNode } from 'react';
-import { useDebounce } from '../hooks/useDebounce';
-import { MovieSortBy } from '../enums/MovieSortBy';
-import { MovieSortDirection } from '../enums/MovieSortDirection';
-import { useBrowseMovies } from '../hooks/useBrowseMovies';
-import { useSearchMovies } from '../hooks/useSearchMovies';
+
+export const INITIAL_FILTER: MovieFilter = {
+  search: '',
+  genre: undefined,
+  sortBy: undefined,
+  sortOrder: undefined,
+};
 
 export const MovieContext = createContext<MovieContextType | undefined>(
   undefined,
 );
 
 export const MovieProvider = ({ children }: { children: ReactNode }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const debouncedQuery = useDebounce(searchQuery, 500);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [sortBy, setSortBy] = useState<MovieSortBy>(MovieSortBy.POPULARITY);
-  const [sortDirection, setSortDirection] = useState<MovieSortDirection>(
-    MovieSortDirection.DESC,
+  const [filterState, setFilterState] = useState<MovieFilter>(INITIAL_FILTER);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+
+    if (filterState.search) params.set('search', filterState.search);
+    else params.delete('search');
+
+    if (filterState.genre) params.set('genre', filterState.genre);
+    else params.delete('genre');
+
+    if (filterState.sortBy) params.set('sortBy', filterState.sortBy);
+    else params.delete('sortBy');
+
+    if (filterState.sortOrder) params.set('sortOrder', filterState.sortOrder);
+    else params.delete('sortOrder');
+
+    setSearchParams(params, { replace: true });
+  }, [filterState, setSearchParams]);
+
+  const handleSearch = useCallback((newSearch: string) => {
+    setFilterState((prev) => ({ ...prev, search: newSearch }));
+  }, []);
+
+  const handleGenreChange = useCallback((genre: Genres | undefined) => {
+    setFilterState((prev) => ({ ...prev, genre }));
+  }, []);
+
+  const handleSortChange = useCallback(
+    (sortBy: SortField | undefined, sortOrder: SortOrder | undefined) => {
+      setFilterState((prev) => ({ ...prev, sortBy, sortOrder }));
+    },
+    [],
   );
-
-  const browse = useBrowseMovies({ sortBy, sortDirection });
-  const search = useSearchMovies({
-    query: debouncedQuery,
-    browseState: browse.moviesState,
-  });
 
   return (
     <MovieContext.Provider
       value={{
-        browse,
-        search,
-        filters: {
-          query: searchQuery,
-          debouncedQuery,
-          setQuery: setSearchQuery,
-          sortBy,
-          setSortBy,
-          sortDirection,
-          setSortDirection,
-        },
+        filter: filterState,
+        setSearch: handleSearch,
+        setGenre: handleGenreChange,
+        setSort: handleSortChange,
       }}
     >
       {children}

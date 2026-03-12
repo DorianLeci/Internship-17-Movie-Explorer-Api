@@ -1,34 +1,14 @@
-import type { Dispatch, SetStateAction } from 'react';
-import type { MovieSortBy } from '../enums/MovieSortBy';
-import type { MovieSortDirection } from '../enums/MovieSortDirection';
-import type { Movie } from './Movie';
-
-export interface MoviesState {
-  movies: Movie[];
-  page: number;
-  totalPageNum: number;
-}
-
-interface FetchState {
-  moviesState: MoviesState;
-  loading: boolean;
-  error: string | null;
-  refetch: () => void;
-  loadMore: () => void;
-}
-
-interface FiltersState {
-  query: string;
-  debouncedQuery: string;
-  setQuery: (query: string) => void;
-  sortBy: MovieSortBy;
-  setSortBy: Dispatch<SetStateAction<MovieSortBy>>;
-  sortDirection: MovieSortDirection;
-  setSortDirection: Dispatch<SetStateAction<MovieSortDirection>>;
-}
+import type { Genres } from 'enums /Genres';
+import type SortField from 'enums /SortField';
+import type SortOrder from 'enums /SortOrder';
+import type { MovieFilter } from './MovieFilter';
 
 export interface MovieContextType {
-  browse: FetchState;
-  search: FetchState;
-  filters: FiltersState;
+  filter: MovieFilter;
+  setSearch: (search: string) => void;
+  setGenre: (genre: Genres | undefined) => void;
+  setSort: (
+    sortBy: SortField | undefined,
+    sortOrder: SortOrder | undefined,
+  ) => void;
 }

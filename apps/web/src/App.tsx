@@ -1,13 +1,13 @@
-import { Routes, Route } from 'react-router-dom';
+import MoviesPage from '@pages/Movies/MoviesPage';
+import { Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout/Layout';
-import { HomePage } from './pages/Home/HomePage';
-import { AppPaths } from './routes/paths';
-import { MoviesPage } from './pages/Movies/MoviesPage';
-import { MovieProvider } from './context/MoviesContext';
 import { FavoritesProvider } from './context/FavoritesContext';
+import { MovieProvider } from './context/MoviesContext';
+import { FavoriteMoviesPage } from './pages/FavoriteMovies/FavoriteMoviesPage';
+import { HomePage } from './pages/Home/HomePage';
 import { MovieDetailsPage } from './pages/MovieDetails/MovieDetailsPage';
 import { NotFoundPage } from './pages/NotFound/NotFoundPage';
-import { FavoriteMoviesPage } from './pages/FavoriteMovies/FavoriteMoviesPage';
+import { AppPaths } from './routes/paths';
 
 function App() {
   return (

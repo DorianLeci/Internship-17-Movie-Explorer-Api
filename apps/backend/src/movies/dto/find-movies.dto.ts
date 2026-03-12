@@ -23,5 +23,5 @@ export class FindMoviesDto {
   @ApiProperty({ required: false, enum: SortOrder })
   @IsOptional()
   @IsEnum(SortOrder)
-  sortOrder: SortOrder;
+  sortOrder?: SortOrder;
 }

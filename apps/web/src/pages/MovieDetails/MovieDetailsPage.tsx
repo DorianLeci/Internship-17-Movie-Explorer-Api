@@ -1,18 +1,18 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import { API_KEY, BASE_URL } from '../../api/config';
-import { useFetch } from '../../hooks/useFetch';
-import type { MovieDetails } from '../../types/MovieDetails';
-import styles from './MoveDetailsPage.module.scss';
+import { useEffect } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
-import { useFavorites } from '../../hooks/useFavorites';
-import { Spinner } from '../../components/Spinner/Spinner';
+import { useNavigate, useParams } from 'react-router-dom';
+import { API_KEY, BASE_URL } from '../../api';
 import { MovieCast } from '../../components/MovieCast/MovieCast';
 import { MovieCrew } from '../../components/MovieCrew/MovieCrew';
 import { MovieReviews } from '../../components/MovieReview/MovieReview';
 import { MovieTrailer } from '../../components/MovieTrailer/MovieTrailer';
-import { useEffect } from 'react';
-import { AppPaths } from '../../routes/paths';
+import { Spinner } from '../../components/Spinner/Spinner';
+import { useFavorites } from '../../hooks/useFavorites';
+import { useFetch } from '../../hooks/useFetch';
 import { useSpinner } from '../../hooks/useSpinner';
+import { AppPaths } from '../../routes/paths';
+import type { MovieDetails } from '../../types/MovieDetails';
+import styles from './MoveDetailsPage.module.scss';
 
 export const MovieDetailsPage = () => {
   const { id } = useParams<{ id: string }>();

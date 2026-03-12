@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
+import { API_KEY, BASE_URL } from '../api';
+import { filterSearchResults } from '../helpers/FilterSearch';
 import type { MoviesState } from '../types/MovieContextType';
 import type { MoviesResponse } from '../types/MovieResponse';
-import { filterSearchResults } from '../helpers/FilterSearch';
 import { useFetchAllPages } from './useFetchAllPages';
-import { API_KEY, BASE_URL } from '../api/config';
 
 const initialState: MoviesState = {
   movies: [],

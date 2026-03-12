@@ -1,19 +1,16 @@
-import { useState } from 'react';
-import { MovieSortBy } from '../../enums/MovieSortBy';
-import { MovieSortDirection } from '../../enums/MovieSortDirection';
-import { useMovies } from '../../hooks/useMovies';
-import styles from './MovieSort.module.scss';
-import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
+import SortField from 'enums /SortField';
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { SortOptionsMap } from '../../helpers/SortOptionsMap';
+import { useMovies } from '../../hooks/useMovies';
 import { useToggle } from '../../hooks/useToggle';
+import styles from './MovieSort.module.scss';
 
 export const MovieSort = () => {
-  const { filters } = useMovies();
-  const { sortBy, setSortBy, sortDirection, setSortDirection } = filters;
+  const { filter, setSort } = useMovies();
   const { open, setOpen, toggle } = useToggle();
 
-  const handleSelect = (value: MovieSortBy) => {
-    setSortBy(value);
+  const handleSelect = (value: SortField) => {
+    setSort(value);
     setOpen(false);
   };
 
@@ -21,15 +18,15 @@ export const MovieSort = () => {
     <div className={styles.sortWrapper}>
       <div className={styles.selectOption}>
         <div
-          className={`${styles.inputLike} ${filters.query ? styles.disabled : ''}`}
+          className={`${styles.inputLike} ${filter.search ? styles.disabled : ''}`}
           onClick={() => toggle()}
         >
-          {SortOptionsMap[sortBy]}
+          {SortOptionsMap[filter.sortBy || SortField.POPULARITY]}
         </div>
 
         <div className={`${styles.options} ${open ? styles.active : ''}`}>
           {Object.entries(SortOptionsMap).map(([value, label]) => (
-            <li onClick={() => handleSelect(value as MovieSortBy)} key={value}>
+            <li onClick={() => handleSelect(value as SortField)} key={value}>
               {label}
             </li>
           ))}

@@ -1,38 +1,41 @@
-import { useNavigate } from 'react-router-dom';
-import { EmptyStateCard } from '../../components/EmptyStateCard/EmptyStateCard';
-import { ErrorCard } from '../../components/ErrorCard/ErrorCard';
-import { MovieCard } from '../../components/MovieCard/MovieCard';
-import { Spinner } from '../../components/Spinner/Spinner';
-import { useFavorites } from '../../hooks/useFavorites';
-import { useSpinner } from '../../hooks/useSpinner';
+import { useAllMovies } from '@api/allMovies';
+import EmptyStateCard from '@components/EmptyStateCard';
+import ErrorCard from '@components/ErrorCard';
+import { useMovies } from '@hooks/useMovies';
+import useReveal from '@hooks/useReveal';
+import MovieCard from '@pages/Movies/components/MovieCard';
+import MoviesPageSkeleton from '@pages/Movies/components/Skeleton';
 import styles from './FavoriteMoviesPage.module.scss';
 
 export const FavoriteMoviesPage = () => {
-  const navigate = useNavigate();
-  const { favoriteMovies, loading, error, refetch } = useFavorites();
-  const showSpinner = useSpinner({ loading });
+  const { filter } = useMovies();
+  const {
+    data: favoriteMovies,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useAllMovies(filter);
+  const visible = useReveal({ isLoading });
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
-        {showSpinner && <Spinner text="Loading favorite movies..." />}
-        {!showSpinner && error && (
-          <ErrorCard message={error} onRetry={refetch} />
+        {visible && <MoviesPageSkeleton />}
+
+        {!visible && isError && (
+          <ErrorCard message={error.message} onRetry={refetch} />
         )}
-        {!showSpinner &&
-          !error &&
-          (!favoriteMovies || favoriteMovies.length === 0) && (
-            <EmptyStateCard
-              title="You have no favorite movies yet"
-              subtitle="Add some movies to your favorites to see them here"
-            />
-          )}
-        {favoriteMovies?.map((movie) => (
-          <MovieCard
-            key={movie.id}
-            movie={movie}
-            onClick={() => navigate(`/movies/${movie.id}`)}
+
+        {!visible && !isError && favoriteMovies?.length === 0 && (
+          <EmptyStateCard
+            title="No favorite movies found"
+            subtitle="Add favorite movies"
           />
+        )}
+
+        {favoriteMovies?.map((movie) => (
+          <MovieCard key={movie.id} movie={movie} />
         ))}
       </div>
     </div>

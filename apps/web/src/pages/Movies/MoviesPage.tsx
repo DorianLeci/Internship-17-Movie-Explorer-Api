@@ -39,7 +39,8 @@ const MoviesPage = () => {
 
         {!visible && !isError && movies?.length === 0 && (
           <EmptyStateCard
-            title={EmptyStateTitle(filter)}
+            title="No films found"
+            searchParams={EmptyStateTitle(filter)}
             subtitle={'Try something else'}
           />
         )}

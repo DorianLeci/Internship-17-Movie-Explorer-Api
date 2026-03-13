@@ -1,16 +1,14 @@
 import { useAllMovies } from '@api/allMovies';
-import { useMovies } from 'hooks/useMovies';
-import { useNavigate } from 'react-router-dom';
-import { ErrorCard } from '../../components/ErrorCard/ErrorCard';
-import { MovieCard } from '../../components/MovieCard/MovieCard';
-import { Spinner } from '../../components/Spinner/Spinner';
-import { useSpinner } from '../../hooks/useSpinner';
-import { MovieSearch } from './components/MovieSearch/MovieSearch';
-import { MovieSort } from './components/MovieSort/MovieSort';
+import { ErrorCard } from '@components/ErrorCard/ErrorCard';
+import { Spinner } from '@components/Spinner/Spinner';
+import { useMovies } from '@hooks/useMovies';
+import { useSpinner } from '@hooks/useSpinner';
+import MovieCard from './components/MovieCard/MovieCard';
+import MovieSearch from './components/MovieSearch';
+import MovieSort from './components/MovieSort';
 import styles from './MoviesPage.module.scss';
 
 const MoviesPage = () => {
-  const navigate = useNavigate();
   const { filter } = useMovies();
   const { data: movies, isLoading, isError, refetch } = useAllMovies(filter);
   const showSpinner = useSpinner({ loading: isLoading });
@@ -28,11 +26,7 @@ const MoviesPage = () => {
           <ErrorCard message={'Error'} onRetry={refetch} />
         )}
         {movies?.map((movie) => (
-          <MovieCard
-            key={movie.id}
-            movie={movie}
-            onClick={() => navigate(`/movies/${movie.id}`)}
-          />
+          <MovieCard key={movie.id} movie={movie} />
         ))}
       </div>
     </div>

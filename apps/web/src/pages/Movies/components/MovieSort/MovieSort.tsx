@@ -6,7 +6,7 @@ import { useMovies } from '../../../../hooks/useMovies';
 import { useToggle } from '../../../../hooks/useToggle';
 import styles from './MovieSort.module.scss';
 
-export const MovieSort = () => {
+const MovieSort = () => {
   const { filter, setSortField, setSortOrder } = useMovies();
   const { open, setOpen, toggle } = useToggle();
 
@@ -49,3 +49,5 @@ export const MovieSort = () => {
     </div>
   );
 };
+
+export default MovieSort;

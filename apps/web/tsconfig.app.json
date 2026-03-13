@@ -14,7 +14,11 @@
       "@api/*": ["api/*"],
       "@pages/*": ["pages/*"],
       "@hooks/*": ["hooks/*"],
-      "@components/*": ["components/*"]
+      "@components/*": ["components/*"],
+      "@assets/*": ["assets/*"],
+      "@helpers/*": ["helpers/*"],
+      "@context/*": ["context/*"],
+      "@routes/*": ["routes/*"]
     },
 
     /* Bundler mode */

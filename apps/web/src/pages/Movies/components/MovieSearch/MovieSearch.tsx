@@ -3,7 +3,7 @@ import { debounce } from 'lodash';
 import { useMemo, useState } from 'react';
 import style from './MovieSearch.module.scss';
 
-export const MovieSearch = () => {
+const MovieSearch = () => {
   const { filter, setSearch } = useMovies();
   const { search: query } = filter;
   const [internalValue, setInternalValue] = useState(query);
@@ -29,3 +29,5 @@ export const MovieSearch = () => {
     ></input>
   );
 };
+
+export default MovieSearch;

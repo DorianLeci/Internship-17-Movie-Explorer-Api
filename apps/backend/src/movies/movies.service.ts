@@ -2,12 +2,13 @@ import SortOrder from '@enums/SortOrder';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
 import { FindMoviesDto } from './dto/find-movies.dto';
+import { MovieEntity } from './entities/movie_entity';
 
 @Injectable()
 export class MoviesService {
   constructor(private prisma: PrismaService) {}
 
-  async findMovies(query: FindMoviesDto) {
+  async findMovies(query: FindMoviesDto): Promise<MovieEntity[]> {
     const where: any = {};
     if (query.search)
       where.title = { contains: query.search, mode: 'insensitive' };

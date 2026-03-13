@@ -1,4 +1,5 @@
 import SortField from 'enums /SortField';
+import SortOrder from 'enums /SortOrder';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { SortOptionsMap } from '../../helpers/SortOptionsMap';
 import { useMovies } from '../../hooks/useMovies';
@@ -6,11 +7,16 @@ import { useToggle } from '../../hooks/useToggle';
 import styles from './MovieSort.module.scss';
 
 export const MovieSort = () => {
-  const { filter, setSort } = useMovies();
+  const { filter, setSortField, setSortOrder } = useMovies();
   const { open, setOpen, toggle } = useToggle();
 
   const handleSelect = (value: SortField) => {
-    setSort(value);
+    setSortField(value);
+    setOpen(false);
+  };
+
+  const handleSortOrder = (value: SortOrder) => {
+    setSortOrder(value === SortOrder.ASC ? SortOrder.DESC : SortOrder.ASC);
     setOpen(false);
   };
 
@@ -35,14 +41,10 @@ export const MovieSort = () => {
 
       <button
         className={styles.directionButton}
-        onClick={() =>
-          sortDirection === MovieSortDirection.ASC
-            ? setSortDirection(MovieSortDirection.DESC)
-            : setSortDirection(MovieSortDirection.ASC)
-        }
-        disabled={!!filters.query}
+        onClick={() => handleSortOrder(filter.sortOrder)}
+        disabled={!!filter.search}
       >
-        {sortDirection === MovieSortDirection.ASC ? (
+        {filter.sortOrder === SortOrder.ASC ? (
           <FaArrowUp></FaArrowUp>
         ) : (
           <FaArrowDown></FaArrowDown>

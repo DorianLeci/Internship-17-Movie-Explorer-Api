@@ -1,7 +1,7 @@
 import type { MovieFilter } from '@tstypes/MovieFilter';
 import type { Genres } from 'enums /Genres';
-import type SortField from 'enums /SortField';
-import type SortOrder from 'enums /SortOrder';
+import SortField from 'enums /SortField';
+import SortOrder from 'enums /SortOrder';
 import {
   createContext,
   useCallback,
@@ -15,8 +15,8 @@ import type { MovieContextType } from '../types/MovieContextType';
 export const INITIAL_FILTER: MovieFilter = {
   search: '',
   genre: undefined,
-  sortBy: undefined,
-  sortOrder: undefined,
+  sortBy: SortField.POPULARITY,
+  sortOrder: SortOrder.DESC,
 };
 
 export const MovieContext = createContext<MovieContextType | undefined>(
@@ -37,11 +37,9 @@ export const MovieProvider = ({ children }: { children: ReactNode }) => {
     if (filterState.genre) params.set('genre', filterState.genre);
     else params.delete('genre');
 
-    if (filterState.sortBy) params.set('sortBy', filterState.sortBy);
-    else params.delete('sortBy');
+    params.set('sortBy', filterState.sortBy);
 
-    if (filterState.sortOrder) params.set('sortOrder', filterState.sortOrder);
-    else params.delete('sortOrder');
+    params.set('sortOrder', filterState.sortOrder);
 
     setSearchParams(params, { replace: true });
   }, [filterState, setSearchParams]);
@@ -54,12 +52,13 @@ export const MovieProvider = ({ children }: { children: ReactNode }) => {
     setFilterState((prev) => ({ ...prev, genre }));
   }, []);
 
-  const handleSortChange = useCallback(
-    (sortBy: SortField | undefined, sortOrder: SortOrder | undefined) => {
-      setFilterState((prev) => ({ ...prev, sortBy, sortOrder }));
-    },
-    [],
-  );
+  const handleSortChange = useCallback((sortBy: SortField) => {
+    setFilterState((prev) => ({ ...prev, sortBy }));
+  }, []);
+
+  const handleOrderChange = useCallback((sortOrder: SortOrder) => {
+    setFilterState((prev) => ({ ...prev, sortOrder }));
+  }, []);
 
   return (
     <MovieContext.Provider
@@ -67,7 +66,8 @@ export const MovieProvider = ({ children }: { children: ReactNode }) => {
         filter: filterState,
         setSearch: handleSearch,
         setGenre: handleGenreChange,
-        setSort: handleSortChange,
+        setSortField: handleSortChange,
+        setSortOrder: handleOrderChange,
       }}
     >
       {children}

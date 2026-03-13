@@ -2,11 +2,11 @@ import { useMovies } from '../../hooks/useMovies';
 import style from './MovieSearch.module.scss';
 
 export const MovieSearch = () => {
-  const { filters } = useMovies();
-  const { query, setQuery } = filters;
+  const { filter, setSearch } = useMovies();
+  const { search: query } = filter;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
+    setSearch(e.target.value);
   };
 
   return (

@@ -7,8 +7,6 @@ export interface MovieContextType {
   filter: MovieFilter;
   setSearch: (search: string) => void;
   setGenre: (genre: Genres | undefined) => void;
-  setSort: (
-    sortBy: SortField | undefined,
-    sortOrder: SortOrder | undefined,
-  ) => void;
+  setSortField: (sortBy: SortField) => void;
+  setSortOrder: (sortBy: SortOrder) => void;
 }

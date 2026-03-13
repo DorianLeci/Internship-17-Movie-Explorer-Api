@@ -3,8 +3,8 @@ import type SortField from 'enums /SortField';
 import type SortOrder from 'enums /SortOrder';
 
 export interface MovieFilter {
-  sortBy: SortField | undefined;
-  sortOrder: SortOrder | undefined;
+  sortBy: SortField;
+  sortOrder: SortOrder;
   genre?: Genres | undefined;
   search?: string;
 }

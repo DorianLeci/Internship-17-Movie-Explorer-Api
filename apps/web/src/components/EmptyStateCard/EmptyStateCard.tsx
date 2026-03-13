@@ -1,25 +1,22 @@
-import styles from './EmptyStateCard.module.scss';
 import { TbMovieOff } from 'react-icons/tb';
+import styles from './EmptyStateCard.module.scss';
 
 interface EmptyStateCardProps {
-  query?: string;
   title: string;
   subtitle: string;
 }
 
-export const EmptyStateCard = ({
-  query,
-  title,
-  subtitle,
-}: EmptyStateCardProps) => {
+const EmptyStateCard = ({ title, subtitle }: EmptyStateCardProps) => {
   return (
     <div className={styles.wrapper}>
       <TbMovieOff className={styles.icon} color="aqua" />
       <h2 className={styles.title}>
-        {title}
-        {query && <span>"{query}"</span>}
+        No films found
+        <span>{title}</span>
       </h2>
       <p className={styles.subtitle}>{subtitle}</p>
     </div>
   );
 };
+
+export default EmptyStateCard;

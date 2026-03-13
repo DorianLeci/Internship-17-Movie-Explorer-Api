@@ -1,11 +1,10 @@
 .card {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   gap: 20px;
-  max-width: 400px;
+  width: 400px;
   height: 820px;
   padding: 10px 0px 20px;
   background: var(--card-bg);
@@ -20,6 +19,16 @@
     transform: scale(1.05);
     box-shadow: var(--card-hover-shadow);
   }
+}
+
+.skeletonCard {
+  display: flex;
+  width: 400px;
+  height: 820px;
+  padding: 10px 0px 20px;
+  background: var(--skeleton-bg);
+  border-radius: 12px;
+  text-decoration: none;
 }
 
 .starIcon {

@@ -1,18 +1,26 @@
 import { useAllMovies } from '@api/allMovies';
-import { ErrorCard } from '@components/ErrorCard/ErrorCard';
-import { Spinner } from '@components/Spinner/Spinner';
+import EmptyStateCard from '@components/EmptyStateCard';
+import ErrorCard from '@components/ErrorCard';
 import { useMovies } from '@hooks/useMovies';
-import { useSpinner } from '@hooks/useSpinner';
-import MovieCard from './components/MovieCard/MovieCard';
+import useReveal from '@hooks/useReveal';
+import MovieCard from './components/MovieCard';
 import MovieFilter from './components/MovieFilter';
 import MovieSearch from './components/MovieSearch';
 import MovieSort from './components/MovieSort';
+import MoviesPageSkeleton from './components/Skeleton';
+import EmptyStateTitle from './helpers/EmptyStateTitle';
 import styles from './MoviesPage.module.scss';
 
 const MoviesPage = () => {
   const { filter } = useMovies();
-  const { data: movies, isLoading, isError, refetch } = useAllMovies(filter);
-  const showSpinner = useSpinner({ loading: isLoading });
+  const {
+    data: movies,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useAllMovies(filter);
+  const visible = useReveal({ isLoading });
 
   return (
     <div className={styles.wrapper}>
@@ -23,10 +31,19 @@ const MoviesPage = () => {
       </div>
 
       <div className={styles.container}>
-        {showSpinner && <Spinner text="Loading movies..." />}
-        {!showSpinner && isError && (
-          <ErrorCard message={'Error'} onRetry={refetch} />
+        {visible && <MoviesPageSkeleton />}
+
+        {!visible && isError && (
+          <ErrorCard message={error.message} onRetry={refetch} />
         )}
+
+        {!visible && !isError && movies?.length === 0 && (
+          <EmptyStateCard
+            title={EmptyStateTitle(filter)}
+            subtitle={'Try something else'}
+          />
+        )}
+
         {movies?.map((movie) => (
           <MovieCard key={movie.id} movie={movie} />
         ))}

@@ -7,34 +7,34 @@ datasource db {
   provider = "postgresql"
 }
 
-enum CrewRole{
-  DIRECTOR
-  PRODUCER
-  WRITER
-  EDITOR
-  COMPOSER
-  CINEMATOGRAPHER
+enum CrewRole {
+  DIRECTOR        @map("Director")
+  PRODUCER        @map("Producer")
+  WRITER          @map("Writer")
+  EDITOR          @map("Editor")
+  COMPOSER        @map("Composer")
+  CINEMATOGRAPHER @map("Cinematographer")
 }
 
-enum GenreEnum{
-  ACTION
-  ADVENTURE
-  ANIMATION
-  COMEDY
-  CRIME
-  DOCUMENTARY
-  DRAMA
-  FAMILY
-  FANTASY
-  HISTORY
-  HORROR
-  MUSIC
-  MYSTERY
-  ROMANCE
-  SCI_FI
-  THRILLER
-  WAR
-  WESTERN
+enum GenreEnum {
+  ACTION    @map("Action")
+  ADVENTURE @map("Adventure")
+  ANIMATION @map("Animation")
+  COMEDY    @map("Comedy")
+  CRIME     @map("Crime")
+  DOCUMENTARY @map("Documentary")
+  DRAMA     @map("Drama")
+  FAMILY    @map("Family")
+  FANTASY   @map("Fantasy")
+  HISTORY   @map("History")
+  HORROR    @map("Horror")
+  MUSIC     @map("Music")
+  MYSTERY   @map("Mystery")
+  ROMANCE   @map("Romance")
+  SCI_FI    @map("Sci-Fi")
+  THRILLER  @map("Thriller")
+  WAR       @map("War")
+  WESTERN   @map("Western")
 }
 
 model Movie{

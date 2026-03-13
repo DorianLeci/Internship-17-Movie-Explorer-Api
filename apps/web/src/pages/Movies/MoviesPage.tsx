@@ -4,6 +4,7 @@ import { Spinner } from '@components/Spinner/Spinner';
 import { useMovies } from '@hooks/useMovies';
 import { useSpinner } from '@hooks/useSpinner';
 import MovieCard from './components/MovieCard/MovieCard';
+import MovieFilter from './components/MovieFilter';
 import MovieSearch from './components/MovieSearch';
 import MovieSort from './components/MovieSort';
 import styles from './MoviesPage.module.scss';
@@ -18,6 +19,7 @@ const MoviesPage = () => {
       <div className={styles.filterWrapper}>
         <MovieSearch />
         <MovieSort />
+        <MovieFilter />
       </div>
 
       <div className={styles.container}>

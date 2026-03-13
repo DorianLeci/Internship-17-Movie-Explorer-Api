@@ -1,5 +1,3 @@
-@use '../../styles/variables.scss' as vars;
-
 container {
   display: flex;
   flex-direction: column;
@@ -33,7 +31,7 @@ container {
     width: 120px;
     aspect-ratio: 1/1;
     mask-image: url('../../assets/images/film-movie-reel-icon.svg');
-    background-color: vars.$color-peach;
+    background-color: var(--color-peach);
     mask-size: contain;
     mask-repeat: no-repeat;
     mask-position: center;
@@ -67,7 +65,7 @@ container {
     width: 100%;
     height: 5px;
     opacity: 0;
-    background-color: vars.$color-aqua;
+    background-color: var(--color-aqua);
     transform: scaleX(0);
     transform-origin: left;
     transition:
@@ -92,5 +90,5 @@ container {
 }
 
 .main {
-  background: vars.$bg-dark;
+  background: var(--bg-dark);
 }

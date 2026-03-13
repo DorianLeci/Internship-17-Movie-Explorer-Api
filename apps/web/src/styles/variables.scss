@@ -1,30 +1,32 @@
-$bg-primary: linear-gradient(
-  180deg,
-  rgba(76, 34, 143, 1) 0%,
-  rgba(113, 65, 196, 1) 100%
-);
+:root {
+  --bg-primary: linear-gradient(
+    180deg,
+    rgba(76, 34, 143, 1) 0%,
+    rgba(113, 65, 196, 1) 100%
+  );
 
-$bg-dark: linear-gradient(
-  180deg,
-  rgba(31, 31, 46, 1) 0%,
-  rgba(0, 0, 0, 1) 100%
-);
+  --bg-dark: linear-gradient(
+    180deg,
+    rgba(31, 31, 46, 1) 0%,
+    rgba(0, 0, 0, 1) 100%
+  );
 
-$font-primary: 'Poppins', sans-serif;
+  --font-primary: 'Poppins', sans-serif;
 
-$color-aqua: rgb(11, 219, 188);
-$color-peach: #ffb3b3;
-$card-bg: linear-gradient(
-  180deg,
-  rgba(76, 34, 143, 1) 0%,
-  rgba(113, 65, 196, 1) 100%
-);
+  --color-aqua: rgb(11, 219, 188);
+  --color-peach: #ffb3b3;
+  --card-bg: linear-gradient(
+    180deg,
+    rgba(76, 34, 143, 1) 0%,
+    rgba(113, 65, 196, 1) 100%
+  );
 
-$text-shadow-black: 4px 0px 4px black;
-$text-shadow-peach: 4px 0px 8px rgba(255, 179, 179, 0.5);
+  --text-shadow-black: 4px 0px 4px black;
+  --text-shadow-peach: 4px 0px 8px rgba(255, 179, 179, 0.5);
 
-$card-shadow: 8px 8px 3px rgba(255, 179, 179, 0.5);
-$card-hover-shadow: 8px 8px 3px rgba(255, 179, 179, 0.7);
-$card-hover-glow: 0 0 18px #ffb3b3;
+  --card-shadow: 8px 8px 3px rgba(255, 179, 179, 0.5);
+  --card-hover-shadow: 8px 8px 3px rgba(255, 179, 179, 0.7);
+  --card-hover-glow: 0 0 18px #ffb3b3;
 
-$bg-dark-opaque: rgba(255, 255, 255, 0.1);
+  --bg-dark-opaque: rgba(255, 255, 255, 0.1);
+}

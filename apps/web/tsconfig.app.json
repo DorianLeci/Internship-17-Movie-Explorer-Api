@@ -12,7 +12,9 @@
       "@tstypes/*": ["types/*"],
       "@enums/*": ["enums/*"],
       "@api/*": ["api/*"],
-      "@pages/*": ["pages/*"]
+      "@pages/*": ["pages/*"],
+      "@hooks/*": ["hooks/*"],
+      "@components/*": ["components/*"]
     },
 
     /* Bundler mode */

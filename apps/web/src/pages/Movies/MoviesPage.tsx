@@ -3,10 +3,10 @@ import { useMovies } from 'hooks/useMovies';
 import { useNavigate } from 'react-router-dom';
 import { ErrorCard } from '../../components/ErrorCard/ErrorCard';
 import { MovieCard } from '../../components/MovieCard/MovieCard';
-import { MovieSearch } from '../../components/MovieSearch/MovieSearch';
-import { MovieSort } from '../../components/MovieSort/MovieSort';
 import { Spinner } from '../../components/Spinner/Spinner';
 import { useSpinner } from '../../hooks/useSpinner';
+import { MovieSearch } from './components/MovieSearch/MovieSearch';
+import { MovieSort } from './components/MovieSort/MovieSort';
 import styles from './MoviesPage.module.scss';
 
 const MoviesPage = () => {

@@ -8,6 +8,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
 
+  app.enableCors({
+    origin: true,
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Movie Explorer API')
     .setDescription('Movie Explorer API documentation')

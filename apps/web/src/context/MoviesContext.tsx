@@ -11,13 +11,7 @@ import {
 } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { MovieContextType } from '../types/MovieContextType';
-
-export const INITIAL_FILTER: MovieFilter = {
-  search: '',
-  genre: undefined,
-  sortBy: SortField.POPULARITY,
-  sortOrder: SortOrder.DESC,
-};
+import getFilterFromURL from './helpers/getFilterFromUrl';
 
 export const MovieContext = createContext<MovieContextType | undefined>(
   undefined,
@@ -26,7 +20,9 @@ export const MovieContext = createContext<MovieContextType | undefined>(
 export const MovieProvider = ({ children }: { children: ReactNode }) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [filterState, setFilterState] = useState<MovieFilter>(INITIAL_FILTER);
+  const [filterState, setFilterState] = useState<MovieFilter>(
+    getFilterFromURL(searchParams),
+  );
 
   useEffect(() => {
     const params = new URLSearchParams();

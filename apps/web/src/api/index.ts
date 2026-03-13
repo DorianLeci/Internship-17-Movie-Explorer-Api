@@ -2,7 +2,7 @@ import axios, { AxiosError, type AxiosResponse } from 'axios';
 import camelcaseKeys from 'camelcase-keys';
 
 export const api = axios.create({
-  baseURL: 'https://backend:3000',
+  baseURL: 'http://localhost:3000',
   headers: {
     'Content-Type': 'application/json',
   },

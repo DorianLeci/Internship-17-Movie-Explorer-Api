@@ -1,5 +1,3 @@
-@use '../../styles/variables.scss' as vars;
-
 .card {
   position: relative;
   display: flex;
@@ -10,16 +8,16 @@
   max-width: 400px;
   height: 820px;
   padding: 10px 0px 20px;
-  background: vars.$card-bg;
+  background: var(--card-bg);
   border-radius: 12px;
-  box-shadow: vars.$card-shadow;
+  box-shadow: var(--card-shadow);
   transition:
     transform 0.2s ease,
     box-shadow 0s ease;
 
   &:hover {
     transform: scale(1.05);
-    box-shadow: vars.$card-hover-shadow;
+    box-shadow: var(--card-hover-shadow);
   }
 }
 
@@ -32,7 +30,7 @@
 
 .title {
   color: white;
-  text-shadow: vars.$text-shadow-black;
+  text-shadow: var(--text-shadow-black);
   text-align: center;
   font-size: 32px;
   font-weight: 600;
@@ -56,8 +54,8 @@
   height: 80px;
 
   p {
-    color: vars.$color-peach;
-    text-shadow: vars.$text-shadow-black;
+    color: var(--color-peach);
+    text-shadow: var(--text-shadow-black);
     font-size: 20px;
     margin: 0;
     text-align: center;

@@ -1,7 +1,4 @@
-interface Favorite {
-  id: number;
-  movieId: number;
-}
+import type { Favorite } from './Favorite';
 
 export interface Movie {
   id: number;

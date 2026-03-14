@@ -8,6 +8,7 @@ import { MovieCrew } from '../../components/MovieCrew/MovieCrew';
 import { MovieReviews } from '../../components/MovieReview/MovieReview';
 import { AppPaths } from '../../routes/paths';
 import styles from './MoveDetailsPage.module.scss';
+import { useToggleFavorite } from './hooks/useToggleFavorite';
 
 const MovieDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +17,10 @@ const MovieDetailsPage = () => {
   const navigate = useNavigate();
   const { data: movie, isLoading, error } = useMovieById(movieId);
   const visible = useReveal({ isLoading });
+
+  const toggleFavoriteMutation = useToggleFavorite();
+
+  const isFavorite = !!movie?.favorite;
 
   useEffect(() => {
     if (!id || error) {
@@ -35,10 +40,15 @@ const MovieDetailsPage = () => {
             </button>
 
             <button
-            // className={`${styles.toggleFavoriteButton} ${isFavorite(id) ? styles.remove : styles.add}`}
-            // onClick={() => toggleFavorite(id)}
+              className={`${styles.toggleFavoriteButton} ${isFavorite ? styles.remove : styles.add}`}
+              onClick={() =>
+                toggleFavoriteMutation.mutate({
+                  id: movieId,
+                  isFavorite,
+                })
+              }
             >
-              {/* {isFavorite(id) ? 'Remove from favorites' : 'Add to favorites'} */}
+              {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
             </button>
           </section>
 

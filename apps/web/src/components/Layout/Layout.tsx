@@ -1,8 +1,8 @@
-import { NavLink } from 'react-router-dom';
-import styles from './Layout.module.scss';
-import { NavItems } from '../../helpers/NavItems';
-import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
+import { NavLink, useLocation } from 'react-router-dom';
+import { NavItems } from '../../helpers/NavItems';
+import styles from './Layout.module.scss';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -17,6 +17,22 @@ export const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className={styles.container}>
+      <Toaster
+        position="top-right"
+        containerStyle={{
+          top: 130,
+          right: 20,
+        }}
+        toastOptions={{
+          style: {
+            fontSize: '24px',
+            color: 'white',
+            background: 'rgba(30,30,30,0.8)',
+            boxShadow: '0px 2px 10px #ffb3b3',
+            backdropFilter: 'blur(10px)',
+          },
+        }}
+      />
       <header className={styles.header}>
         <h1>Movie Explorer</h1>
         <nav className={styles.nav}>

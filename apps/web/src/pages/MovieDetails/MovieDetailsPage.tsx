@@ -1,44 +1,33 @@
+import { useMovieById } from '@api/movie';
+import useReveal from '@hooks/useReveal';
 import { useEffect } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate, useParams } from 'react-router-dom';
-import { API_KEY, BASE_URL } from '../../api';
 import { MovieCast } from '../../components/MovieCast/MovieCast';
 import { MovieCrew } from '../../components/MovieCrew/MovieCrew';
 import { MovieReviews } from '../../components/MovieReview/MovieReview';
-import { MovieTrailer } from '../../components/MovieTrailer/MovieTrailer';
-import { Spinner } from '../../components/Spinner/Spinner';
-import { useFavorites } from '../../hooks/useFavorites';
-import { useFetch } from '../../hooks/useFetch';
-import { useSpinner } from '../../hooks/useSpinner';
 import { AppPaths } from '../../routes/paths';
-import type { MovieDetails } from '../../types/MovieDetails';
 import styles from './MoveDetailsPage.module.scss';
 
-export const MovieDetailsPage = () => {
+const MovieDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
+  const movieId = id ? Number(id) : undefined;
+
   const navigate = useNavigate();
-  const { toggleFavorite, isFavorite } = useFavorites();
-
-  const params = {
-    api_key: API_KEY,
-    append_to_response: 'credits,videos,reviews',
-  };
-  const url = `${BASE_URL}/movie/${id}?${new URLSearchParams(params)}`;
-  const { data, loading, error } = useFetch<MovieDetails>(url);
-
-  const showSpinner = useSpinner({ loading });
+  const { data: movie, isLoading, error } = useMovieById(movieId);
+  const visible = useReveal({ isLoading });
 
   useEffect(() => {
     if (!id || error) {
       navigate(AppPaths.NOT_FOUND, { replace: true });
     }
-  }, [error, id, navigate]);
+  }, [error, movieId, navigate]);
 
   return (
     <div className={styles.container}>
-      {showSpinner && <Spinner text="Loading movie details..." />}
+      {visible && <p>Loading...</p>}
 
-      {data && id ? (
+      {movie && (
         <>
           <section className={styles.action}>
             <button className={styles.backButton} onClick={() => navigate(-1)}>
@@ -46,24 +35,24 @@ export const MovieDetailsPage = () => {
             </button>
 
             <button
-              className={`${styles.toggleFavoriteButton} ${isFavorite(id) ? styles.remove : styles.add}`}
-              onClick={() => toggleFavorite(id)}
+            // className={`${styles.toggleFavoriteButton} ${isFavorite(id) ? styles.remove : styles.add}`}
+            // onClick={() => toggleFavorite(id)}
             >
-              {isFavorite(id) ? 'Remove from favorites' : 'Add to favorites'}
+              {/* {isFavorite(id) ? 'Remove from favorites' : 'Add to favorites'} */}
             </button>
           </section>
 
           <section className={styles.info}>
-            <h1 className={styles.title}>{data.title}</h1>
+            <h1 className={styles.title}>{movie.title}</h1>
             <div className={styles.additional}>
-              <p className={styles.overview}>{data.overview}</p>
+              <p className={styles.overview}>{movie.description}</p>
               <p className={styles.runtime}>
                 <strong className={styles.label}>Runtime: </strong>
-                <span className={styles.value}>{data.runtime} min</span>
+                <span className={styles.value}>{movie.runtime} min</span>
               </p>
               <p className={styles.genres}>
                 <strong className={styles.label}>Genres: </strong>
-                {data.genres.map((g) => (
+                {movie.genres.map((g) => (
                   <span key={g.id} className={styles.value}>
                     {g.name}
                   </span>
@@ -72,12 +61,14 @@ export const MovieDetailsPage = () => {
             </div>
           </section>
 
-          <MovieCast cast={data.credits?.cast} />
-          <MovieCrew crew={data.credits?.crew} />
-          <MovieReviews reviews={data.reviews?.results} />
-          <MovieTrailer videos={data.videos?.results} />
+          <MovieCast cast={movie.topCast} />
+          <MovieCrew crew={movie.topCrew} />
+          <MovieReviews reviews={movie.reviews} />
+          {/* <MovieTrailer videos={movie.videos?.results} /> */}
         </>
-      ) : null}
+      )}
     </div>
   );
 };
+
+export default MovieDetailsPage;

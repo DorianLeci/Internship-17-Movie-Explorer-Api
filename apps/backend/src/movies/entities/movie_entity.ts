@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Favorite } from '../../../generated/prisma/browser';
+import { Favorite } from 'generated/prisma/browser';
 
 export class MovieEntity {
   @ApiProperty()

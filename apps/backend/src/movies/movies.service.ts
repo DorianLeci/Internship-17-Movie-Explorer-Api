@@ -1,12 +1,13 @@
 import SortOrder from '@enums/SortOrder';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
 import { FindMoviesDto } from './dto/find-movies.dto';
+import { MovieDetailsEntity } from './entities/movie_details_entity';
 import { MovieEntity } from './entities/movie_entity';
 
 @Injectable()
 export class MoviesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async findMovies(query: FindMoviesDto): Promise<MovieEntity[]> {
     const where: any = {};
@@ -34,5 +35,22 @@ export class MoviesService {
       include: { favorite: true },
       orderBy: { popularity: SortOrder.DESC },
     });
+  }
+
+  async findMovieById(id: number): Promise<MovieDetailsEntity> {
+    const movie = await this.prisma.movie.findUnique({
+      where: { id },
+      include: {
+        favorite: true,
+        genres: true,
+        topCast: { include: { actor: true } },
+        topCrew: { include: { crewMember: true } },
+        reviews: true,
+      },
+    });
+
+    if (!movie) throw new NotFoundException(`Movie with id ${id} not found`);
+
+    return movie;
   }
 }

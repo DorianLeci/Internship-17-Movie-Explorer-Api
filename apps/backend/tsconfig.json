@@ -12,11 +12,12 @@
     "target": "ES2023",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@movies/*": ["movies/*"],
-      "@enums/*": ["enums/*"],
-      "@prisma/*": ["prisma/*"]
+      "@movies/*": ["src/movies/*"],
+      "@enums/*": ["src/enums/*"],
+      "@prisma/*": ["src/prisma/*"],
+      "@generated/*": ["src/generated/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

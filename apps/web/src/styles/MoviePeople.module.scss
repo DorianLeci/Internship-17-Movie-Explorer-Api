@@ -1,13 +1,11 @@
-@use './variables.scss' as vars;
-
 .peopleContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 20px 0px 0px;
-  box-shadow: 0px 2px 10px vars.$color-peach;
+  box-shadow: 0px 2px 10px var(--color-peach);
   border-radius: 30px;
-  background: vars.$bg-dark;
+  background: var(--bg-dark);
 }
 
 .title {
@@ -15,7 +13,7 @@
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: vars.$color-peach;
+  color: Var(--color-peach);
 }
 
 .scrollContainer {
@@ -39,7 +37,7 @@
   min-width: 230px;
   padding: 15px 20px;
   border-radius: 20px;
-  background: vars.$bg-dark-opaque;
+  background: var(--bg-dark-opaque);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   text-align: center;
   transition:
@@ -50,7 +48,7 @@
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: vars.$card-hover-glow;
+    box-shadow: var(--card-hover-glow);
   }
 }
 
@@ -65,5 +63,5 @@
   display: block;
   margin-top: 5px;
   font-size: 14px;
-  color: vars.$color-peach;
+  color: var(--color-peach);
 }

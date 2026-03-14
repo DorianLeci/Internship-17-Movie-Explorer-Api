@@ -1,20 +1,17 @@
-import type { CastMember } from './CastMember';
-import type { CrewMember } from './CrewMember';
 import type { Movie } from './Movie';
+import type { CastMember, CrewMember } from './MovieMember';
 import type { MovieReview } from './MovieReview';
 import type { MovieVideo } from './MovieVideo';
 
 export interface MovieDetails extends Movie {
   runtime: number;
-  overview: string;
+  description: string;
   genres: { id: number; name: string }[];
 
-  credits?: {
-    cast: CastMember[];
-    crew: CrewMember[];
-  };
+  topCast: CastMember[];
+  topCrew: CrewMember[];
 
-  reviews?: { results: MovieReview[] };
+  reviews: MovieReview[];
 
   videos?: {
     results: MovieVideo[];

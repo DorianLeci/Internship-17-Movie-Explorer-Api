@@ -2,12 +2,12 @@ import type { MovieReview } from '../../types/MovieReview';
 import styles from './MovieReview.module.scss';
 
 interface MovieReviewProps {
-  reviews?: MovieReview[];
+  reviews: MovieReview[];
   limit?: number;
 }
 
 export const MovieReviews = ({ reviews, limit = 10 }: MovieReviewProps) => {
-  if (!reviews?.length) return null;
+  if (!reviews.length) return null;
 
   return (
     <section className={styles.reviewContainer}>

@@ -14,7 +14,7 @@ const FavoriteMoviesPage = () => {
     error,
     refetch,
   } = useFavoriteMovies();
-  const visible = useReveal({ isLoading });
+  const visible = useReveal({ isLoading: isLoading });
 
   return (
     <div className={styles.wrapper}>

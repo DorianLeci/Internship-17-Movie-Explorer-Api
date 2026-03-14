@@ -13,11 +13,9 @@ const adapter = new PrismaPg({
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  // Genres
   const genres = Object.values(GenreEnum).map((name) => ({ name }));
   await prisma.genre.createMany({ data: genres, skipDuplicates: true });
 
-  // Actors
   const actorsData = [
     { firstName: 'Tim', lastName: 'Robbins' },
     { firstName: 'Russell', lastName: 'Crowe' },
@@ -87,7 +85,6 @@ async function main() {
     actors.push(actor);
   }
 
-  // Crew members
   const crewData: { firstName: string; lastName: string; role: CrewRole }[] = [
     { firstName: 'Frank', lastName: 'Darabont', role: CrewRole.DIRECTOR },
     { firstName: 'Steven', lastName: 'Spielberg', role: CrewRole.DIRECTOR },
@@ -233,6 +230,25 @@ async function main() {
         'Matt Damon',
       ],
       crew: ['Frank Darabont', 'John Williams', 'Kathleen Kennedy'],
+      reviews: [
+        {
+          author: 'Dorian Leci',
+          content: `
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque at tortor porta nulla euismod ullamcorper sed ut massa. Maecenas at magna luctus, dapibus velit vitae, egestas dolor. Nam at pulvinar felis. Mauris sit amet libero pellentesque, varius risus eu, pellentesque nisl. Nam sit amet suscipit lacus. Donec nec scelerisque purus, in laoreet elit. Maecenas et odio eu purus sodales eleifend ac at turpis. Nunc tincidunt libero faucibus felis tristique faucibus. Sed vitae justo vel lectus mollis feugiat. Curabitur consectetur non lorem ut pulvinar. Pellentesque suscipit nec ligula sed consectetur. Nullam eget mattis libero. In hac habitasse platea dictumst.
+Aenean egestas pellentesque massa, a iaculis nisi lobortis quis. Cras et lorem metus. Phasellus a maximus turpis, a euismod augue. Mauris eu blandit lacus, at faucibus lectus. Phasellus vulputate orci a neque porttitor egestas. In finibus et nunc sed mollis. Fusce fermentum neque ac venenatis maximus. Aliquam ut gravida nulla. Vivamus nec porta est. Vivamus placerat nec felis ac commodo.
+Sed vestibulum quam nec tristique luctus. In in diam justo. Vivamus vulputate dignissim est, ut gravida libero pulvinar at. Proin ac turpis vel velit imperdiet dignissim. Suspendisse in felis eu lacus tincidunt blandit. Nulla semper porttitor tempor. Donec suscipit sagittis lacinia. Pellentesque quis leo purus. Ut posuere est non eleifend facilisis. Suspendisse et nibh ut neque elementum porta. Curabitur vitae laoreet lorem.
+Donec risus ligula, ultricies eget orci sed, mattis suscipit orci. Morbi faucibus lorem id erat varius tincidunt. Quisque aliquam in urna in semper. Sed non volutpat magna. Nullam tempus purus tortor. Praesent id purus tellus. Aenean tempor cursus ullamcorper. Pellentesque eu laoreet odio, id scelerisque elit. Nunc dapibus, tellus id pulvinar congue, metus felis venenatis lacus, sed ultricies risus turpis at ex. Nunc vel eros nisl. Fusce vel libero laoreet, pulvinar est quis, iaculis enim. Mauris vel mi ac felis faucibus vulputate. Duis porta arcu a aliquam tincidunt. Nunc auctor dictum sem sed varius. Phasellus dolor lorem, pretium ac ante ut, auctor eleifend mauris.
+Integer auctor sem nibh, in ultrices metus maximus lobortis. Sed pharetra mattis dignissim. Nulla sed felis maximus nulla aliquet congue. Fusce venenatis luctus velit, quis imperdiet justo mollis at. Fusce tristique enim risus, sodales dictum sapien maximus eu. Fusce sit amet lorem felis. Suspendisse a est facilisis, pharetra magna ut, porta est. Phasellus ultrices enim neque, at lobortis mauris blandit nec. Donec id urna sed ligula iaculis fermentum. Maecenas et luctus neque. Sed elementum tortor lobortis justo tincidunt imperdiet. Nam euismod eu libero sit amet iaculis. Cras vel dapibus ligula, vel pretium nulla. `,
+        },
+        {
+          author: 'Dorian Leci2',
+          content: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque at tortor porta nulla euismod ullamcorper sed ut massa. Maecenas at magna luctus, dapibus velit vitae, egestas dolor. Nam at pulvinar felis. Mauris sit amet libero pellentesque, varius risus eu, pellentesque nisl. Nam sit amet suscipit lacus. Donec nec scelerisque purus, in laoreet elit. Maecenas et odio eu purus sodales eleifend ac at turpis. Nunc tincidunt libero faucibus felis tristique faucibus. Sed vitae justo vel lectus mollis feugiat. Curabitur consectetur non lorem ut pulvinar. Pellentesque suscipit nec ligula sed consectetur. Nullam eget mattis libero. In hac habitasse platea dictumst.
+Aenean egestas pellentesque massa, a iaculis nisi lobortis quis. Cras et lorem metus. Phasellus a maximus turpis, a euismod augue. Mauris eu blandit lacus, at faucibus lectus. Phasellus vulputate orci a neque porttitor egestas. In finibus et nunc sed mollis. Fusce fermentum neque ac venenatis maximus. Aliquam ut gravida nulla. Vivamus nec porta est. Vivamus placerat nec felis ac commodo.
+Sed vestibulum quam nec tristique luctus. In in diam justo. Vivamus vulputate dignissim est, ut gravida libero pulvinar at. Proin ac turpis vel velit imperdiet dignissim. Suspendisse in felis eu lacus tincidunt blandit. Nulla semper porttitor tempor. Donec suscipit sagittis lacinia. Pellentesque quis leo purus. Ut posuere est non eleifend facilisis. Suspendisse et nibh ut neque elementum porta. Curabitur vitae laoreet lorem.
+Donec risus ligula, ultricies eget orci sed, mattis suscipit orci. Morbi faucibus lorem id erat varius tincidunt. Quisque aliquam in urna in semper. Sed non volutpat magna. Nullam tempus purus tortor. Praesent id purus tellus. Aenean tempor cursus ullamcorper. Pellentesque eu laoreet odio, id scelerisque elit. Nunc dapibus, tellus id pulvinar congue, metus felis venenatis lacus, sed ultricies risus turpis at ex. Nunc vel eros nisl. Fusce vel libero laoreet, pulvinar est quis, iaculis enim. Mauris vel mi ac felis faucibus vulputate. Duis porta arcu a aliquam tincidunt. Nunc auctor dictum sem sed varius. Phasellus dolor lorem, pretium ac ante ut, auctor eleifend mauris.
+Integer auctor sem nibh, in ultrices metus maximus lobortis. Sed pharetra mattis dignissim. Nulla sed felis maximus nulla aliquet congue. Fusce venenatis luctus velit, quis imperdiet justo mollis at. Fusce tristique enim risus, sodales dictum sapien maximus eu. Fusce sit amet lorem felis. Suspendisse a est facilisis, pharetra magna ut, porta est. Phasellus ultrices enim neque, at lobortis mauris blandit nec. Donec id urna sed ligula iaculis fermentum. Maecenas et luctus neque. Sed elementum tortor lobortis justo tincidunt imperdiet. Nam euismod eu libero sit amet iaculis. Cras vel dapibus ligula, vel pretium nulla. `,
+        },
+      ],
     },
     {
       title: 'The Godfather',
@@ -508,6 +524,62 @@ async function main() {
       reviews: [
         { author: 'Liam', content: 'Epic romance on the Titanic.' },
         { author: 'Mia', content: 'Heartbreaking and visually stunning.' },
+      ],
+    },
+    {
+      title: 'Avatar',
+      description:
+        'A paraplegic Marine is dispatched to the moon Pandora on a unique mission, becoming torn between following his orders and protecting the world he feels is his home.',
+      runtime: 162,
+      rating: 7.8,
+      popularity: 89,
+      posterUrl: '',
+      trailerUrl: '',
+      releaseDate: new Date('2009-12-18'),
+      genres: [GenreEnum.ACTION, GenreEnum.ADVENTURE, GenreEnum.SCI_FI],
+      cast: ['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver'],
+      crew: ['James Cameron', 'Simon Franglen', 'Jon Landau'],
+      reviews: [
+        {
+          author: 'Alice',
+          content: `This movie is visually stunning. The world of Pandora is so immersive that you feel like you are part of it. The 3D effects were groundbreaking for its time and still hold up. I especially loved the interaction with the Na’vi and the way nature and technology are contrasted. Truly a masterpiece in visual storytelling.`,
+        },
+        {
+          author: 'Bob',
+          content: `I appreciate the environmental message, but the story feels familiar. The love story is predictable, yet engaging enough to keep you invested. The action sequences are spectacular and the music complements the epic scenery perfectly.`,
+        },
+        {
+          author: 'Catherine',
+          content: `Honestly, the world-building in Avatar is unmatched. Every plant, creature, and landscape feels real. The themes of colonialism, exploitation, and respect for nature are woven seamlessly into the narrative. A movie you can watch multiple times and still notice new details.`,
+        },
+      ],
+    },
+    {
+      title: 'The Avengers',
+      description:
+        'Earth’s mightiest heroes must come together and learn to fight as a team.',
+      runtime: 143,
+      rating: 8.0,
+      popularity: 95,
+      posterUrl: '',
+      trailerUrl: '',
+      releaseDate: new Date('2012-05-04'),
+      genres: [GenreEnum.ACTION, GenreEnum.ADVENTURE, GenreEnum.FANTASY],
+      cast: ['Robert Downey Jr.', 'Chris Evans', 'Scarlett Johansson'],
+      crew: ['Joss Whedon', 'Kevin Feige', 'Alan Silvestri'],
+      reviews: [
+        {
+          author: 'David',
+          content: `As a Marvel fan, this movie was everything I hoped for. The team dynamic is excellent, and the humor is perfectly balanced with high-stakes action. The final battle scene on New York is iconic.`,
+        },
+        {
+          author: 'Ella',
+          content: `I loved seeing all the heroes together. The pacing was perfect and each character had moments to shine. Some of the CGI-heavy sequences look slightly dated now, but overall the experience is thrilling and entertaining.`,
+        },
+        {
+          author: 'Frank',
+          content: `The Avengers set a new standard for superhero team movies. Every character's arc feels satisfying, and the chemistry between the cast is phenomenal. I could watch the interactions between Tony and Steve all day.`,
+        },
       ],
     },
   ];

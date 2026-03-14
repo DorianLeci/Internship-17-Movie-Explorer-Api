@@ -1,5 +1,5 @@
+import styles from '@styles/MoviePeople.module.scss';
 import type { CastMember } from '@tstypes/MovieMember';
-import styles from '../../styles/MoviePeople.module.scss';
 
 interface MovieCastProps {
   cast: CastMember[];

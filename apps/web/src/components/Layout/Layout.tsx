@@ -25,7 +25,7 @@ export const Layout = ({ children }: LayoutProps) => {
         }}
         toastOptions={{
           style: {
-            fontSize: '24px',
+            fontSize: '20px',
             color: 'white',
             background: 'rgba(30,30,30,0.8)',
             boxShadow: '0px 2px 10px #ffb3b3',

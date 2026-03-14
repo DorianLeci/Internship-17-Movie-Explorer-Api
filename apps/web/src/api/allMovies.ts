@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import type { Movie } from '@tstypes/Movie';
 import type { MovieFilter } from '@tstypes/MovieFilter';
 import { api } from '.';
+import { QueryKeys } from './QueryKeys';
 
 export const getAllMovies = (filter: MovieFilter) => {
   const params = new URLSearchParams();
@@ -17,7 +18,7 @@ export const getAllMovies = (filter: MovieFilter) => {
 export const useAllMovies = (filter: MovieFilter) => {
   return useQuery({
     queryKey: [
-      'allMovies',
+      QueryKeys.ALL_MOVIES,
       filter.genre,
       filter.search,
       filter.sortBy,

@@ -1,4 +1,4 @@
-import type { MovieVideo } from '../../types/MovieVideo';
+import type { MovieVideo } from '../../../../types/MovieVideo';
 import styles from './MovieTrailer.module.scss';
 
 interface MovieTrailerProps {

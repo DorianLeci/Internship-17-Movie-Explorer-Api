@@ -21,23 +21,25 @@ const NotFoundPage = lazy(() => import('@pages/NotFound/NotFoundPage'));
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <MovieProvider>
-        <Layout>
-          <Routes>
-            <Route path={AppPaths.HOME} element={<HomePage />} />
+      <Layout>
+        <Routes>
+          <Route path={AppPaths.HOME} element={<HomePage />} />
 
-            <Route path={AppPaths.MOVIES} element={<MoviesPage />} />
+          <Route
+            path={AppPaths.MOVIES}
+            element={
+              <MovieProvider>
+                <MoviesPage />
+              </MovieProvider>
+            }
+          />
 
-            <Route path={AppPaths.FAVORITES} element={<FavoriteMoviesPage />} />
-            <Route
-              path={AppPaths.MOVIE_DETAIL}
-              element={<MovieDetailsPage />}
-            />
-            <Route path={AppPaths.NOT_FOUND} element={<NotFoundPage />} />
-            <Route path={AppPaths.NON_EXSTING} element={<NotFoundPage />} />
-          </Routes>
-        </Layout>
-      </MovieProvider>
+          <Route path={AppPaths.FAVORITES} element={<FavoriteMoviesPage />} />
+          <Route path={AppPaths.MOVIE_DETAIL} element={<MovieDetailsPage />} />
+          <Route path={AppPaths.NOT_FOUND} element={<NotFoundPage />} />
+          <Route path={AppPaths.NON_EXSTING} element={<NotFoundPage />} />
+        </Routes>
+      </Layout>
     </QueryClientProvider>
   );
 }

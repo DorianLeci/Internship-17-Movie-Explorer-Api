@@ -18,9 +18,14 @@
 
 .cardScrollContainer {
   padding: 0px 15px;
-  overflow-x: scroll;
+  overflow-x: auto;
   overflow-y: visible;
-  scroll-behavior: smooth;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .cardContainer {
@@ -41,16 +46,6 @@
   background: var(--bg-dark-opaque);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   text-align: center;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-
-  will-change: transform;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--card-hover-glow);
-  }
 }
 
 .author {

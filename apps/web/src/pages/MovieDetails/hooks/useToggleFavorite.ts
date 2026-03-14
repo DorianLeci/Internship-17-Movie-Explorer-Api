@@ -1,4 +1,5 @@
 import { createFavorite, removeFavorite } from '@api/favorite';
+import { QueryKeys } from '@api/QueryKeys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
 
@@ -24,11 +25,13 @@ export const useToggleFavorite = () => {
       );
       queryClient.invalidateQueries({
         predicate: (query) =>
-          query.queryKey[0] === 'movie' && query.queryKey[1] === variables.id,
+          query.queryKey[0] === QueryKeys.MOVIE &&
+          query.queryKey[1] === variables.id,
       });
+      queryClient.refetchQueries({ queryKey: [QueryKeys.FAVORITE_MOVIES] });
     },
     onError: (error: any) => {
-      toast.error(error.message || 'Something went wrong');
+      toast.error(error || 'Something went wrong');
     },
   });
 };

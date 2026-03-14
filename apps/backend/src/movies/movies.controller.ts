@@ -31,7 +31,7 @@ export class MoviesController {
 
   @Get(':id')
   @ApiOkResponse({
-    description: 'All movies fetched by query parameters',
+    description: 'Movie fetched by id',
     isArray: true,
     type: MovieDetailsEntity,
   })

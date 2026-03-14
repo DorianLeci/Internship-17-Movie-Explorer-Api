@@ -1,13 +1,14 @@
 import { useMovieById } from '@api/movie';
 import useReveal from '@hooks/useReveal';
+import { AppPaths } from '@routes/paths';
 import { useEffect } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate, useParams } from 'react-router-dom';
-import { MovieCast } from '../../components/MovieCast/MovieCast';
-import { MovieCrew } from '../../components/MovieCrew/MovieCrew';
-import { MovieReviews } from '../../components/MovieReview/MovieReview';
-import { AppPaths } from '../../routes/paths';
 import styles from './MoveDetailsPage.module.scss';
+import { MovieCast } from './components/MovieCast/MovieCast';
+import { MovieCrew } from './components/MovieCrew/MovieCrew';
+import { MovieReviews } from './components/MovieReview/MovieReview';
+import MovieDetailsSkeleton from './components/Skeleton/MovieDetailsSkeleton';
 import { useToggleFavorite } from './hooks/useToggleFavorite';
 
 const MovieDetailsPage = () => {
@@ -30,9 +31,9 @@ const MovieDetailsPage = () => {
 
   return (
     <div className={styles.container}>
-      {visible && <p>Loading...</p>}
+      {visible && <MovieDetailsSkeleton />}
 
-      {movie && (
+      {!visible && movie && (
         <>
           <section className={styles.action}>
             <button className={styles.backButton} onClick={() => navigate(-1)}>

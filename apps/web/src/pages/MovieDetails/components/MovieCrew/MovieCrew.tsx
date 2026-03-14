@@ -1,5 +1,5 @@
-import styles from '../../styles/MoviePeople.module.scss';
-import type { CrewMember } from '../../types/MovieMember';
+import styles from '@styles/MoviePeople.module.scss';
+import type { CrewMember } from '@tstypes/MovieMember';
 
 interface MovieCrewProps {
   crew: CrewMember[];

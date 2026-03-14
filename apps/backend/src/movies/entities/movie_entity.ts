@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Favorite } from '../../../generated/prisma/browser';
 
 export class MovieEntity {
   @ApiProperty()
@@ -33,4 +34,7 @@ export class MovieEntity {
 
   @ApiProperty()
   updatedAt: Date;
+
+  @ApiProperty()
+  favorite: Favorite | null;
 }

@@ -17,7 +17,7 @@ export const getAllMovies = (filter: MovieFilter) => {
 export const useAllMovies = (filter: MovieFilter) => {
   return useQuery({
     queryKey: [
-      'allFilms',
+      'allMovies',
       filter.genre,
       filter.search,
       filter.sortBy,

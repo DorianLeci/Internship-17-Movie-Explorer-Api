@@ -1,21 +1,19 @@
-import { useAllMovies } from '@api/allMovies';
+import { useFavoriteMovies } from '@api/favoriteMovies';
 import EmptyStateCard from '@components/EmptyStateCard';
 import ErrorCard from '@components/ErrorCard';
-import { useMovies } from '@hooks/useMovies';
 import useReveal from '@hooks/useReveal';
 import MovieCard from '@pages/Movies/components/MovieCard';
 import MoviesPageSkeleton from '@pages/Movies/components/Skeleton';
 import styles from './FavoriteMoviesPage.module.scss';
 
-export const FavoriteMoviesPage = () => {
-  const { filter } = useMovies();
+const FavoriteMoviesPage = () => {
   const {
     data: favoriteMovies,
     isLoading,
     isError,
     error,
     refetch,
-  } = useAllMovies(filter);
+  } = useFavoriteMovies();
   const visible = useReveal({ isLoading });
 
   return (
@@ -41,3 +39,5 @@ export const FavoriteMoviesPage = () => {
     </div>
   );
 };
+
+export default FavoriteMoviesPage;

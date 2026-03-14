@@ -27,4 +27,12 @@ export class MoviesService {
       },
     });
   }
+
+  async findFavoriteMovies(): Promise<MovieEntity[]> {
+    return this.prisma.movie.findMany({
+      where: { favorite: { isNot: null } },
+      include: { favorite: true },
+      orderBy: { popularity: SortOrder.DESC },
+    });
+  }
 }

@@ -1,7 +1,7 @@
+import { FaChartLine, FaFilm, FaStar } from 'react-icons/fa';
 import styles from './HomePage.module.scss';
-import { FaFilm, FaStar, FaChartLine } from 'react-icons/fa';
 
-export const HomePage = () => {
+const HomePage = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.homeTitle}>Welcome to Movie Explorer</h1>
@@ -27,3 +27,5 @@ export const HomePage = () => {
     </div>
   );
 };
+
+export default HomePage;

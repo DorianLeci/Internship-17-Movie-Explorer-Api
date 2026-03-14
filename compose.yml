@@ -9,9 +9,6 @@ services:
       - ./apps/web:/app
       - /app/node_modules
 
-    networks:
-      - frontend_network
-
   backend:
     build:
       context: apps/backend
@@ -32,7 +29,6 @@ services:
 
     networks:
       - backend_network
-      - frontend_network
 
   db:
     image: postgres:17
@@ -52,6 +48,4 @@ volumes:
 
 networks:
   backend_network:
-    driver: bridge
-  frontend_network:
     driver: bridge

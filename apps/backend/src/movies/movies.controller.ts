@@ -17,4 +17,14 @@ export class MoviesController {
   findAll(@Query() query: FindMoviesDto) {
     return this.moviesService.findMovies(query);
   }
+
+  @Get('favorites')
+  @ApiOkResponse({
+    description: 'All favorite movies fetched',
+    isArray: true,
+    type: MovieEntity,
+  })
+  async getFavoriteMovies() {
+    return this.moviesService.findFavoriteMovies();
+  }
 }

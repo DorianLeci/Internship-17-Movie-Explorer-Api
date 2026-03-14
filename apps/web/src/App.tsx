@@ -1,13 +1,18 @@
-import MoviesPage from '@pages/Movies/MoviesPage';
+import { Layout } from '@components/Layout/Layout';
+import { MovieProvider } from '@context/MoviesContext';
+import { AppPaths } from '@routes/paths';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Layout } from './components/Layout/Layout';
-import { MovieProvider } from './context/MoviesContext';
-import { HomePage } from './pages/Home/HomePage';
-import { NotFoundPage } from './pages/NotFound/NotFoundPage';
-import { AppPaths } from './routes/paths';
 
 const queryClient = new QueryClient();
+
+const HomePage = lazy(() => import('@pages/Home/HomePage'));
+const MoviesPage = lazy(() => import('@pages/Movies/MoviesPage'));
+const FavoriteMoviesPage = lazy(
+  () => import('@pages/FavoriteMovies/FavoriteMoviesPage'),
+);
+const NotFoundPage = lazy(() => import('@pages/NotFound/NotFoundPage'));
 
 function App() {
   return (
@@ -19,7 +24,8 @@ function App() {
 
             <Route path={AppPaths.MOVIES} element={<MoviesPage />} />
 
-            <Route path={AppPaths.NOT_FOUND} element={<NotFoundPage />}></Route>
+            <Route path={AppPaths.FAVORITES} element={<FavoriteMoviesPage />} />
+            <Route path={AppPaths.NOT_FOUND} element={<NotFoundPage />} />
             <Route path={AppPaths.NON_EXSTING} element={<NotFoundPage />} />
           </Routes>
         </Layout>

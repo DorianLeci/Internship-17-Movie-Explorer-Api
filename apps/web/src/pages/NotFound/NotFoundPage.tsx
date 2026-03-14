@@ -1,7 +1,7 @@
 import { FaExclamationTriangle } from 'react-icons/fa';
 import styles from './NotFoundPage.module.scss';
 
-export const NotFoundPage = () => {
+const NotFoundPage = () => {
   return (
     <div className={styles.container}>
       <FaExclamationTriangle size={180} color="yellow" />
@@ -10,3 +10,5 @@ export const NotFoundPage = () => {
     </div>
   );
 };
+
+export default NotFoundPage;

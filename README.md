@@ -1,5 +1,5 @@
-# Internship-15-Movie-Explorer
-**React App for exploring movies using The Movie Database (TMDB) API**
+# Internship-17-Movie-Explorer-Api
+**React App for exploring movies using local database which is populated from TMDB**
 
 ---
 
@@ -16,7 +16,7 @@
 ## Requirements
 - Node.js (v18+ recommended)
 - npm (Node Package Manager)
-
+- Docker & Docker Compose:
 ---
 
 ## Installation
@@ -27,32 +27,28 @@ git clone git@github.com:DorianLeci/Internship-15-Movie-Explorer.git
 
 2. Navigate into the project folder:
 ```
-cd Internship-15-Movie-Explorer
+cd Internship-17-Movie-Explorer-Api
 ```
 
-3. Install dependencies:
-```
-npm install
-```
-
-## Environment Variables
-
-1. Copy the example environment file:
+3. Run with docker compose:
+   Windows/Mac
    ```
-   cp .env.example .env
+   docker compose up --build
    ```
-
-2. Open .env and add your TMDB key: VITE_TMDB_API_KEY=YOUR_KEY_HERE
-
-3. If you don’t have a key yet, you can create a free account and generate one here: https://developer.themoviedb.org/docs/getting-started
-
-## Final
-
-1. Run the app:
+   Linux
    ```
-   npm run dev
+   sudo docker compose up --build
    ```
-2. Open the browser and visit: http://localhost:5173/ (by default) or click on the link from your terminal
+## Access
+
+   Frontend:
+   ```
+   http://localhost:5173/
+   ```
+   Backend Swagger documentation:
+   ```
+   http://localhost:3000/api
+   ```
 
 
 

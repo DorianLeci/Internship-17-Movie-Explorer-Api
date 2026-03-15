@@ -31,11 +31,11 @@ cd Internship-17-Movie-Explorer-Api
 ```
 
 3. Run with docker compose:
-   Windows/Mac
+-  Windows/Mac
    ```
    docker compose up --build
    ```
-   Linux
+-  Linux
    ```
    sudo docker compose up --build
    ```

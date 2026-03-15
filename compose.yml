@@ -16,6 +16,7 @@ services:
 
     environment:
       DATABASE_URL: 'postgresql://postgres:postgres@db:5432/Movies?schema=public'
+      TMDB_API_ACCESS_TOKEN: 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YzM5MjcwMTRkNzljNTYyZTAyMGI2MzMzODFmNTgxMyIsIm5iZiI6MTc3MjEyMjEzNy4xOTkwMDAxLCJzdWIiOiI2OWEwNzAxOTllMTJkMWZhZjhlZmYzNmQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.-psY37dApXAeWL0s3ags1t5zDds-RQQR9QxXkTKztZs'
 
     volumes:
       - ./apps/backend:/app

@@ -55,6 +55,8 @@ export class MoviesService {
 
     if (!movie) throw new NotFoundException(`Movie with id ${id} not found`);
 
+    movie.topCrew.sort((a, b) => a.role.localeCompare(b.role));
+
     return movie;
   }
 }

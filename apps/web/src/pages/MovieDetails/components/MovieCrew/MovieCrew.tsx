@@ -1,3 +1,4 @@
+import useHorizontalScroll from '@hooks/useHorizontalScroll';
 import styles from '@styles/MoviePeople.module.scss';
 import type { CrewMember } from '@tstypes/MovieMember';
 
@@ -8,10 +9,12 @@ interface MovieCrewProps {
 export const MovieCrew = ({ crew }: MovieCrewProps) => {
   if (!crew.length) return null;
 
+  const ref = useHorizontalScroll();
+
   return (
     <section className={styles.peopleContainer}>
       <h2 className={styles.title}>Top Crew</h2>
-      <div className={styles.scrollContainer}>
+      <div className={styles.scrollContainer} ref={ref}>
         <div className={styles.cardContainer}>
           {crew.map((member) => (
             <div key={`${member.id}-${member.role}`} className={styles.card}>

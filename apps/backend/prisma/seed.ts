@@ -1,7 +1,7 @@
 import { PrismaPg } from '@prisma/adapter-pg';
 import { CrewRole, GenreEnum, PrismaClient } from '../generated/prisma/client';
 
-const TMDB_KEY = process.env.TMDB_API_KEY;
+const TMDB_TOKEN = process.env.TMDB_API_ACCESS_TOKEN;
 const IMAGE_BASE = 'https://image.tmdb.org/t/p/w500';
 const TOTAL_PAGES = 5;
 
@@ -44,7 +44,13 @@ async function main() {
   for (let page = 1; page <= TOTAL_PAGES; page++) {
     pageFetches.push(
       fetch(
-        `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_KEY}&vote_count.gte=1000&vote_average.gte=7&sort_by=popularity.desc&page=${page}`,
+        `https://api.themoviedb.org/3/discover/movie?vote_count.gte=1000&vote_average.gte=7&sort_by=popularity.desc&page=${page}`,
+        {
+          headers: {
+            Authorization: `Bearer ${TMDB_TOKEN}`,
+            'Content-Type': 'application/json',
+          },
+        },
       ),
     );
   }
@@ -61,7 +67,13 @@ async function main() {
   for (const movie of allResults) {
     movieDetailsFetches.push(
       fetch(
-        `https://api.themoviedb.org/3/movie/${movie.id}?api_key=${TMDB_KEY}&append_to_response=credits,videos,reviews`,
+        `https://api.themoviedb.org/3/movie/${movie.id}?append_to_response=credits,videos,reviews`,
+        {
+          headers: {
+            Authorization: `Bearer ${TMDB_TOKEN}`,
+            'Content-Type': 'application/json',
+          },
+        },
       ),
     );
   }

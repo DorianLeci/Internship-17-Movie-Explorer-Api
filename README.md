@@ -22,7 +22,7 @@
 ## Installation
 1. Clone the repository:
 ```
-git clone git@github.com:DorianLeci/Internship-15-Movie-Explorer.git
+git clone git@github.com:DorianLeci/Internship-17-Movie-Explorer-Api.git
 ```
 
 2. Navigate into the project folder:

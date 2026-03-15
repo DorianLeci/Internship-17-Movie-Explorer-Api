@@ -31,7 +31,7 @@ enum GenreEnum {
   MUSIC     @map("Music")
   MYSTERY   @map("Mystery")
   ROMANCE   @map("Romance")
-  SCI_FI    @map("Sci-Fi")
+  SCI_FI @map("Sci Fi")
   THRILLER  @map("Thriller")
   WAR       @map("War")
   WESTERN   @map("Western")
@@ -45,7 +45,7 @@ model Movie{
   rating Float
   popularity Float
   posterUrl String
-  trailerUrl String
+  trailerKey String
   releaseDate DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -72,24 +72,22 @@ model Genre{
 
 model TopCast{
   id Int @id @default(autoincrement())
+  name String
   character String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  actorId Int
   movieId Int
   movie Movie @relation(fields: [movieId], references: [id])
-  actor Actor @relation(fields: [actorId],references: [id])
 }
 
 model TopCrew{
   id Int @id @default(autoincrement())
+  name String
   role CrewRole
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  crewMemberId Int
   movieId Int
   movie Movie @relation(fields: [movieId], references: [id])
-  crewMember CrewMember @relation(fields: [crewMemberId],references: [id])
 }
 
 model Review{
@@ -100,22 +98,4 @@ model Review{
   updatedAt DateTime @updatedAt  
   movieId Int
   movie Movie @relation(fields: [movieId], references: [id])  
-}
-
-model Actor{
-  id Int @id @default(autoincrement())
-  firstName String
-  lastName String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  topCast TopCast[]
-}
-
-model CrewMember{
-  id Int @id @default(autoincrement())
-  firstName String
-  lastName String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt  
-  topCrew TopCrew[]
 }

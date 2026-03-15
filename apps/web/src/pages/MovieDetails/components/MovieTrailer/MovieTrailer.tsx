@@ -1,18 +1,13 @@
-import type { MovieVideo } from '../../../../types/MovieVideo';
 import styles from './MovieTrailer.module.scss';
 
 interface MovieTrailerProps {
-  videos?: MovieVideo[];
+  trailerKey: string;
 }
 
-export const MovieTrailer = ({ videos }: MovieTrailerProps) => {
-  const trailer = videos?.find(
-    (v) => v.site === 'YouTube' && v.type === 'Trailer',
-  );
-
+const MovieTrailer = ({ trailerKey }: MovieTrailerProps) => {
   return (
     <>
-      {trailer && (
+      {trailerKey && (
         <section className={styles.video}>
           <div className={styles.videoContainer}>
             <h2 className={styles.title}>Trailer</h2>
@@ -20,8 +15,7 @@ export const MovieTrailer = ({ videos }: MovieTrailerProps) => {
               className={styles.videoFrame}
               width="560"
               height="315"
-              src={`https://www.youtube.com/embed/${trailer.key}`}
-              title={trailer.name}
+              src={`https://www.youtube.com/embed/${trailerKey}`}
               allowFullScreen
             />
           </div>
@@ -30,3 +24,5 @@ export const MovieTrailer = ({ videos }: MovieTrailerProps) => {
     </>
   );
 };
+
+export default MovieTrailer;

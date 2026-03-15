@@ -1,11 +1,30 @@
 import { PrismaPg } from '@prisma/adapter-pg';
-import {
-  Actor,
-  CrewMember,
-  CrewRole,
-  GenreEnum,
-  PrismaClient,
-} from '../generated/prisma/client';
+import { CrewRole, GenreEnum, PrismaClient } from '../generated/prisma/client';
+
+const TMDB_KEY = process.env.TMDB_API_KEY;
+const IMAGE_BASE = 'https://image.tmdb.org/t/p/w500';
+const TOTAL_PAGES = 5;
+
+const tmdbToGenre: Record<string, GenreEnum> = {
+  Action: GenreEnum.ACTION,
+  Adventure: GenreEnum.ADVENTURE,
+  Animation: GenreEnum.ANIMATION,
+  Comedy: GenreEnum.COMEDY,
+  Crime: GenreEnum.CRIME,
+  Documentary: GenreEnum.DOCUMENTARY,
+  Drama: GenreEnum.DRAMA,
+  Family: GenreEnum.FAMILY,
+  Fantasy: GenreEnum.FANTASY,
+  History: GenreEnum.HISTORY,
+  Horror: GenreEnum.HORROR,
+  Music: GenreEnum.MUSIC,
+  Mystery: GenreEnum.MYSTERY,
+  Romance: GenreEnum.ROMANCE,
+  'Science Fiction': GenreEnum.SCI_FI,
+  Thriller: GenreEnum.THRILLER,
+  War: GenreEnum.WAR,
+  Western: GenreEnum.WESTERN,
+};
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,
@@ -14,618 +33,106 @@ const prisma = new PrismaClient({ adapter });
 
 async function main() {
   const genres = Object.values(GenreEnum).map((name) => ({ name }));
+
   await prisma.genre.createMany({ data: genres, skipDuplicates: true });
 
-  const actorsData = [
-    { firstName: 'Tim', lastName: 'Robbins' },
-    { firstName: 'Russell', lastName: 'Crowe' },
-    { firstName: 'Carrie', lastName: 'Fisher' },
-    { firstName: 'Peter', lastName: 'Cushing' },
-    { firstName: 'Ian', lastName: 'McKellen' },
-    { firstName: 'Orlando', lastName: 'Bloom' },
-    { firstName: 'Viggo', lastName: 'Mortensen' },
-    { firstName: 'Cate', lastName: 'Blanchett' },
-    { firstName: 'Joaquin', lastName: 'Phoenix' },
-    { firstName: 'Connie', lastName: 'Nielsen' },
-    { firstName: 'Morgan', lastName: 'Freeman' },
-    { firstName: 'Marlon', lastName: 'Brando' },
-    { firstName: 'Al', lastName: 'Pacino' },
-    { firstName: 'Christian', lastName: 'Bale' },
-    { firstName: 'Heath', lastName: 'Ledger' },
-    { firstName: 'Henry', lastName: 'Fonda' },
-    { firstName: 'Liam', lastName: 'Neeson' },
-    { firstName: 'Elijah', lastName: 'Wood' },
-    { firstName: 'John', lastName: 'Travolta' },
-    { firstName: 'Samuel', lastName: 'Jackson' },
-    { firstName: 'Tom', lastName: 'Hanks' },
-    { firstName: 'Robin', lastName: 'Wright' },
-    { firstName: 'Leonardo', lastName: 'DiCaprio' },
-    { firstName: 'Joseph', lastName: 'Gordon-Levitt' },
-    { firstName: 'Elliot', lastName: 'Page' },
-    { firstName: 'Matt', lastName: 'Damon' },
-    { firstName: 'Ryan', lastName: 'Gosling' },
-    { firstName: 'Brad', lastName: 'Pitt' },
-    { firstName: 'Keanu', lastName: 'Reeves' },
-    { firstName: 'Carrie-Anne', lastName: 'Moss' },
-    { firstName: 'Mark', lastName: 'Hamill' },
-    { firstName: 'Harrison', lastName: 'Ford' },
-    { firstName: 'Sigourney', lastName: 'Weaver' },
-    { firstName: 'Christian', lastName: 'Slater' },
-    { firstName: 'Anne', lastName: 'Hathaway' },
-    { firstName: 'Matthew', lastName: 'Broderick' },
-    { firstName: 'Jeremy', lastName: 'Irons' },
-    { firstName: 'James', lastName: 'Earl Jones' },
-    { firstName: 'Moira', lastName: 'Kelly' },
-    { firstName: 'Whoopi', lastName: 'Goldberg' },
-    { firstName: 'Kate', lastName: 'Winslet' },
-    { firstName: 'Billy', lastName: 'Zane' },
-    { firstName: 'Kathy', lastName: 'Bates' },
-    { firstName: 'Bill', lastName: 'Paxton' },
-    { firstName: 'Sam', lastName: 'Neill' },
-    { firstName: 'Laura', lastName: 'Dern' },
-    { firstName: 'Jeff', lastName: 'Goldblum' },
-    { firstName: 'Richard', lastName: 'Attenborough' },
-    { firstName: 'Joseph', lastName: 'Mazzello' },
-    { firstName: 'Uma', lastName: 'Thurman' },
-    { firstName: 'Bruce', lastName: 'Willis' },
-    { firstName: 'Gary', lastName: 'Sinise' },
-    { firstName: 'Sally', lastName: 'Field' },
-    { firstName: 'Tom', lastName: 'Hardy' },
-    { firstName: 'Ken', lastName: 'Watanabe' },
-    { firstName: 'Laurence', lastName: 'Fishburne' },
-    { firstName: 'Hugo', lastName: 'Weaving' },
-    { firstName: 'Matthew', lastName: 'McConaughey' },
-    { firstName: 'Jessica', lastName: 'Chastain' },
-    { firstName: 'Oliver', lastName: 'Reed' },
-  ];
+  const pageFetches: Promise<Response>[] = [];
+  const allResults: any[] = [];
+  const movieDetailsFetches: Promise<Response>[] = [];
+  const allMovieDetails: any[] = [];
 
-  const actors: Actor[] = [];
-  for (const a of actorsData) {
-    const actor = await prisma.actor.create({ data: a });
-    actors.push(actor);
+  for (let page = 1; page <= TOTAL_PAGES; page++) {
+    pageFetches.push(
+      fetch(
+        `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_KEY}&vote_count.gte=1000&vote_average.gte=7&sort_by=popularity.desc&page=${page}`,
+      ),
+    );
   }
 
-  const crewData: { firstName: string; lastName: string; role: CrewRole }[] = [
-    { firstName: 'Frank', lastName: 'Darabont', role: CrewRole.DIRECTOR },
-    { firstName: 'Steven', lastName: 'Spielberg', role: CrewRole.DIRECTOR },
-    { firstName: 'Ridley', lastName: 'Scott', role: CrewRole.DIRECTOR },
-    { firstName: 'Francis', lastName: 'Coppola', role: CrewRole.DIRECTOR },
-    { firstName: 'Christopher', lastName: 'Nolan', role: CrewRole.DIRECTOR },
-    { firstName: 'Quentin', lastName: 'Tarantino', role: CrewRole.DIRECTOR },
-    { firstName: 'Peter', lastName: 'Jackson', role: CrewRole.DIRECTOR },
-    { firstName: 'James', lastName: 'Cameron', role: CrewRole.DIRECTOR },
-    { firstName: 'George', lastName: 'Lucas', role: CrewRole.PRODUCER },
-    { firstName: 'Kathleen', lastName: 'Kennedy', role: CrewRole.PRODUCER },
-    { firstName: 'Hans', lastName: 'Zimmer', role: CrewRole.COMPOSER },
-    { firstName: 'John', lastName: 'Williams', role: CrewRole.COMPOSER },
-    { firstName: 'Howard', lastName: 'Shore', role: CrewRole.COMPOSER },
-    { firstName: 'Wally', lastName: 'Pfister', role: CrewRole.CINEMATOGRAPHER },
-    { firstName: 'Roger', lastName: 'Allers', role: CrewRole.DIRECTOR },
-  ];
+  const settled = await Promise.allSettled(pageFetches);
 
-  const crewMembers: (CrewMember & { role: CrewRole })[] = [];
-  for (const c of crewData) {
-    const crew = await prisma.crewMember.create({
-      data: { firstName: c.firstName, lastName: c.lastName },
-    });
-    crewMembers.push({ ...crew, role: c.role });
+  for (const s of settled) {
+    if (s.status === 'fulfilled') {
+      const pageData = await s.value.json();
+      allResults.push(...pageData.results);
+    }
   }
 
-  const topCastData = {
-    'The Shawshank Redemption': [
-      { actor: ['Tim', 'Robbins'], character: 'Andy Dufresne' },
-      { actor: ['Morgan', 'Freeman'], character: 'Ellis Boyd "Red" Redding' },
-      { actor: ['Brad', 'Pitt'], character: 'Supporting Character' },
-      { actor: ['Christian', 'Slater'], character: 'Supporting Character' },
-      { actor: ['Matt', 'Damon'], character: 'Supporting Character' },
-    ],
-    'The Godfather': [
-      { actor: ['Marlon', 'Brando'], character: 'Vito Corleone' },
-      { actor: ['Al', 'Pacino'], character: 'Michael Corleone' },
-      { actor: ['Morgan', 'Freeman'], character: 'Supporting Character' },
-      { actor: ['Brad', 'Pitt'], character: 'Supporting Character' },
-      { actor: ['Samuel', 'Jackson'], character: 'Supporting Character' },
-    ],
-    'The Dark Knight': [
-      { actor: ['Christian', 'Bale'], character: 'Bruce Wayne / Batman' },
-      { actor: ['Heath', 'Ledger'], character: 'Joker' },
-      { actor: ['Joseph', 'Gordon-Levitt'], character: 'John Blake' },
-      { actor: ['Elliot', 'Page'], character: 'Miranda Tate / Talia al Ghul' },
-      { actor: ['Brad', 'Pitt'], character: 'Supporting Character' },
-    ],
-    'Pulp Fiction': [
-      { actor: ['John', 'Travolta'], character: 'Vincent Vega' },
-      { actor: ['Samuel', 'Jackson'], character: 'Jules Winnfield' },
-      { actor: ['Uma', 'Thurman'], character: 'Mia Wallace' },
-      { actor: ['Bruce', 'Willis'], character: 'Butch Coolidge' },
-      { actor: ['Morgan', 'Freeman'], character: 'Supporting Character' },
-    ],
-    'Forrest Gump': [
-      { actor: ['Tom', 'Hanks'], character: 'Forrest Gump' },
-      { actor: ['Robin', 'Wright'], character: 'Jenny Curran' },
-      { actor: ['Gary', 'Sinise'], character: 'Lieutenant Dan Taylor' },
-      { actor: ['Sally', 'Field'], character: 'Mrs. Gump' },
-      { actor: ['Matt', 'Damon'], character: 'Supporting Character' },
-    ],
-    Inception: [
-      { actor: ['Leonardo', 'DiCaprio'], character: 'Dom Cobb' },
-      { actor: ['Joseph', 'Gordon-Levitt'], character: 'Arthur' },
-      { actor: ['Elliot', 'Page'], character: 'Ariadne' },
-      { actor: ['Tom', 'Hardy'], character: 'Eames' },
-      { actor: ['Ken', 'Watanabe'], character: 'Saito' },
-    ],
-    'The Matrix': [
-      { actor: ['Keanu', 'Reeves'], character: 'Neo' },
-      { actor: ['Carrie-Anne', 'Moss'], character: 'Trinity' },
-      { actor: ['Laurence', 'Fishburne'], character: 'Morpheus' },
-      { actor: ['Hugo', 'Weaving'], character: 'Agent Smith' },
-      { actor: ['Brad', 'Pitt'], character: 'Supporting Character' },
-    ],
-    Interstellar: [
-      { actor: ['Matthew', 'McConaughey'], character: 'Cooper' },
-      { actor: ['Anne', 'Hathaway'], character: 'Brand' },
-      { actor: ['Jessica', 'Chastain'], character: 'Murph' },
-      { actor: ['Matt', 'Damon'], character: 'Dr. Mann' },
-    ],
-    Gladiator: [
-      { actor: ['Russell', 'Crowe'], character: 'Maximus' },
-      { actor: ['Joaquin', 'Phoenix'], character: 'Commodus' },
-      { actor: ['Connie', 'Nielsen'], character: 'Lucilla' },
-      { actor: ['Oliver', 'Reed'], character: 'Proximo' },
-      { actor: ['Tom', 'Hanks'], character: 'Supporting Character' },
-    ],
-    'The Lord of the Rings: The Fellowship of the Ring': [
-      { actor: ['Elijah', 'Wood'], character: 'Frodo Baggins' },
-      { actor: ['Ian', 'McKellen'], character: 'Gandalf' },
-      { actor: ['Orlando', 'Bloom'], character: 'Legolas' },
-      { actor: ['Viggo', 'Mortensen'], character: 'Aragorn' },
-      { actor: ['Cate', 'Blanchett'], character: 'Galadriel' },
-    ],
-    'Star Wars: Episode IV – A New Hope': [
-      { actor: ['Mark', 'Hamill'], character: 'Luke Skywalker' },
-      { actor: ['Harrison', 'Ford'], character: 'Han Solo' },
-      { actor: ['Carrie', 'Fisher'], character: 'Leia Organa' },
-      { actor: ['Peter', 'Cushing'], character: 'Grand Moff Tarkin' },
-    ],
-    'Jurassic Park': [
-      { actor: ['Sam', 'Neill'], character: 'Dr. Alan Grant' },
-      { actor: ['Laura', 'Dern'], character: 'Dr. Ellie Sattler' },
-      { actor: ['Jeff', 'Goldblum'], character: 'Dr. Ian Malcolm' },
-      { actor: ['Richard', 'Attenborough'], character: 'John Hammond' },
-      { actor: ['Joseph', 'Mazzello'], character: 'Tim Murphy' },
-    ],
-    'The Lion King': [
-      { actor: ['Matthew', 'Broderick'], character: 'Simba' },
-      { actor: ['Jeremy', 'Irons'], character: 'Scar' },
-      { actor: ['James', 'Earl Jones'], character: 'Mufasa' },
-      { actor: ['Moira', 'Kelly'], character: 'Nala' },
-      { actor: ['Whoopi', 'Goldberg'], character: 'Shenzi' },
-    ],
-    Titanic: [
-      { actor: ['Leonardo', 'DiCaprio'], character: 'Jack Dawson' },
-      { actor: ['Kate', 'Winslet'], character: 'Rose DeWitt Bukater' },
-      { actor: ['Billy', 'Zane'], character: 'Cal Hockley' },
-      { actor: ['Kathy', 'Bates'], character: 'Molly Brown' },
-      { actor: ['Bill', 'Paxton'], character: 'Brock Lovett' },
-    ],
-  };
+  for (const movie of allResults) {
+    movieDetailsFetches.push(
+      fetch(
+        `https://api.themoviedb.org/3/movie/${movie.id}?api_key=${TMDB_KEY}&append_to_response=credits,videos,reviews`,
+      ),
+    );
+  }
 
-  const moviesData = [
-    {
-      title: 'The Shawshank Redemption',
-      description:
-        'Two imprisoned men bond over many years, finding solace and eventual redemption through acts of common decency.',
-      runtime: 142,
-      rating: 9.3,
-      popularity: 100,
-      posterUrl: '',
-      trailerUrl: '',
-      releaseDate: new Date('1994-09-23'),
-      genres: [GenreEnum.DRAMA],
-      cast: [
-        'Tim Robbins',
-        'Morgan Freeman',
-        'Brad Pitt',
-        'Christian Slater',
-        'Matt Damon',
-      ],
-      crew: ['Frank Darabont', 'John Williams', 'Kathleen Kennedy'],
-      reviews: [
-        {
-          author: 'Dorian Leci',
-          content: `
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque at tortor porta nulla euismod ullamcorper sed ut massa. Maecenas at magna luctus, dapibus velit vitae, egestas dolor. Nam at pulvinar felis. Mauris sit amet libero pellentesque, varius risus eu, pellentesque nisl. Nam sit amet suscipit lacus. Donec nec scelerisque purus, in laoreet elit. Maecenas et odio eu purus sodales eleifend ac at turpis. Nunc tincidunt libero faucibus felis tristique faucibus. Sed vitae justo vel lectus mollis feugiat. Curabitur consectetur non lorem ut pulvinar. Pellentesque suscipit nec ligula sed consectetur. Nullam eget mattis libero. In hac habitasse platea dictumst.
-Aenean egestas pellentesque massa, a iaculis nisi lobortis quis. Cras et lorem metus. Phasellus a maximus turpis, a euismod augue. Mauris eu blandit lacus, at faucibus lectus. Phasellus vulputate orci a neque porttitor egestas. In finibus et nunc sed mollis. Fusce fermentum neque ac venenatis maximus. Aliquam ut gravida nulla. Vivamus nec porta est. Vivamus placerat nec felis ac commodo.
-Sed vestibulum quam nec tristique luctus. In in diam justo. Vivamus vulputate dignissim est, ut gravida libero pulvinar at. Proin ac turpis vel velit imperdiet dignissim. Suspendisse in felis eu lacus tincidunt blandit. Nulla semper porttitor tempor. Donec suscipit sagittis lacinia. Pellentesque quis leo purus. Ut posuere est non eleifend facilisis. Suspendisse et nibh ut neque elementum porta. Curabitur vitae laoreet lorem.
-Donec risus ligula, ultricies eget orci sed, mattis suscipit orci. Morbi faucibus lorem id erat varius tincidunt. Quisque aliquam in urna in semper. Sed non volutpat magna. Nullam tempus purus tortor. Praesent id purus tellus. Aenean tempor cursus ullamcorper. Pellentesque eu laoreet odio, id scelerisque elit. Nunc dapibus, tellus id pulvinar congue, metus felis venenatis lacus, sed ultricies risus turpis at ex. Nunc vel eros nisl. Fusce vel libero laoreet, pulvinar est quis, iaculis enim. Mauris vel mi ac felis faucibus vulputate. Duis porta arcu a aliquam tincidunt. Nunc auctor dictum sem sed varius. Phasellus dolor lorem, pretium ac ante ut, auctor eleifend mauris.
-Integer auctor sem nibh, in ultrices metus maximus lobortis. Sed pharetra mattis dignissim. Nulla sed felis maximus nulla aliquet congue. Fusce venenatis luctus velit, quis imperdiet justo mollis at. Fusce tristique enim risus, sodales dictum sapien maximus eu. Fusce sit amet lorem felis. Suspendisse a est facilisis, pharetra magna ut, porta est. Phasellus ultrices enim neque, at lobortis mauris blandit nec. Donec id urna sed ligula iaculis fermentum. Maecenas et luctus neque. Sed elementum tortor lobortis justo tincidunt imperdiet. Nam euismod eu libero sit amet iaculis. Cras vel dapibus ligula, vel pretium nulla. `,
-        },
-        {
-          author: 'Dorian Leci2',
-          content: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque at tortor porta nulla euismod ullamcorper sed ut massa. Maecenas at magna luctus, dapibus velit vitae, egestas dolor. Nam at pulvinar felis. Mauris sit amet libero pellentesque, varius risus eu, pellentesque nisl. Nam sit amet suscipit lacus. Donec nec scelerisque purus, in laoreet elit. Maecenas et odio eu purus sodales eleifend ac at turpis. Nunc tincidunt libero faucibus felis tristique faucibus. Sed vitae justo vel lectus mollis feugiat. Curabitur consectetur non lorem ut pulvinar. Pellentesque suscipit nec ligula sed consectetur. Nullam eget mattis libero. In hac habitasse platea dictumst.
-Aenean egestas pellentesque massa, a iaculis nisi lobortis quis. Cras et lorem metus. Phasellus a maximus turpis, a euismod augue. Mauris eu blandit lacus, at faucibus lectus. Phasellus vulputate orci a neque porttitor egestas. In finibus et nunc sed mollis. Fusce fermentum neque ac venenatis maximus. Aliquam ut gravida nulla. Vivamus nec porta est. Vivamus placerat nec felis ac commodo.
-Sed vestibulum quam nec tristique luctus. In in diam justo. Vivamus vulputate dignissim est, ut gravida libero pulvinar at. Proin ac turpis vel velit imperdiet dignissim. Suspendisse in felis eu lacus tincidunt blandit. Nulla semper porttitor tempor. Donec suscipit sagittis lacinia. Pellentesque quis leo purus. Ut posuere est non eleifend facilisis. Suspendisse et nibh ut neque elementum porta. Curabitur vitae laoreet lorem.
-Donec risus ligula, ultricies eget orci sed, mattis suscipit orci. Morbi faucibus lorem id erat varius tincidunt. Quisque aliquam in urna in semper. Sed non volutpat magna. Nullam tempus purus tortor. Praesent id purus tellus. Aenean tempor cursus ullamcorper. Pellentesque eu laoreet odio, id scelerisque elit. Nunc dapibus, tellus id pulvinar congue, metus felis venenatis lacus, sed ultricies risus turpis at ex. Nunc vel eros nisl. Fusce vel libero laoreet, pulvinar est quis, iaculis enim. Mauris vel mi ac felis faucibus vulputate. Duis porta arcu a aliquam tincidunt. Nunc auctor dictum sem sed varius. Phasellus dolor lorem, pretium ac ante ut, auctor eleifend mauris.
-Integer auctor sem nibh, in ultrices metus maximus lobortis. Sed pharetra mattis dignissim. Nulla sed felis maximus nulla aliquet congue. Fusce venenatis luctus velit, quis imperdiet justo mollis at. Fusce tristique enim risus, sodales dictum sapien maximus eu. Fusce sit amet lorem felis. Suspendisse a est facilisis, pharetra magna ut, porta est. Phasellus ultrices enim neque, at lobortis mauris blandit nec. Donec id urna sed ligula iaculis fermentum. Maecenas et luctus neque. Sed elementum tortor lobortis justo tincidunt imperdiet. Nam euismod eu libero sit amet iaculis. Cras vel dapibus ligula, vel pretium nulla. `,
-        },
-      ],
-    },
-    {
-      title: 'The Godfather',
-      description:
-        'The aging patriarch of an organized crime dynasty transfers control to his reluctant son.',
-      runtime: 175,
-      rating: 9.2,
-      popularity: 99,
-      posterUrl: '',
-      trailerUrl: '',
-      releaseDate: new Date('1972-03-24'),
-      genres: [GenreEnum.CRIME, GenreEnum.DRAMA],
-      cast: [
-        'Marlon Brando',
-        'Al Pacino',
-        'Morgan Freeman',
-        'Brad Pitt',
-        'Samuel Jackson',
-      ],
-      crew: ['Francis Coppola', 'John Williams', 'Kathleen Kennedy'],
-    },
-    {
-      title: 'The Dark Knight',
-      description:
-        'Batman faces the Joker in Gotham City in one of the greatest superhero films.',
-      runtime: 152,
-      rating: 9.0,
-      popularity: 98,
-      posterUrl: '',
-      trailerUrl: '',
-      releaseDate: new Date('2008-07-18'),
-      genres: [GenreEnum.ACTION, GenreEnum.CRIME],
-      cast: [
-        'Christian Bale',
-        'Heath Ledger',
-        'Brad Pitt',
-        'Joseph Gordon-Levitt',
-        'Elliot Page',
-      ],
-      crew: ['Christopher Nolan', 'Hans Zimmer', 'Kathleen Kennedy'],
-    },
-    {
-      title: 'Pulp Fiction',
-      description: 'Intertwining stories of crime and redemption in LA.',
-      runtime: 154,
-      rating: 8.9,
-      popularity: 97,
-      posterUrl: '',
-      trailerUrl: '',
-      releaseDate: new Date('1994-10-14'),
-      genres: [GenreEnum.CRIME, GenreEnum.COMEDY],
-      cast: [
-        'John Travolta',
-        'Samuel Jackson',
-        'Brad Pitt',
-        'Leonardo DiCaprio',
-        'Morgan Freeman',
-      ],
-      crew: ['Quentin Tarantino', 'John Williams', 'Kathleen Kennedy'],
-    },
-    {
-      title: 'Forrest Gump',
-      description:
-        'Life unfolds through the eyes of a simple man with a big heart.',
-      runtime: 142,
-      rating: 8.8,
-      popularity: 96,
-      posterUrl: '',
-      trailerUrl: '',
-      releaseDate: new Date('1994-07-06'),
-      genres: [GenreEnum.DRAMA, GenreEnum.ROMANCE],
-      cast: [
-        'Tom Hanks',
-        'Robin Wright',
-        'Matt Damon',
-        'Keanu Reeves',
-        'Ryan Gosling',
-      ],
-      crew: ['Steven Spielberg', 'John Williams', 'Kathleen Kennedy'],
-    },
-    {
-      title: 'Inception',
-      description:
-        'A thief who steals corporate secrets through dream-sharing technology.', // real
-      runtime: 148,
-      rating: 8.8,
-      popularity: 95,
-      posterUrl: '',
-      trailerUrl: '',
-      releaseDate: new Date('2010-07-16'),
-      genres: [GenreEnum.ACTION, GenreEnum.SCI_FI],
-      cast: [
-        'Leonardo DiCaprio',
-        'Joseph Gordon-Levitt',
-        'Elliot Page',
-        'Christian Bale',
-        'Ryan Gosling',
-      ],
-      crew: ['Christopher Nolan', 'Hans Zimmer', 'Kathleen Kennedy'],
-    },
-    {
-      title: 'The Matrix',
-      description:
-        'A hacker discovers reality is a simulation controlled by powerful forces.',
-      runtime: 136,
-      rating: 8.7,
-      popularity: 94,
-      posterUrl: '',
-      trailerUrl: '',
-      releaseDate: new Date('1999-03-31'),
-      genres: [GenreEnum.ACTION, GenreEnum.SCI_FI],
-      cast: [
-        'Keanu Reeves',
-        'Carrie-Anne Moss',
-        'Brad Pitt',
-        'Ryan Gosling',
-        'Morgan Freeman',
-      ],
-      crew: ['Peter Jackson', 'Hans Zimmer', 'Kathleen Kennedy'],
-    },
-    {
-      title: 'Interstellar',
-      description:
-        'Explorers travel through a wormhole in space to save humanity.',
-      runtime: 169,
-      rating: 8.6,
-      popularity: 93,
-      posterUrl: '',
-      trailerUrl: '',
-      releaseDate: new Date('2014-11-07'),
-      genres: [GenreEnum.SCI_FI, GenreEnum.ADVENTURE],
-      cast: ['Matt Damon', 'Anne Hathaway'],
-      crew: ['Christopher Nolan', 'Hans Zimmer', 'Wally Pfister'],
-    },
-    {
-      title: 'Gladiator',
-      description: 'A former Roman General sets out to exact vengeance.',
-      runtime: 155,
-      rating: 8.5,
-      popularity: 92,
-      posterUrl: '',
-      trailerUrl: '',
-      releaseDate: new Date('2000-05-05'),
-      genres: [GenreEnum.ACTION, GenreEnum.DRAMA],
-      cast: [
-        'Russell Crowe',
-        'Joaquin Phoenix',
-        'Connie Nielsen',
-        'Brad Pitt',
-        'Tom Hanks',
-      ],
-      crew: ['Ridley Scott', 'Hans Zimmer', 'Kathleen Kennedy'],
-      reviews: [
-        { author: 'Alice', content: 'Epic movie with stunning visuals.' },
-        { author: 'Bob', content: 'Russell Crowe is phenomenal!' },
-      ],
-    },
-    {
-      title: 'The Lord of the Rings: The Fellowship of the Ring',
-      description: 'A hobbit begins a journey to destroy the One Ring.',
-      runtime: 178,
-      rating: 8.8,
-      popularity: 95,
-      posterUrl: '',
-      trailerUrl: '',
-      releaseDate: new Date('2001-12-19'),
-      genres: [GenreEnum.FANTASY, GenreEnum.ADVENTURE],
-      cast: [
-        'Elijah Wood',
-        'Ian McKellen',
-        'Orlando Bloom',
-        'Viggo Mortensen',
-        'Cate Blanchett',
-      ],
-      crew: ['Peter Jackson', 'Howard Shore', 'Kathleen Kennedy'],
-      reviews: [
-        {
-          author: 'Charlie',
-          content: 'A masterpiece of fantasy storytelling.',
-        },
-        { author: 'Dana', content: 'The visuals and music are breathtaking.' },
-      ],
-    },
-    {
-      title: 'Star Wars: Episode IV – A New Hope',
-      description: 'Luke Skywalker begins his journey to become a Jedi.',
-      runtime: 121,
-      rating: 8.6,
-      popularity: 90,
-      posterUrl: '',
-      trailerUrl: '',
-      releaseDate: new Date('1977-05-25'),
-      genres: [GenreEnum.SCI_FI, GenreEnum.ADVENTURE],
-      cast: ['Mark Hamill', 'Harrison Ford', 'Carrie Fisher', 'Peter Cushing'],
-      crew: ['George Lucas', 'John Williams', 'Kathleen Kennedy'],
-      reviews: [
-        { author: 'Eve', content: 'Classic sci-fi adventure that never ages.' },
-        {
-          author: 'Frank',
-          content: 'Iconic performances and unforgettable music.',
-        },
-      ],
-    },
-    {
-      title: 'Jurassic Park',
-      description: 'Dinosaurs are brought back to life on a theme park island.',
-      runtime: 127,
-      rating: 8.1,
-      popularity: 89,
-      posterUrl: '',
-      trailerUrl: '',
-      releaseDate: new Date('1993-06-11'),
-      genres: [GenreEnum.ACTION, GenreEnum.SCI_FI],
-      cast: [
-        'Sam Neill',
-        'Laura Dern',
-        'Jeff Goldblum',
-        'Richard Attenborough',
-        'Joseph Mazzello',
-      ],
-      crew: ['Steven Spielberg', 'John Williams', 'Kathleen Kennedy'],
-      reviews: [
-        {
-          author: 'Grace',
-          content: 'Dinosaurs come to life like never before!',
-        },
-        { author: 'Henry', content: 'Spielberg at his finest.' },
-      ],
-    },
-    {
-      title: 'The Lion King',
-      description:
-        'A young lion prince flees his kingdom only to return and reclaim it.',
-      runtime: 88,
-      rating: 8.5,
-      popularity: 91,
-      posterUrl: '',
-      trailerUrl: '',
-      releaseDate: new Date('1994-06-24'),
-      genres: [GenreEnum.ANIMATION, GenreEnum.ADVENTURE],
-      cast: [
-        'Matthew Broderick',
-        'Jeremy Irons',
-        'James Earl Jones',
-        'Moira Kelly',
-        'Whoopi Goldberg',
-      ],
-      crew: ['Roger Allers', 'Hans Zimmer', 'Kathleen Kennedy'],
-      reviews: [
-        { author: 'Ivy', content: 'Timeless animated classic.' },
-        { author: 'Jack', content: 'Music and story are unforgettable.' },
-      ],
-    },
-    {
-      title: 'Titanic',
-      description:
-        'A young couple fall in love aboard the ill-fated ship Titanic.',
-      runtime: 195,
-      rating: 7.8,
-      popularity: 90,
-      posterUrl: '',
-      trailerUrl: '',
-      releaseDate: new Date('1997-12-19'),
-      genres: [GenreEnum.DRAMA, GenreEnum.ROMANCE],
-      cast: [
-        'Leonardo DiCaprio',
-        'Kate Winslet',
-        'Billy Zane',
-        'Kathy Bates',
-        'Bill Paxton',
-      ],
-      crew: ['James Cameron', 'John Williams', 'Kathleen Kennedy'],
-      reviews: [
-        { author: 'Liam', content: 'Epic romance on the Titanic.' },
-        { author: 'Mia', content: 'Heartbreaking and visually stunning.' },
-      ],
-    },
-    {
-      title: 'Avatar',
-      description:
-        'A paraplegic Marine is dispatched to the moon Pandora on a unique mission, becoming torn between following his orders and protecting the world he feels is his home.',
-      runtime: 162,
-      rating: 7.8,
-      popularity: 89,
-      posterUrl: '',
-      trailerUrl: '',
-      releaseDate: new Date('2009-12-18'),
-      genres: [GenreEnum.ACTION, GenreEnum.ADVENTURE, GenreEnum.SCI_FI],
-      cast: ['Sam Worthington', 'Zoe Saldana', 'Sigourney Weaver'],
-      crew: ['James Cameron', 'Simon Franglen', 'Jon Landau'],
-      reviews: [
-        {
-          author: 'Alice',
-          content: `This movie is visually stunning. The world of Pandora is so immersive that you feel like you are part of it. The 3D effects were groundbreaking for its time and still hold up. I especially loved the interaction with the Na’vi and the way nature and technology are contrasted. Truly a masterpiece in visual storytelling.`,
-        },
-        {
-          author: 'Bob',
-          content: `I appreciate the environmental message, but the story feels familiar. The love story is predictable, yet engaging enough to keep you invested. The action sequences are spectacular and the music complements the epic scenery perfectly.`,
-        },
-        {
-          author: 'Catherine',
-          content: `Honestly, the world-building in Avatar is unmatched. Every plant, creature, and landscape feels real. The themes of colonialism, exploitation, and respect for nature are woven seamlessly into the narrative. A movie you can watch multiple times and still notice new details.`,
-        },
-      ],
-    },
-    {
-      title: 'The Avengers',
-      description:
-        'Earth’s mightiest heroes must come together and learn to fight as a team.',
-      runtime: 143,
-      rating: 8.0,
-      popularity: 95,
-      posterUrl: '',
-      trailerUrl: '',
-      releaseDate: new Date('2012-05-04'),
-      genres: [GenreEnum.ACTION, GenreEnum.ADVENTURE, GenreEnum.FANTASY],
-      cast: ['Robert Downey Jr.', 'Chris Evans', 'Scarlett Johansson'],
-      crew: ['Joss Whedon', 'Kevin Feige', 'Alan Silvestri'],
-      reviews: [
-        {
-          author: 'David',
-          content: `As a Marvel fan, this movie was everything I hoped for. The team dynamic is excellent, and the humor is perfectly balanced with high-stakes action. The final battle scene on New York is iconic.`,
-        },
-        {
-          author: 'Ella',
-          content: `I loved seeing all the heroes together. The pacing was perfect and each character had moments to shine. Some of the CGI-heavy sequences look slightly dated now, but overall the experience is thrilling and entertaining.`,
-        },
-        {
-          author: 'Frank',
-          content: `The Avengers set a new standard for superhero team movies. Every character's arc feels satisfying, and the chemistry between the cast is phenomenal. I could watch the interactions between Tony and Steve all day.`,
-        },
-      ],
-    },
-  ];
+  const settledMovieDetails = await Promise.allSettled(movieDetailsFetches);
 
-  for (const m of moviesData) {
-    await prisma.movie.create({
+  for (const s of settledMovieDetails) {
+    if (s.status === 'fulfilled') {
+      const details = await s.value.json();
+      allMovieDetails.push(details);
+    }
+  }
+
+  for (const details of allMovieDetails) {
+    const poster = details.poster_path
+      ? `${IMAGE_BASE}${details.poster_path}`
+      : '';
+
+    const trailer = details.videos?.results?.find(
+      (v: any) => v.type === 'Trailer' && v.site === 'YouTube',
+    );
+
+    const trailerKey = trailer?.key || '';
+
+    const createdMovie = await prisma.movie.create({
       data: {
-        title: m.title,
-        description: m.description,
-        runtime: m.runtime,
-        rating: m.rating,
-        popularity: m.popularity,
-        posterUrl: m.posterUrl,
-        trailerUrl: m.trailerUrl,
-        releaseDate: m.releaseDate,
-        genres: { connect: m.genres.map((g: GenreEnum) => ({ name: g })) },
+        title: details.title,
+        description: details.overview,
+        runtime: details.runtime,
+        rating: details.vote_average,
+        popularity: details.popularity,
+        posterUrl: poster,
+        trailerKey,
+        releaseDate: new Date(details.release_date),
+        genres: {
+          connect: details.genres
+            .map((g: any) => ({
+              name: tmdbToGenre[g.name],
+            }))
+            .filter(Boolean),
+        },
         topCast: {
-          create: topCastData[m.title].map((c) => {
-            const [firstName, lastName] = c.actor;
-            const actor = actors.find(
-              (a) => a.firstName === firstName && a.lastName === lastName,
-            );
-            if (!actor)
-              throw new Error(`Actor ${firstName} ${lastName} not found`);
-            return { actorId: actor.id, character: c.character };
-          }),
-        },
-        topCrew: {
-          create: m.crew.map((name) => {
-            const [firstName, lastName] = name.split(' ');
-            const crew = crewMembers.find(
-              (c) => c.firstName === firstName && c.lastName === lastName,
-            );
-            if (!crew) throw new Error(`Crew ${name} not found`);
-            return { crewMemberId: crew.id, role: crew.role };
-          }),
-        },
-        reviews: {
-          create: m.reviews?.map((r) => ({
-            author: r.author,
-            content: r.content,
+          create: details.credits?.cast?.slice(0, 5).map((c: any) => ({
+            name: c.name,
+            character: c.character,
           })),
         },
-        favorite: { create: {} },
+
+        topCrew: {
+          create: details.credits?.crew
+            ?.filter((c: any) =>
+              Object.values(CrewRole).includes(c.job.toUpperCase()),
+            )
+            .map((c: any) => ({
+              name: c.name,
+              role: c.job.toUpperCase() as CrewRole,
+            })),
+        },
       },
     });
+
+    if (details.reviews?.results)
+      for (const r of details.reviews?.results) {
+        await prisma.review.create({
+          data: {
+            author: r.author,
+            content: r.content,
+            movieId: createdMovie.id,
+          },
+        });
+      }
   }
 }
 

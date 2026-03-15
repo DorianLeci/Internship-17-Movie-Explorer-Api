@@ -1,5 +1,6 @@
 import { useMovieById } from '@api/movie';
 import useReveal from '@hooks/useReveal';
+import GenreDisplayMap from '@pages/Movies/components/MovieFilter/helpers/GenreDisplayMap';
 import { AppPaths } from '@routes/paths';
 import { useEffect } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -8,6 +9,7 @@ import styles from './MoveDetailsPage.module.scss';
 import { MovieCast } from './components/MovieCast/MovieCast';
 import { MovieCrew } from './components/MovieCrew/MovieCrew';
 import { MovieReviews } from './components/MovieReview/MovieReview';
+import MovieTrailer from './components/MovieTrailer';
 import MovieDetailsSkeleton from './components/Skeleton/MovieDetailsSkeleton';
 import { useToggleFavorite } from './hooks/useToggleFavorite';
 
@@ -65,7 +67,7 @@ const MovieDetailsPage = () => {
                 <strong className={styles.label}>Genres: </strong>
                 {movie.genres.map((g) => (
                   <span key={g.id} className={styles.value}>
-                    {g.name}
+                    {GenreDisplayMap[g.name]}
                   </span>
                 ))}
               </p>
@@ -75,7 +77,7 @@ const MovieDetailsPage = () => {
           <MovieCast cast={movie.topCast} />
           <MovieCrew crew={movie.topCrew} />
           <MovieReviews reviews={movie.reviews} />
-          {/* <MovieTrailer videos={movie.videos?.results} /> */}
+          <MovieTrailer trailerKey={movie.trailerKey} />
         </>
       )}
     </div>

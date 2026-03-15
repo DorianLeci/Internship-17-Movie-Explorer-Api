@@ -24,7 +24,7 @@ export class MovieEntity {
   posterUrl: string;
 
   @ApiProperty()
-  trailerUrl: string;
+  trailerKey: string;
 
   @ApiProperty()
   releaseDate: Date;

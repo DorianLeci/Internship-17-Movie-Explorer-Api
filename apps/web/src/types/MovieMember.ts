@@ -2,16 +2,13 @@ import type { CrewRole } from 'enums /CrewRole';
 
 export interface MovieMember {
   id: number;
-  firstName: string;
-  lastName: string;
+  name: string;
 }
 
-export interface CastMember {
-  actor: MovieMember;
+export interface CastMember extends MovieMember {
   character: string;
 }
 
-export interface CrewMember {
-  crewMember: MovieMember;
+export interface CrewMember extends MovieMember {
   role: CrewRole;
 }

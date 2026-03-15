@@ -47,8 +47,8 @@ export class MoviesService {
       include: {
         favorite: true,
         genres: true,
-        topCast: { include: { actor: true } },
-        topCrew: { include: { crewMember: true } },
+        topCast: true,
+        topCrew: true,
         reviews: true,
       },
     });

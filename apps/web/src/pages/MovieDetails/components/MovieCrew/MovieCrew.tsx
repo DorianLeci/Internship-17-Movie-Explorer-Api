@@ -13,12 +13,10 @@ export const MovieCrew = ({ crew }: MovieCrewProps) => {
       <h2 className={styles.title}>Top Crew</h2>
       <div className={styles.scrollContainer}>
         <div className={styles.cardContainer}>
-          {crew.map(({ crewMember, role }) => (
-            <div key={`${crewMember.id}-${role}`} className={styles.card}>
-              <span className={styles.name}>
-                {`${crewMember.firstName} ${crewMember.lastName}`}
-              </span>
-              <span className={styles.role}>{role}</span>
+          {crew.map((member) => (
+            <div key={`${member.id}-${member.role}`} className={styles.card}>
+              <span className={styles.name}>{member.name}</span>
+              <span className={styles.role}>{member.role}</span>
             </div>
           ))}
         </div>

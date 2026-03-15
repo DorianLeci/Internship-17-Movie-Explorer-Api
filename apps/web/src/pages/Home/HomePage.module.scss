@@ -28,14 +28,15 @@
   gap: 0.5rem;
   padding: 15px 30px;
   color: white;
+  text-decoration: none;
   text-align: center;
   background: var(--bg-dark);
   border-radius: 30px;
   box-shadow: 0px 2px 10px var(--color-peach);
   will-change: transform;
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:hover {
     transform: translateY(-4px);

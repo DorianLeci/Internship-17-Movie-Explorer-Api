@@ -37,7 +37,8 @@ cd Internship-17-Movie-Explorer-Api
    ```
 -  Linux
    ```
-   sudo docker compose up --build
+   sudo usermod -aG docker $USER
+   docker compose up --build
    ```
 ## Access
 

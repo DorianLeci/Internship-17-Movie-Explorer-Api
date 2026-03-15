@@ -1,4 +1,4 @@
-import { AppPaths } from '../routes/paths';
+import { AppPaths } from '@routes/paths';
 
 interface NavItem {
   label: string;

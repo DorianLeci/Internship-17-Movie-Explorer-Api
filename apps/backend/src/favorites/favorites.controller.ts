@@ -10,8 +10,8 @@ import {
 import {
   ApiConflictResponse,
   ApiCreatedResponse,
+  ApiNoContentResponse,
   ApiNotFoundResponse,
-  ApiOkResponse,
 } from '@nestjs/swagger';
 import { CreateFavoriteDto } from './dto/create-favorite.dto';
 import { FavoriteEntity } from './entities/favorite_entity';
@@ -35,7 +35,9 @@ export class FavoritesController {
 
   @Delete(':id')
   @HttpCode(204)
-  @ApiOkResponse({ description: 'Movie successfully removed from favorites' })
+  @ApiNoContentResponse({
+    description: 'Movie successfully removed from favorites',
+  })
   @ApiNotFoundResponse({ description: 'Movie is not in favorites' })
   async remove(@Param('id', ParseIntPipe) id: number) {
     return this.favoritesService.remove(id);

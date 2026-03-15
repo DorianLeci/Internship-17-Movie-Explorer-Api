@@ -2,8 +2,8 @@ import SortOrder from '@enums/SortOrder';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
 import { FindMoviesDto } from './dto/find-movies.dto';
-import { MovieDetailsEntity } from './entities/movie_details_entity';
-import { MovieEntity } from './entities/movie_entity';
+import { MovieEntity } from './entities/movie.entity';
+import { MovieDetailsEntity } from './entities/movie_details.entity';
 
 @Injectable()
 export class MoviesService {

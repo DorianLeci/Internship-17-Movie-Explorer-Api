@@ -1,7 +1,8 @@
+import { BaseEntity } from '@base/base.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { Favorite } from 'generated/prisma/browser';
+import { FavoriteEntity } from 'src/favorites/entities/favorite_entity';
 
-export class MovieEntity {
+export class MovieEntity extends BaseEntity {
   @ApiProperty()
   id: number;
 
@@ -29,12 +30,6 @@ export class MovieEntity {
   @ApiProperty()
   releaseDate: Date;
 
-  @ApiProperty()
-  createdAt: Date;
-
-  @ApiProperty()
-  updatedAt: Date;
-
-  @ApiProperty()
-  favorite: Favorite | null;
+  @ApiProperty({ type: () => [FavoriteEntity] })
+  favorite: FavoriteEntity | null;
 }

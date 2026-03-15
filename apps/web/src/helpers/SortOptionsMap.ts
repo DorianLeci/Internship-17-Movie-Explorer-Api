@@ -4,4 +4,5 @@ export const SortOptionsMap: Record<SortField, string> = {
   [SortField.POPULARITY]: 'Popularity',
   [SortField.RATING]: 'Rating',
   [SortField.RELEASE_DATE]: 'Release Date',
+  [SortField.TITLE]: 'Title',
 };

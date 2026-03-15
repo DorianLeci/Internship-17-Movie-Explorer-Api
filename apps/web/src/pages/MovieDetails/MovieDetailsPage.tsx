@@ -2,7 +2,7 @@ import { useMovieById } from '@api/movie';
 import useReveal from '@hooks/useReveal';
 import GenreDisplayMap from '@pages/Movies/components/MovieFilter/helpers/GenreDisplayMap';
 import { AppPaths } from '@routes/paths';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './MoveDetailsPage.module.scss';
@@ -13,17 +13,38 @@ import MovieTrailer from './components/MovieTrailer';
 import MovieDetailsSkeleton from './components/Skeleton/MovieDetailsSkeleton';
 import { useToggleFavorite } from './hooks/useToggleFavorite';
 
+const DELAY = 2500;
+
 const MovieDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const movieId = id ? Number(id) : undefined;
-
   const navigate = useNavigate();
+
   const { data: movie, isLoading, error } = useMovieById(movieId);
   const visible = useReveal({ isLoading });
 
   const toggleFavoriteMutation = useToggleFavorite();
+  const [disabledFavorite, setDisabledFavorite] = useState(false);
 
   const isFavorite = !!movie?.favorite;
+
+  const handleToggleFavorite = () => {
+    if (disabledFavorite) return;
+
+    setDisabledFavorite(true);
+
+    toggleFavoriteMutation.mutate(
+      {
+        id: movieId,
+        isFavorite,
+      },
+      {
+        onSettled: () => {
+          setTimeout(() => setDisabledFavorite(false), DELAY);
+        },
+      },
+    );
+  };
 
   useEffect(() => {
     if (!id || error) {
@@ -43,13 +64,8 @@ const MovieDetailsPage = () => {
             </button>
 
             <button
-              className={`${styles.toggleFavoriteButton} ${isFavorite ? styles.remove : styles.add}`}
-              onClick={() =>
-                toggleFavoriteMutation.mutate({
-                  id: movieId,
-                  isFavorite,
-                })
-              }
+              className={`${styles.toggleFavoriteButton} ${isFavorite ? styles.remove : styles.add} ${disabledFavorite ? styles.disabled : ''}`}
+              onClick={handleToggleFavorite}
             >
               {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
             </button>

@@ -17,7 +17,8 @@
       "@movies/*": ["src/movies/*"],
       "@enums/*": ["src/enums/*"],
       "@prisma/*": ["src/prisma/*"],
-      "@generated/*": ["src/generated/*"]
+      "@generated/*": ["src/generated/*"],
+      "@base/*": ["src/base/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

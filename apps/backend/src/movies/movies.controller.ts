@@ -1,8 +1,8 @@
 import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger';
 import { FindMoviesDto } from './dto/find-movies.dto';
-import { MovieDetailsEntity } from './entities/movie_details_entity';
-import { MovieEntity } from './entities/movie_entity';
+import { MovieEntity } from './entities/movie.entity';
+import { MovieDetailsEntity } from './entities/movie_details.entity';
 import { MoviesService } from './movies.service';
 
 @Controller('movies')
@@ -32,7 +32,6 @@ export class MoviesController {
   @Get(':id')
   @ApiOkResponse({
     description: 'Movie fetched by id',
-    isArray: true,
     type: MovieDetailsEntity,
   })
   @ApiNotFoundResponse({ description: 'Movie by specified id not found' })

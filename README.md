@@ -4,7 +4,7 @@
 ---
 
 ## Features
-- Browse popular movies with pagination
+- Browse popular movies
 
 - Search for movies with filters (release date, rating, popularity)
 

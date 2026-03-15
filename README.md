@@ -40,6 +40,8 @@ cd Internship-17-Movie-Explorer-Api
    sudo usermod -aG docker $USER
    docker compose up --build
    ```
+---
+
 ## Access
 
    Frontend:

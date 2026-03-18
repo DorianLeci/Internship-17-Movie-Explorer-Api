@@ -5,9 +5,11 @@ import { AppService } from './app.service';
 import { MoviesModule } from './movies/movies.module';
 import { GenresModule } from './genres/genres.module';
 import { FavoritesModule } from './favorites/favorites.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [MoviesModule, PrismaModule, GenresModule, FavoritesModule],
+  imports: [MoviesModule, PrismaModule, GenresModule, FavoritesModule, AuthModule, UsersModule],
   controllers: [AppController],
   providers: [AppService],
 })

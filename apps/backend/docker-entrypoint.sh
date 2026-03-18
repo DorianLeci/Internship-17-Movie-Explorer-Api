@@ -1,10 +1,11 @@
+#!/bin/sh
 set -euo pipefail
 
-echo "===Running database migrations==="
+echo "=== Running database migrations ==="
 npx prisma migrate deploy
 
-echo "===Seeding database==="
+echo "=== Seeding database ==="
 npx prisma db seed
 
-echo "===Starting backend==="
+echo "=== Starting backend ==="
 exec "$@"

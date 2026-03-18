@@ -33,7 +33,7 @@ export class FavoritesController {
     type: FavoriteEntity,
   })
   @ApiConflictResponse({
-    description: 'Movie is already in favorites or invalid data',
+    description: 'Movie is already in favorites',
   })
   async create(@Body() dto: CreateFavoriteDto, @Req() req) {
     const userId = req.user.sub;

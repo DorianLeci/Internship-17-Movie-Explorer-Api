@@ -1,6 +1,5 @@
 import { BaseEntity } from '@base/base.entity';
 import { ApiProperty } from '@nestjs/swagger';
-import { FavoriteEntity } from 'src/favorites/entities/favorite_entity';
 
 export class MovieEntity extends BaseEntity {
   @ApiProperty()
@@ -29,7 +28,4 @@ export class MovieEntity extends BaseEntity {
 
   @ApiProperty()
   releaseDate: Date;
-
-  @ApiProperty({ type: () => [FavoriteEntity] })
-  favorite: FavoriteEntity | null;
 }

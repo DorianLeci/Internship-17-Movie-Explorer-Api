@@ -10,6 +10,7 @@ import { LocalStrategy } from './strategy/local.strategy';
 @Module({
   imports: [
     UsersModule,
+    ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({

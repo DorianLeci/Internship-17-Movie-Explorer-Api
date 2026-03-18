@@ -11,16 +11,20 @@ import { FavoriteEntity } from './entities/favorite_entity';
 export class FavoritesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto: CreateFavoriteDto): Promise<FavoriteEntity> {
+  async create(
+    { movieId }: CreateFavoriteDto,
+    userId: number,
+  ): Promise<FavoriteEntity> {
     const existing = await this.prisma.favorite.findUnique({
-      where: { movieId_userId: { userId: dto.movieId, movieId: dto.userId } },
+      where: { movieId_userId: { userId, movieId } },
     });
 
     if (existing)
       throw new ConflictException('Film is already in the favorites');
 
     return this.prisma.favorite.create({
-      data: { movieId: dto.movieId, userId: dto.userId },
+      data: { movieId, userId },
+      include: { movie: true },
     });
   }
 
@@ -36,5 +40,10 @@ export class FavoritesService {
     });
   }
 
-  async findAllByUser();
+  async findAllByUser(userId: number): Promise<FavoriteEntity[]> {
+    return this.prisma.favorite.findMany({
+      where: { userId },
+      include: { movie: true },
+    });
+  }
 }

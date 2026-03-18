@@ -6,8 +6,5 @@ export class CreateFavoriteDto {
     description: 'Movie id which is being added to the favorites',
   })
   @IsInt()
-  userId: number;
-
-  @IsInt()
   movieId: number;
 }

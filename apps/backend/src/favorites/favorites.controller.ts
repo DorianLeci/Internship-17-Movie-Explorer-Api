@@ -6,8 +6,12 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import {
+  ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiNoContentResponse,
@@ -20,8 +24,10 @@ import { FavoritesService } from './favorites.service';
 @Controller('favorites')
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
+
+  @UseGuards(AuthGuard('jwt'))
   @Post()
-  @HttpCode(201)
+  @ApiBearerAuth('access-token')
   @ApiCreatedResponse({
     description: 'Movie successfully added to favorites',
     type: FavoriteEntity,
@@ -29,17 +35,21 @@ export class FavoritesController {
   @ApiConflictResponse({
     description: 'Movie is already in favorites or invalid data',
   })
-  async create(@Body() dto: CreateFavoriteDto) {
-    return this.favoritesService.create(dto);
+  async create(@Body() dto: CreateFavoriteDto, @Req() req) {
+    const userId = req.user.sub;
+    return this.favoritesService.create(dto, userId);
   }
 
-  @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':movieId')
   @HttpCode(204)
+  @ApiBearerAuth('access-token')
   @ApiNoContentResponse({
     description: 'Movie successfully removed from favorites',
   })
   @ApiNotFoundResponse({ description: 'Movie is not in favorites' })
-  async remove(@Param('id', ParseIntPipe) id: number) {
-    return this.favoritesService.remove(id);
+  async remove(@Param('movieId', ParseIntPipe) movieId: number, @Req() req) {
+    const userId = req.user.sub;
+    return this.favoritesService.remove(movieId, userId);
   }
 }

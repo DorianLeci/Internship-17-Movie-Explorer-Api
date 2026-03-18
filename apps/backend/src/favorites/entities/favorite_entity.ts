@@ -1,3 +1,4 @@
+import { MovieEntity } from '@movies/entities/movie.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class FavoriteEntity {
@@ -6,6 +7,9 @@ export class FavoriteEntity {
 
   @ApiProperty()
   movieId: number;
+
+  @ApiProperty()
+  movie: MovieEntity;
 
   @ApiProperty()
   createdAt: Date;

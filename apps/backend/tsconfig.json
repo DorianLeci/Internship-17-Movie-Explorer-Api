@@ -19,7 +19,8 @@
       "@prisma/*": ["src/prisma/*"],
       "@generated/*": ["src/generated/*"],
       "@base/*": ["src/base/*"],
-      "@tstypes/*": ["src/types/*"]
+      "@tstypes/*": ["src/types/*"],
+      "@validators/*": ["src/validators/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

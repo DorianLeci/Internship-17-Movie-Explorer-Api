@@ -23,9 +23,6 @@ export class MoviesService {
     return this.prisma.movie.findMany({
       where,
       orderBy,
-      include: {
-        favorite: true,
-      },
     });
   }
 
@@ -33,7 +30,6 @@ export class MoviesService {
     const movie = await this.prisma.movie.findUnique({
       where: { id },
       include: {
-        favorite: true,
         genres: true,
         topCast: true,
         topCrew: true,

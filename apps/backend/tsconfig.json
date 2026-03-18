@@ -18,7 +18,8 @@
       "@enums/*": ["src/enums/*"],
       "@prisma/*": ["src/prisma/*"],
       "@generated/*": ["src/generated/*"],
-      "@base/*": ["src/base/*"]
+      "@base/*": ["src/base/*"],
+      "@tstypes/*": ["src/types/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

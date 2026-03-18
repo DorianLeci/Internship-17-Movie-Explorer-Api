@@ -9,16 +9,6 @@ import { MoviesService } from './movies.service';
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
-  @Get('favorites')
-  @ApiOkResponse({
-    description: 'All favorite movies fetched',
-    isArray: true,
-    type: MovieEntity,
-  })
-  async getFavoriteMovies() {
-    return this.moviesService.findFavoriteMovies();
-  }
-
   @Get()
   @ApiOkResponse({
     description: 'All movies fetched by query parameters',

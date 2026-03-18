@@ -13,7 +13,7 @@ export class FavoritesService {
 
   async create(dto: CreateFavoriteDto): Promise<FavoriteEntity> {
     const existing = await this.prisma.favorite.findUnique({
-      where: { movieId: dto.movieId },
+      where: { userId_movieId: dto.movieId },
     });
 
     if (existing)

@@ -29,18 +29,6 @@ export class MoviesService {
     });
   }
 
-  async findFavoriteMovies(): Promise<MovieEntity[]> {
-    return this.prisma.movie.findMany({
-      where: { favorite: { isNot: null } },
-      include: { favorite: true },
-      orderBy: {
-        favorite: {
-          createdAt: SortOrder.DESC,
-        },
-      },
-    });
-  }
-
   async findMovieById(id: number): Promise<MovieDetailsEntity> {
     const movie = await this.prisma.movie.findUnique({
       where: { id },

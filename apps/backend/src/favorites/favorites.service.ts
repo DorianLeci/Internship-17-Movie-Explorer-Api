@@ -35,4 +35,6 @@ export class FavoritesService {
       where: { movieId_userId: { movieId: movieId, userId: userId } },
     });
   }
+
+  async findAllByUser();
 }

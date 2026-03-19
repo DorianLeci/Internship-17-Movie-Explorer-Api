@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsStrongPassword } from '@validators/IsStrongPassword';
 import { IsEmail } from 'class-validator';
-import { IsStrongPassword } from '../validators/IsStrongPassword';
 
 export class RegisterRequestDto {
   @ApiProperty({ description: 'User email, must be unique' })

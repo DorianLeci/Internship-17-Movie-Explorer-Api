@@ -7,9 +7,7 @@ import {
   ParseIntPipe,
   Post,
   Req,
-  UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBearerAuth,
   ApiConflictResponse,
@@ -17,6 +15,8 @@ import {
   ApiNoContentResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
+import { Role } from 'generated/prisma/client';
+import { AuthRoles } from 'src/roles/auth-roles.decorator';
 import { CreateFavoriteDto } from './dto/create-favorite.dto';
 import { FavoriteEntity } from './entities/favorite_entity';
 import { FavoritesService } from './favorites.service';
@@ -25,7 +25,7 @@ import { FavoritesService } from './favorites.service';
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
-  @UseGuards(AuthGuard('jwt'))
+  @AuthRoles(Role.ADMIN, Role.USER)
   @Post()
   @ApiBearerAuth('access-token')
   @ApiCreatedResponse({
@@ -40,7 +40,7 @@ export class FavoritesController {
     return this.favoritesService.create(dto, userId);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @AuthRoles(Role.ADMIN, Role.USER)
   @Delete(':movieId')
   @HttpCode(204)
   @ApiBearerAuth('access-token')

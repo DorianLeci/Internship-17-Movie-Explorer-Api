@@ -1,5 +1,11 @@
 import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
-import { ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger';
+import { Role } from 'generated/prisma/client';
+import { AuthRoles } from 'src/roles/auth-roles.decorator';
 import { FindMoviesDto } from './dto/find-movies.dto';
 import { MovieEntity } from './entities/movie.entity';
 import { MovieDetailsEntity } from './entities/movie_details.entity';
@@ -9,7 +15,9 @@ import { MoviesService } from './movies.service';
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
+  @AuthRoles(Role.ADMIN, Role.USER)
   @Get()
+  @ApiBearerAuth('access-token')
   @ApiOkResponse({
     description: 'All movies fetched by query parameters',
     isArray: true,
@@ -19,7 +27,9 @@ export class MoviesController {
     return this.moviesService.findMovies(query);
   }
 
+  @AuthRoles(Role.ADMIN, Role.USER)
   @Get(':id')
+  @ApiBearerAuth('access-token')
   @ApiOkResponse({
     description: 'Movie fetched by id',
     type: MovieDetailsEntity,

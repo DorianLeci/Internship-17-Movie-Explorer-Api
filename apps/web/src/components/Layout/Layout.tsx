@@ -37,6 +37,8 @@ export const Layout = ({ children }: LayoutProps) => {
       )
         return false;
 
+      if (!isLoggedIn && item.path === AppPaths.FAVORITES) return false;
+
       return true;
     });
   }, [data]);

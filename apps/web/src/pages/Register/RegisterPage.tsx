@@ -1,6 +1,7 @@
+import FormInput from '@components/FormInput';
 import { yupResolver } from '@hookform/resolvers/yup';
 import useAuth from '@hooks/useAuth';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
 import styles from './RegisterPage.module.scss';
@@ -10,6 +11,8 @@ type RegisterFormValues = yup.InferType<typeof registerSchema>;
 
 const RegisterPage = () => {
   const { registerMutation } = useAuth();
+  const { mutate, isLoading } = registerMutation;
+
   const {
     register,
     handleSubmit,
@@ -17,7 +20,7 @@ const RegisterPage = () => {
   } = useForm<RegisterFormValues>({ resolver: yupResolver(registerSchema) });
 
   const onSubmit: SubmitHandler<RegisterFormValues> = (data) => {
-    registerMutation.mutate({
+    mutate({
       email: data.email,
       password: data.password,
     });
@@ -28,45 +31,35 @@ const RegisterPage = () => {
       <Box
         sx={{
           maxWidth: 400,
-          margin: '100px auto',
+          margin: '0px auto',
           padding: 4,
-          boxShadow: 3,
+          boxShadow: 'var(--card-shadow)',
           borderRadius: 2,
-          background:
-            'linear-gradient(180deg, rgb(76, 34, 143) 0%, rgb(113, 65, 196) 100%);',
+          background: 'var(--card-bg)',
         }}
       >
-        <Typography variant="h5" mb={2}>
-          Register
+        <Typography
+          variant="h5"
+          sx={{
+            mb: 4,
+            fontSize: '28px',
+            textShadow: 'var(--text-shadow-black)',
+            textAlign: 'center',
+          }}
+        >
+          Please Register
         </Typography>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className={styles.formField}>
-            <TextField
-              label="Email"
-              fullWidth
-              margin="normal"
-              {...register('email')}
-              error={!!errors.email}
-              helperText={errors.email?.message}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  backgroundColor: '#f5f5f5',
-                  borderRadius: 2,
-                  '&.Mui-focused fieldset': {
-                    borderColor: 'var(--color-peach)',
-                  },
-                },
-                '& .MuiInputBase-input': {
-                  color: '#333',
-                },
-                '& .MuiFormHelperText-root': {
-                  color: 'red',
-                },
-              }}
-            />
-          </div>
-          <TextField
+          <FormInput
+            label="Email"
+            fullWidth
+            margin="normal"
+            {...register('email')}
+            error={!!errors.email}
+            helperText={errors.email?.message}
+          />
+          <FormInput
             label="Password"
             type="password"
             fullWidth
@@ -76,7 +69,7 @@ const RegisterPage = () => {
             helperText={errors.password?.message}
           />
 
-          <TextField
+          <FormInput
             label="Confirm Password"
             type="password"
             fullWidth
@@ -86,8 +79,18 @@ const RegisterPage = () => {
             helperText={errors.confirmPassword?.message}
           />
 
-          <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
-            {'Register'}
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            sx={{
+              mt: 2,
+              color: 'black',
+              fontSize: '20px',
+              backgroundColor: 'var(--color-peach)',
+            }}
+          >
+            {isLoading ? 'Registering...' : 'Register'}
           </Button>
         </form>
       </Box>

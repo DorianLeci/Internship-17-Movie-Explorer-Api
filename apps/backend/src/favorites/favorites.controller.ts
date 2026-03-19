@@ -12,11 +12,12 @@ import {
   ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
 } from '@nestjs/swagger';
+import { AuthRoles } from '@roles/auth-roles.decorator';
 import { Role } from 'generated/prisma/client';
-import { AuthRoles } from 'src/roles/auth-roles.decorator';
 import { CreateFavoriteDto } from './dto/create-favorite.dto';
 import { FavoriteEntity } from './entities/favorite_entity';
 import { FavoritesService } from './favorites.service';
@@ -35,6 +36,10 @@ export class FavoritesController {
   @ApiConflictResponse({
     description: 'Movie is already in favorites',
   })
+  @ApiForbiddenResponse({
+    description:
+      'Can not manipulate with your favorites without account and sufficient role',
+  })
   async create(@Body() dto: CreateFavoriteDto, @Req() req) {
     const userId = req.user.sub;
     return this.favoritesService.create(dto, userId);
@@ -48,6 +53,10 @@ export class FavoritesController {
     description: 'Movie successfully removed from favorites',
   })
   @ApiNotFoundResponse({ description: 'Movie is not in favorites' })
+  @ApiForbiddenResponse({
+    description:
+      'Can not manipulate with your favorites without account and sufficient role',
+  })
   async remove(@Param('movieId', ParseIntPipe) movieId: number, @Req() req) {
     const userId = req.user.sub;
     return this.favoritesService.remove(movieId, userId);

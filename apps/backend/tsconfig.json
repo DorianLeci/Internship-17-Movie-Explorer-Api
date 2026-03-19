@@ -15,12 +15,15 @@
     "baseUrl": ".",
     "paths": {
       "@movies/*": ["src/movies/*"],
+      "@favorites/*": ["src/favorites"],
       "@enums/*": ["src/enums/*"],
       "@prisma/*": ["src/prisma/*"],
       "@generated/*": ["src/generated/*"],
       "@base/*": ["src/base/*"],
       "@tstypes/*": ["src/types/*"],
-      "@validators/*": ["src/validators/*"]
+      "@validators/*": ["src/validators/*"],
+      "@guards/*": ["src/guards/*"],
+      "@roles/*": ["src/roles/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

@@ -26,10 +26,11 @@ const MovieDetailsPage = () => {
   const toggleFavoriteMutation = useToggleFavorite();
   const [disabledFavorite, setDisabledFavorite] = useState(false);
 
-  const isFavorite = !!movie?.favorite;
+  const isFavorite = movie?.isFavorite;
+  const isButtonDisabled = disabledFavorite || isFavorite === undefined;
 
   const handleToggleFavorite = () => {
-    if (disabledFavorite) return;
+    if (isButtonDisabled) return;
 
     setDisabledFavorite(true);
 
@@ -64,8 +65,9 @@ const MovieDetailsPage = () => {
             </button>
 
             <button
-              className={`${styles.toggleFavoriteButton} ${isFavorite ? styles.remove : styles.add} ${disabledFavorite ? styles.disabled : ''}`}
+              className={`${styles.toggleFavoriteButton} ${isFavorite ? styles.remove : styles.add}`}
               onClick={handleToggleFavorite}
+              disabled={isButtonDisabled}
             >
               {isFavorite ? 'Remove from favorites' : 'Add to favorites'}
             </button>

@@ -9,7 +9,10 @@ import { MovieDetailsEntity } from './entities/movie_details.entity';
 export class MoviesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findMovies(query: FindMoviesDto): Promise<MovieEntity[]> {
+  async findMovies(
+    query: FindMoviesDto,
+    userId?: number,
+  ): Promise<MovieEntity[]> {
     const where: any = {};
     if (query.search)
       where.title = { contains: query.search, mode: 'insensitive' };
@@ -20,27 +23,59 @@ export class MoviesService {
       ? { [query.sortBy]: query.sortOrder || SortOrder.DESC }
       : { popularity: SortOrder.DESC };
 
-    return this.prisma.movie.findMany({
+    const movies = await this.prisma.movie.findMany({
       where,
       orderBy,
+      include: {
+        favorites: userId ? { where: { userId } } : false,
+      },
     });
+
+    return movies.map((movie) => ({
+      ...movie,
+      isFavorite: movie.favorites?.length > 0,
+    }));
   }
 
-  async findMovieById(id: number): Promise<MovieDetailsEntity> {
+  async findMovieById(
+    movieId?: number,
+    userId?: number,
+  ): Promise<MovieDetailsEntity> {
     const movie = await this.prisma.movie.findUnique({
-      where: { id },
+      where: { id: movieId },
       include: {
         genres: true,
         topCast: true,
         topCrew: true,
         reviews: true,
+        favorites: userId ? { where: { userId } } : false,
       },
     });
 
-    if (!movie) throw new NotFoundException(`Movie with id ${id} not found`);
+    if (!movie)
+      throw new NotFoundException(`Movie with id ${movieId} not found`);
 
     movie.topCrew.sort((a, b) => a.role.localeCompare(b.role));
 
-    return movie;
+    return {
+      ...movie,
+      isFavorite: movie.favorites?.length > 0,
+    };
+  }
+
+  async findFavorites(userId: number): Promise<MovieEntity[]> {
+    const movies = await this.prisma.movie.findMany({
+      where: {
+        favorites: { some: { userId } },
+      },
+      include: {
+        favorites: { where: { userId } },
+      },
+    });
+
+    return movies.map((movie) => ({
+      ...movie,
+      isFavorite: movie.favorites.length > 0,
+    }));
   }
 }

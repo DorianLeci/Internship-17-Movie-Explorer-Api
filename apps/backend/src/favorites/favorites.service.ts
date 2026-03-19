@@ -20,30 +20,27 @@ export class FavoritesService {
     });
 
     if (existing)
-      throw new ConflictException('Film is already in the favorites');
+      throw new ConflictException(
+        `Movie (id: ${movieId}) is already in the favorites`,
+      );
 
     return this.prisma.favorite.create({
       data: { movieId, userId },
-      include: { movie: true },
     });
   }
 
   async remove(movieId: number, userId: number) {
     const existing = await this.prisma.favorite.findUnique({
-      where: { movieId_userId: { movieId: movieId, userId: userId } },
+      where: { movieId_userId: { movieId, userId } },
     });
 
-    if (!existing) throw new NotFoundException('Film is not in the favorites');
+    if (!existing)
+      throw new NotFoundException(
+        'Movie (id: ${movieId}) is not in the favorites',
+      );
 
     await this.prisma.favorite.delete({
-      where: { movieId_userId: { movieId: movieId, userId: userId } },
-    });
-  }
-
-  async findAllByUser(userId: number): Promise<FavoriteEntity[]> {
-    return this.prisma.favorite.findMany({
-      where: { userId },
-      include: { movie: true },
+      where: { movieId_userId: { movieId, userId } },
     });
   }
 }

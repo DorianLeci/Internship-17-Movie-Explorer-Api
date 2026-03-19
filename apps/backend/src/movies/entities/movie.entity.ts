@@ -28,4 +28,7 @@ export class MovieEntity extends BaseEntity {
 
   @ApiProperty()
   releaseDate: Date;
+
+  @ApiProperty()
+  isFavorite: boolean;
 }

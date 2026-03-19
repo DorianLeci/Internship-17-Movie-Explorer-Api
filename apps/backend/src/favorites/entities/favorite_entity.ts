@@ -5,11 +5,8 @@ export class FavoriteEntity {
   @ApiProperty()
   id: number;
 
-  @ApiProperty()
-  movieId: number;
-
-  @ApiProperty()
-  movie: MovieEntity;
+  @ApiProperty({ required: false })
+  movie?: MovieEntity;
 
   @ApiProperty()
   createdAt: Date;

@@ -20,6 +20,7 @@ const MoviesPage = () => {
     error,
     refetch,
   } = useAllMovies(filter);
+
   const visible = useReveal({ isLoading });
 
   return (

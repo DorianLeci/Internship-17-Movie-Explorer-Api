@@ -1,5 +1,6 @@
 import axios, { AxiosError, type AxiosResponse } from 'axios';
 import camelcaseKeys from 'camelcase-keys';
+import LocalStorage from './helpers/LocalStorage';
 
 export const api = axios.create({
   baseURL: 'http://localhost:3000',
@@ -22,3 +23,9 @@ api.interceptors.response.use(
     return Promise.reject(error.response.data.message || error.message);
   },
 );
+
+api.interceptors.request.use((config) => {
+  const token = LocalStorage.getAccessToken();
+  if (token && config.headers) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});

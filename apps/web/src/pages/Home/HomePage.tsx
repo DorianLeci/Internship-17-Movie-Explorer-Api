@@ -1,9 +1,13 @@
+import { useMe } from '@api/useMe';
 import { AppPaths } from '@routes/paths';
 import { FaChartLine, FaFilm, FaStar } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import styles from './HomePage.module.scss';
 
 const HomePage = () => {
+  const { data } = useMe();
+  const isLoggedIn = !!data;
+
   return (
     <div className={styles.container}>
       <h1 className={styles.homeTitle}>Welcome to Movie Explorer</h1>
@@ -23,11 +27,14 @@ const HomePage = () => {
           <span className={styles.subtitle}>Explore cast and reviews</span>
           <FaFilm size={80} color="cyan" />
         </Link>
-        <Link to={AppPaths.FAVORITES} className={styles.featureCard}>
-          <h2 className={styles.title}>Favorites</h2>
-          <span className={styles.subtitle}>Save your favorite movies</span>
-          <FaStar size={80} color="yellow" />
-        </Link>
+
+        {isLoggedIn && (
+          <Link to={AppPaths.FAVORITES} className={styles.featureCard}>
+            <h2 className={styles.title}>Favorites</h2>
+            <span className={styles.subtitle}>Save your favorite movies</span>
+            <FaStar size={80} color="yellow" />
+          </Link>
+        )}
       </section>
     </div>
   );

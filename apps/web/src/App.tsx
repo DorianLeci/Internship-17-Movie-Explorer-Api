@@ -20,12 +20,15 @@ const NotFoundPage = lazy(() => import('@pages/NotFound/NotFoundPage'));
 
 const RegisterPage = lazy(() => import('@pages/Register/RegisterPage'));
 
+const LoginPage = lazy(() => import('@pages/Login/LoginPage'));
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Layout>
         <Routes>
           <Route path={AppPaths.REGISTER} element={<RegisterPage />} />
+          <Route path={AppPaths.LOGIN} element={<LoginPage />} />
           <Route path={AppPaths.HOME} element={<HomePage />} />
 
           <Route

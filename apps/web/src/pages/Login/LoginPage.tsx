@@ -4,27 +4,26 @@ import useAuth from '@hooks/useAuth';
 import { Box, Button, Typography } from '@mui/material';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
-import styles from './RegisterPage.module.scss';
-import registerSchema from './validation/RegisterSchema';
+import styles from './LoginPage.module.scss';
+import loginSchema from './validation/LoginSchema';
 
-type RegisterFormValues = yup.InferType<typeof registerSchema>;
+type LoginFormValues = yup.InferType<typeof loginSchema>;
 
-const RegisterPage = () => {
-  const { registerMutation } = useAuth();
+const LoginPage = () => {
+  const { loginMutation } = useAuth();
 
   const {
-    register,
+    register: login,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterFormValues>({ resolver: yupResolver(registerSchema) });
+  } = useForm<LoginFormValues>({ resolver: yupResolver(loginSchema) });
 
-  const onSubmit: SubmitHandler<RegisterFormValues> = (data) => {
-    registerMutation.mutate({
+  const onSubmit: SubmitHandler<LoginFormValues> = (data) => {
+    loginMutation.mutate({
       email: data.email,
       password: data.password,
     });
   };
-
   return (
     <div className={styles.formContainer}>
       <Box
@@ -46,7 +45,7 @@ const RegisterPage = () => {
             textAlign: 'center',
           }}
         >
-          Please Register
+          Please Login
         </Typography>
 
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -54,7 +53,7 @@ const RegisterPage = () => {
             label="Email"
             fullWidth
             margin="normal"
-            {...register('email')}
+            {...login('email')}
             error={!!errors.email}
             helperText={errors.email?.message}
           />
@@ -63,21 +62,10 @@ const RegisterPage = () => {
             type="password"
             fullWidth
             margin="normal"
-            {...register('password')}
+            {...login('password')}
             error={!!errors.password}
             helperText={errors.password?.message}
           />
-
-          <FormInput
-            label="Confirm Password"
-            type="password"
-            fullWidth
-            margin="normal"
-            {...register('confirmPassword')}
-            error={!!errors.confirmPassword}
-            helperText={errors.confirmPassword?.message}
-          />
-
           <Button
             type="submit"
             variant="contained"
@@ -89,7 +77,7 @@ const RegisterPage = () => {
               backgroundColor: 'var(--color-peach)',
             }}
           >
-            {registerMutation.isPending ? 'Registering...' : 'Register'}
+            {loginMutation.isPending ? 'Logging in...' : 'Login'}
           </Button>
         </form>
       </Box>
@@ -97,4 +85,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default LoginPage;

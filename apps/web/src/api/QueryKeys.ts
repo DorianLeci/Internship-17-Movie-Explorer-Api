@@ -3,4 +3,5 @@ export enum QueryKeys {
   FAVORITE_MOVIES = 'favoriteMovies',
   MOVIE = 'movie',
   ALL_GENRES = 'allGenres',
+  ME = 'me',
 }

@@ -37,6 +37,18 @@ export class MoviesController {
     return this.moviesService.findMovies(query, userId);
   }
 
+  @AuthRoles(Role.ADMIN, Role.USER)
+  @Get('favorites')
+  @ApiBearerAuth('access-token')
+  @ApiOkResponse({
+    description: 'ALl user favorite movies fetched',
+    type: MovieEntity,
+  })
+  async getFavorites(@Req() req) {
+    const userId = req.user.sub;
+    return this.moviesService.findFavorites(userId);
+  }
+
   @UseGuards(OptionalTokenGuard)
   @Get(':id')
   @ApiBearerAuth('access-token')
@@ -48,17 +60,5 @@ export class MoviesController {
   async getMovieById(@Param('id', ParseIntPipe) id: number, @Req() req) {
     const userId = req.user?.sub;
     return this.moviesService.findMovieById(id, userId);
-  }
-
-  @AuthRoles(Role.ADMIN, Role.USER)
-  @Get('favorites')
-  @ApiBearerAuth('access-token')
-  @ApiOkResponse({
-    description: 'ALl user favorite movies fetched',
-    type: MovieEntity,
-  })
-  async getFavorites(@Req() req) {
-    const userId = req.user.sub;
-    return this.moviesService.findFavorites(userId);
   }
 }

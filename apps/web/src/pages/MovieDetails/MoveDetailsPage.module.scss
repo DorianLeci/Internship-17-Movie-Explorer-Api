@@ -51,6 +51,11 @@
     box-shadow: 0 4px 2px var(--color-peach);
   }
 
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   &.add {
     color: rgb(68, 250, 68);
   }

@@ -33,7 +33,7 @@ export class MoviesService {
 
     return movies.map((movie) => ({
       ...movie,
-      isFavorite: movie.favorites?.length > 0,
+      isFavorite: userId ? movie.favorites?.length > 0 : undefined,
     }));
   }
 
@@ -59,7 +59,7 @@ export class MoviesService {
 
     return {
       ...movie,
-      isFavorite: movie.favorites?.length > 0,
+      isFavorite: userId ? movie.favorites?.length > 0 : undefined,
     };
   }
 

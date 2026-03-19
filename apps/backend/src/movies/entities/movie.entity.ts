@@ -30,5 +30,5 @@ export class MovieEntity extends BaseEntity {
   releaseDate: Date;
 
   @ApiProperty()
-  isFavorite: boolean;
+  isFavorite: boolean | undefined;
 }

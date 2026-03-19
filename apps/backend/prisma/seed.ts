@@ -1,5 +1,11 @@
 import { PrismaPg } from '@prisma/adapter-pg';
-import { CrewRole, GenreEnum, PrismaClient } from '../generated/prisma/client';
+import * as bcrypt from 'bcrypt';
+import {
+  CrewRole,
+  GenreEnum,
+  PrismaClient,
+  Role,
+} from '../generated/prisma/client';
 
 const TMDB_TOKEN = process.env.TMDB_API_ACCESS_TOKEN;
 const IMAGE_BASE = 'https://image.tmdb.org/t/p/w500';
@@ -32,6 +38,18 @@ const adapter = new PrismaPg({
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+  const hashedAdmin = await bcrypt.hash('admin123', 10);
+
+  await prisma.user.upsert({
+    where: { email: 'admin@example.com' },
+    update: {},
+    create: {
+      email: 'admin@example.com',
+      password: hashedAdmin,
+      role: Role.ADMIN,
+    },
+  });
+
   const genres = Object.values(GenreEnum).map((name) => ({ name }));
 
   await prisma.genre.createMany({ data: genres, skipDuplicates: true });

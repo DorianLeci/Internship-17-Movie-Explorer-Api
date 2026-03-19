@@ -31,6 +31,7 @@ const MovieDetailsPage = () => {
 
   const handleToggleFavorite = () => {
     if (isButtonDisabled) return;
+    console.log('Pozvan toggle favorite');
 
     setDisabledFavorite(true);
 

@@ -4,5 +4,5 @@ export interface Movie {
   title: string;
   releaseDate: string;
   posterUrl: string;
-  isFavorite: boolean;
+  isFavorite: boolean | undefined;
 }

@@ -18,11 +18,14 @@ const MovieDetailsPage = lazy(
 
 const NotFoundPage = lazy(() => import('@pages/NotFound/NotFoundPage'));
 
+const RegisterPage = lazy(() => import('@pages/Register/RegisterPage'));
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Layout>
         <Routes>
+          <Route path={AppPaths.REGISTER} element={<RegisterPage />} />
           <Route path={AppPaths.HOME} element={<HomePage />} />
 
           <Route

@@ -1,4 +1,6 @@
 export enum AppPaths {
+  REGISTER = '/register',
+  LOGIN = '/login',
   HOME = '/',
   MOVIES = '/movies',
   MOVIE_DETAIL = '/movies/:id',

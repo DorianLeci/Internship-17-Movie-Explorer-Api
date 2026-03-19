@@ -1,14 +1,17 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   Post,
+  Req,
   Request,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
   ApiConflictResponse,
   ApiCreatedResponse,
@@ -49,5 +52,13 @@ export class AuthController {
   ): Promise<RegisterResponseDto> {
     const access_token = await this.authService.register(registerBody);
     return { token: access_token };
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('me')
+  @ApiBearerAuth('access-token')
+  @ApiUnauthorizedResponse({ description: 'Access token expired' })
+  me(@Req() req) {
+    return req.user;
   }
 }

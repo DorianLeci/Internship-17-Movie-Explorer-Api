@@ -6,5 +6,5 @@ export const editMovie = (
   id: number,
   data: EditMovieDto,
 ): Promise<UpdateMovie> => {
-  return api.post<never, UpdateMovie>(`/movies/${id}`, data);
+  return api.patch<never, UpdateMovie>(`/movies/${id}`, data);
 };

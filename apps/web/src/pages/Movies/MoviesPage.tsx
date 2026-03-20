@@ -3,14 +3,15 @@ import EmptyStateCard from '@components/EmptyStateCard';
 import ErrorCard from '@components/ErrorCard';
 import { useMovies } from '@hooks/useMovies';
 import useReveal from '@hooks/useReveal';
-import { useState } from 'react';
 import CreateMovieModal from './components/Modal/CreateMovieModal';
+import EditMovieModal from './components/Modal/EditMovieModal';
 import MovieCard from './components/MovieCard';
 import MovieFilter from './components/MovieFilter';
 import MovieSearch from './components/MovieSearch';
 import MovieSort from './components/MovieSort';
 import MoviesPageSkeleton from './components/Skeleton';
 import EmptyStateTitle from './helpers/EmptyStateTitle';
+import useModal from './hooks/useModal';
 import styles from './MoviesPage.module.scss';
 
 interface MoviesPageProps {
@@ -28,7 +29,15 @@ const MoviesPage = ({ isAdmin = false }: MoviesPageProps) => {
 
   const visible = useReveal({ isLoading });
 
-  const [isModalOpen, setModalOpen] = useState(false);
+  const {
+    isCreateModalOpen,
+    isEditModalOpen,
+    openCreateModal,
+    closeCreateModal,
+    openEditModal,
+    closeEditModal,
+    editingMovie,
+  } = useModal();
 
   return (
     <div className={styles.wrapper}>
@@ -36,14 +45,14 @@ const MoviesPage = ({ isAdmin = false }: MoviesPageProps) => {
         <MovieSearch />
         <MovieSort />
         <MovieFilter />
-        {isAdmin && (
-          <button onClick={() => setModalOpen(true)}>+ Add Movie</button>
-        )}
+        {isAdmin && <button onClick={openCreateModal}>+ Add Movie</button>}
       </div>
 
-      <CreateMovieModal
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
+      <CreateMovieModal isOpen={isCreateModalOpen} onClose={closeCreateModal} />
+      <EditMovieModal
+        movieId={editingMovie}
+        isOpen={isEditModalOpen}
+        onClose={closeEditModal}
       />
 
       <div className={styles.container}>
@@ -62,7 +71,12 @@ const MoviesPage = ({ isAdmin = false }: MoviesPageProps) => {
         )}
 
         {movies?.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
+          <MovieCard
+            key={movie.id}
+            movie={movie}
+            isAdmin={isAdmin}
+            onOpen={openEditModal}
+          />
         ))}
       </div>
     </div>

@@ -76,3 +76,17 @@
     font-weight: 600;
   }
 }
+
+.editButton {
+  position: absolute;
+  top: -20px;
+  left: -10px;
+  color: var(--color-peach);
+  border: none;
+  background: none;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}

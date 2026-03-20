@@ -15,3 +15,5 @@ export interface MovieDetails extends Movie {
 
   reviews: MovieReview[];
 }
+
+export type UpdateMovie = Partial<MovieDetails>;

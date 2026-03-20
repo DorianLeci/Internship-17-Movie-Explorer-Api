@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   Req,
@@ -20,6 +21,7 @@ import { AuthRoles } from '@roles/auth-roles.decorator';
 import { Role } from 'generated/prisma/client';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { FindMoviesDto } from './dto/find-movies.dto';
+import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MovieEntity } from './entities/movie.entity';
 import { MovieDetailsEntity } from './entities/movie_details.entity';
 import { MoviesService } from './movies.service';
@@ -71,8 +73,23 @@ export class MoviesController {
   @ApiBearerAuth('access-token')
   @ApiCreatedResponse({
     description: 'Movie succesfully created',
+    type: MovieEntity,
   })
   create(@Body() dto: CreateMovieDto) {
     return this.moviesService.create(dto);
+  }
+
+  @AuthRoles(Role.ADMIN)
+  @Patch(':id')
+  @ApiBearerAuth('access-token')
+  @ApiCreatedResponse({
+    description: 'Movie succesfully updated',
+    type: MovieEntity,
+  })
+  update(
+    @Param('id', ParseIntPipe) movieId: number,
+    @Body() dto: UpdateMovieDto,
+  ) {
+    return this.moviesService.update(movieId, dto);
   }
 }

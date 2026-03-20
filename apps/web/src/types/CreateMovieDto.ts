@@ -9,3 +9,5 @@ export interface CreateMovieDto {
   releaseDate: Date;
   genres: (number | undefined)[];
 }
+
+export type EditMovieDto = Partial<CreateMovieDto>;

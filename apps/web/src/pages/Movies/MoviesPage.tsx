@@ -4,7 +4,7 @@ import ErrorCard from '@components/ErrorCard';
 import { useMovies } from '@hooks/useMovies';
 import useReveal from '@hooks/useReveal';
 import { useState } from 'react';
-import MovieModal from './components/Modal/MovieModal';
+import CreateMovieModal from './components/Modal/CreateMovieModal';
 import MovieCard from './components/MovieCard';
 import MovieFilter from './components/MovieFilter';
 import MovieSearch from './components/MovieSearch';
@@ -41,7 +41,10 @@ const MoviesPage = ({ isAdmin = false }: MoviesPageProps) => {
         )}
       </div>
 
-      <MovieModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+      <CreateMovieModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+      />
 
       <div className={styles.container}>
         {visible && <MoviesPageSkeleton />}

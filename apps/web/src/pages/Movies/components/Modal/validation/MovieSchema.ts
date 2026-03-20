@@ -65,4 +65,9 @@ const movieSchema = yup
   })
   .required();
 
-export default movieSchema;
+export const createMovieSchema = movieSchema;
+
+export const editMovieSchema = movieSchema.partial();
+
+export type CreateMovieFormValues = yup.InferType<typeof createMovieSchema>;
+export type EditMovieFormValues = yup.InferType<typeof editMovieSchema>;

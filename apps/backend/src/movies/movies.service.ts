@@ -3,6 +3,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { FindMoviesDto } from './dto/find-movies.dto';
+import { UpdateMovieResponse } from './dto/update-movie-response.dto';
+import { UpdateMovieDto } from './dto/update-movie.dto';
 import { MovieEntity } from './entities/movie.entity';
 import { MovieDetailsEntity } from './entities/movie_details.entity';
 
@@ -80,7 +82,7 @@ export class MoviesService {
     }));
   }
 
-  async create(createMovieDto: CreateMovieDto) {
+  async create(createMovieDto: CreateMovieDto): Promise<number> {
     console.log('Dto: ', createMovieDto);
     const movie = await this.prisma.movie.create({
       data: {
@@ -100,5 +102,32 @@ export class MoviesService {
     });
 
     return movie.id;
+  }
+
+  async update(
+    movieId: number,
+    updateMovieDto: UpdateMovieDto,
+  ): Promise<UpdateMovieResponse> {
+    const existingMovie = await this.prisma.movie.findUnique({
+      where: { id: movieId },
+    });
+
+    if (!existingMovie)
+      throw new NotFoundException(`Movie with id ${movieId} not found`);
+
+    const { genres, ...rest } = updateMovieDto;
+
+    const movie = await this.prisma.movie.update({
+      where: { id: movieId },
+      data: {
+        ...rest,
+        ...(genres ? { genres: { set: genres.map((id) => ({ id })) } } : {}),
+      },
+    });
+
+    return {
+      id: movieId,
+      updatedFields: updateMovieDto,
+    };
   }
 }

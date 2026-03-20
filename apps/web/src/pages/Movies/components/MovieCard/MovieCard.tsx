@@ -9,8 +9,6 @@ interface MovieCardProps {
   movie: Movie;
 }
 
-const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w500';
-
 const MovieCard = ({ movie }: MovieCardProps) => {
   return (
     <Link to={`/movies/${movie.id}`} className={styles.card}>
@@ -19,11 +17,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
       <h1 className={styles.title}>{movie.title}</h1>
       <img
         className={styles.poster}
-        src={
-          movie.posterUrl
-            ? `${TMDB_IMAGE_BASE}${movie.posterUrl}`
-            : defaultPoster
-        }
+        src={movie.posterUrl ? `${movie.posterUrl}` : defaultPoster}
         alt={movie.title}
       />
       <div className={styles.info}>

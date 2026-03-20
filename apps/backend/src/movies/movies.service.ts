@@ -1,6 +1,7 @@
 import SortOrder from '@enums/SortOrder';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
+import { CreateMovieDto } from './dto/create-movie.dto';
 import { FindMoviesDto } from './dto/find-movies.dto';
 import { MovieEntity } from './entities/movie.entity';
 import { MovieDetailsEntity } from './entities/movie_details.entity';
@@ -77,5 +78,27 @@ export class MoviesService {
       ...movie,
       isFavorite: movie.favorites.length > 0,
     }));
+  }
+
+  async create(createMovieDto: CreateMovieDto) {
+    console.log('Dto: ', createMovieDto);
+    const movie = await this.prisma.movie.create({
+      data: {
+        title: createMovieDto.title,
+        description: createMovieDto.description,
+        runtime: createMovieDto.runtime,
+        rating: createMovieDto.rating,
+        popularity: createMovieDto.popularity,
+        posterUrl: createMovieDto.posterUrl,
+        trailerKey: createMovieDto.trailerKey,
+        releaseDate: createMovieDto.releaseDate,
+
+        genres: {
+          connect: createMovieDto.genres.map((id) => ({ id })),
+        },
+      },
+    });
+
+    return movie.id;
   }
 }

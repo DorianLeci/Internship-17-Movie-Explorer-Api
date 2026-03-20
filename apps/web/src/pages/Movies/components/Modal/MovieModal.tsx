@@ -3,9 +3,12 @@ import FormInput from '@components/FormInput';
 import MultiSelectInput from '@components/MultiSelectInput';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Typography } from '@mui/material';
-import { Controller, FormContainer, useForm } from 'react-hook-form-mui';
+import useCreateMovie from '@pages/Movies/hooks/useCreateMovie';
+import type { Genre } from '@tstypes/Genre';
+import { Controller, useForm, type SubmitHandler } from 'react-hook-form';
 import { FaTimes } from 'react-icons/fa';
 import * as yup from 'yup';
+import GenreDisplayMap from '../MovieFilter/helpers/GenreDisplayMap';
 import styles from './AddMovieModal.module.scss';
 import movieSchema from './validation/MovieSchema';
 
@@ -18,18 +21,31 @@ type MovieFormValues = yup.InferType<typeof movieSchema>;
 
 const MovieModal = ({ isOpen, onClose }: MovieModalProps) => {
   const { data: genres } = useGenres();
+  const addMutation = useCreateMovie({ onClose });
 
-  const {
-    register: login,
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<MovieFormValues>({
+  const onSubmit: SubmitHandler<MovieFormValues> = (data) => {
+    addMutation.mutate(data);
+  };
+
+  const form = useForm<MovieFormValues>({
     resolver: yupResolver(movieSchema) as any,
     defaultValues: {
+      title: '',
+      description: '',
+      runtime: 1,
+      rating: 1,
+      popularity: 1,
+      releaseDate: new Date(),
       genres: [],
     },
   });
+
+  const {
+    register: create,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = form;
 
   return (
     <div className={`${styles.modalOverlay} ${isOpen ? styles.open : ''}`}>
@@ -62,16 +78,25 @@ const MovieModal = ({ isOpen, onClose }: MovieModalProps) => {
             <FaTimes size={30} color="white" />
           </button>
 
-          <FormContainer>
-            <FormInput label="Title" fullWidth margin="normal" required />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <FormInput
+              label="Title"
+              fullWidth
+              margin="normal"
+              {...create('title')}
+              error={!!errors.title}
+              helperText={errors.title?.message}
+            />
 
             <FormInput
               label="Description"
               fullWidth
               margin="normal"
+              {...create('description')}
+              error={!!errors.description}
+              helperText={errors.description?.message}
               multiline
               rows={4}
-              required
             />
 
             <FormInput
@@ -79,7 +104,9 @@ const MovieModal = ({ isOpen, onClose }: MovieModalProps) => {
               type="number"
               fullWidth
               margin="normal"
-              required
+              {...create('runtime')}
+              error={!!errors.runtime}
+              helperText={errors.runtime?.message}
               slotProps={{
                 htmlInput: { min: 1 },
               }}
@@ -90,7 +117,9 @@ const MovieModal = ({ isOpen, onClose }: MovieModalProps) => {
               type="number"
               fullWidth
               margin="normal"
-              required
+              {...create('rating')}
+              error={!!errors.rating}
+              helperText={errors.rating?.message}
               slotProps={{
                 htmlInput: { min: 1, max: 10, step: 0.5 },
               }}
@@ -101,7 +130,9 @@ const MovieModal = ({ isOpen, onClose }: MovieModalProps) => {
               type="number"
               fullWidth
               margin="normal"
-              required
+              {...create('popularity')}
+              error={!!errors.popularity}
+              helperText={errors.popularity?.message}
               slotProps={{
                 htmlInput: { min: 0, max: 10, step: 0.5 },
               }}
@@ -112,6 +143,9 @@ const MovieModal = ({ isOpen, onClose }: MovieModalProps) => {
               type="url"
               fullWidth
               margin="normal"
+              {...create('posterUrl')}
+              error={!!errors.posterUrl}
+              helperText={errors.posterUrl?.message}
             />
 
             <FormInput
@@ -119,6 +153,9 @@ const MovieModal = ({ isOpen, onClose }: MovieModalProps) => {
               type="url"
               fullWidth
               margin="normal"
+              {...create('trailerKey')}
+              error={!!errors.trailerKey}
+              helperText={errors.trailerKey?.message}
             />
 
             <FormInput
@@ -126,15 +163,34 @@ const MovieModal = ({ isOpen, onClose }: MovieModalProps) => {
               type="date"
               fullWidth
               margin="normal"
-              required
+              {...create('releaseDate')}
+              error={!!errors.releaseDate}
+              helperText={errors.releaseDate?.message}
               InputLabelProps={{ shrink: true }}
             />
 
             <Controller
               control={control}
               name="genres"
-              render={({ field }) => (
-                <MultiSelectInput {...field} required options={genres ?? []} />
+              render={({ field, fieldState }) => (
+                <>
+                  <MultiSelectInput
+                    value={field.value}
+                    onChange={field.onChange}
+                    options={
+                      genres?.map((genre: Genre) => ({
+                        id: genre.id,
+                        name: GenreDisplayMap[genre.name],
+                      })) ?? []
+                    }
+                    error={!!fieldState.error}
+                  />
+                  {fieldState.error && (
+                    <span className={styles.genreError}>
+                      {fieldState.error.message}
+                    </span>
+                  )}
+                </>
               )}
             />
 
@@ -142,6 +198,7 @@ const MovieModal = ({ isOpen, onClose }: MovieModalProps) => {
               type="submit"
               variant="contained"
               fullWidth
+              disabled={addMutation.isPending}
               sx={{
                 mt: 2,
                 color: 'black',
@@ -149,9 +206,9 @@ const MovieModal = ({ isOpen, onClose }: MovieModalProps) => {
                 backgroundColor: 'var(--color-peach)',
               }}
             >
-              Add Movie
+              {addMutation.isPending ? 'Adding movie...' : 'Add movie'}
             </Button>
-          </FormContainer>
+          </form>
         </Box>
       </div>
     </div>

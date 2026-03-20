@@ -21,10 +21,10 @@ export class MovieEntity extends BaseEntity {
   popularity: number;
 
   @ApiProperty()
-  posterUrl: string;
+  posterUrl: string | null;
 
   @ApiProperty()
-  trailerKey: string;
+  trailerKey: string | null;
 
   @ApiProperty()
   releaseDate: Date;

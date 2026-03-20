@@ -5,10 +5,11 @@ import {
   Select,
   type SelectProps,
 } from '@mui/material';
+import type { Genres } from 'enums /Genres';
 
 interface Option {
   id: number;
-  name: string;
+  name: string | Genres;
 }
 type MultiSelectProps = SelectProps & {
   options: Option[];

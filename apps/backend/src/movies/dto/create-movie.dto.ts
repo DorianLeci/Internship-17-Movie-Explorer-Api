@@ -3,7 +3,6 @@ import {
   ArrayNotEmpty,
   IsArray,
   IsDateString,
-  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -12,9 +11,8 @@ import {
   Max,
   Min,
 } from 'class-validator';
-import { GenreEnum } from 'generated/prisma/enums';
 
-export class AddMovieDto {
+export class CreateMovieDto {
   @IsString()
   @IsNotEmpty({ message: 'Title cannot be empty' })
   title: string;
@@ -57,6 +55,5 @@ export class AddMovieDto {
 
   @IsArray()
   @ArrayNotEmpty()
-  @IsEnum(GenreEnum, { each: true })
-  genres: GenreEnum[];
+  genres: number[];
 }

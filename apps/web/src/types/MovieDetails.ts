@@ -11,7 +11,7 @@ export interface MovieDetails extends Movie {
   topCast: CastMember[];
   topCrew: CrewMember[];
 
-  trailerKey: string;
+  trailerKey: string | null;
 
   reviews: MovieReview[];
 }

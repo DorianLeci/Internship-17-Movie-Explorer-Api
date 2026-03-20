@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
+import { type AccessToken } from '@tstypes/Auth';
 import { api } from '.';
 import LocalStorage from './helpers/LocalStorage';
 import { QueryKeys } from './QueryKeys';
 
 export const fetchMe = async () => {
-  return api.get('/auth/me');
+  return api.get<never, AccessToken>('/auth/me');
 };
 
 export const useMe = () => {

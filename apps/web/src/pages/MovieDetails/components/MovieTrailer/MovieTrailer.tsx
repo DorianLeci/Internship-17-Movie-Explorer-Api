@@ -1,7 +1,7 @@
 import styles from './MovieTrailer.module.scss';
 
 interface MovieTrailerProps {
-  trailerKey: string;
+  trailerKey: string | null;
 }
 
 const MovieTrailer = ({ trailerKey }: MovieTrailerProps) => {

@@ -60,8 +60,8 @@ model Movie{
   runtime Int  
   rating Float
   popularity Float
-  posterUrl String
-  trailerKey String
+  posterUrl String?
+  trailerKey String?
   releaseDate DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

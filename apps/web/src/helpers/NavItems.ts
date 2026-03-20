@@ -10,5 +10,6 @@ export const NavItems: NavItem[] = [
   { label: 'Login', path: AppPaths.LOGIN },
   { label: 'Home', path: AppPaths.HOME },
   { label: 'Movies', path: AppPaths.MOVIES },
+  { label: 'Admin', path: AppPaths.ADMIN_MOVIES },
   { label: 'Favorites', path: AppPaths.FAVORITES },
 ];

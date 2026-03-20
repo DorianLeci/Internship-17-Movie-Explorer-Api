@@ -1,7 +1,9 @@
 import { Layout } from '@components/Layout/Layout';
 import { MovieProvider } from '@context/MoviesContext';
 import { AppPaths } from '@routes/paths';
+import PrivateRoute from '@routes/Private/PrivateRoute';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Roles } from 'enums /Roles';
 import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
@@ -40,7 +42,26 @@ function App() {
             }
           />
 
-          <Route path={AppPaths.FAVORITES} element={<FavoriteMoviesPage />} />
+          <Route
+            path={AppPaths.FAVORITES}
+            element={
+              <PrivateRoute allowedRoles={[Roles.USER, Roles.ADMIN]}>
+                <FavoriteMoviesPage />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path={AppPaths.ADMIN_MOVIES}
+            element={
+              <PrivateRoute allowedRoles={[Roles.ADMIN]}>
+                <MovieProvider>
+                  <MoviesPage isAdmin={true} />
+                </MovieProvider>
+              </PrivateRoute>
+            }
+          />
+
           <Route path={AppPaths.MOVIE_DETAIL} element={<MovieDetailsPage />} />
           <Route path={AppPaths.NOT_FOUND} element={<NotFoundPage />} />
           <Route path={AppPaths.NON_EXSTING} element={<NotFoundPage />} />

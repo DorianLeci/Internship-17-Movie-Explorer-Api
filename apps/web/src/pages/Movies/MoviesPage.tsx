@@ -3,6 +3,8 @@ import EmptyStateCard from '@components/EmptyStateCard';
 import ErrorCard from '@components/ErrorCard';
 import { useMovies } from '@hooks/useMovies';
 import useReveal from '@hooks/useReveal';
+import { useState } from 'react';
+import MovieModal from './components/Modal/MovieModal';
 import MovieCard from './components/MovieCard';
 import MovieFilter from './components/MovieFilter';
 import MovieSearch from './components/MovieSearch';
@@ -11,7 +13,10 @@ import MoviesPageSkeleton from './components/Skeleton';
 import EmptyStateTitle from './helpers/EmptyStateTitle';
 import styles from './MoviesPage.module.scss';
 
-const MoviesPage = () => {
+interface MoviesPageProps {
+  isAdmin?: boolean;
+}
+const MoviesPage = ({ isAdmin = false }: MoviesPageProps) => {
   const { filter } = useMovies();
   const {
     data: movies,
@@ -23,13 +28,20 @@ const MoviesPage = () => {
 
   const visible = useReveal({ isLoading });
 
+  const [isModalOpen, setModalOpen] = useState(false);
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.filterWrapper}>
         <MovieSearch />
         <MovieSort />
         <MovieFilter />
+        {isAdmin && (
+          <button onClick={() => setModalOpen(true)}>+ Add Movie</button>
+        )}
       </div>
+
+      <MovieModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
 
       <div className={styles.container}>
         {visible && <MoviesPageSkeleton />}

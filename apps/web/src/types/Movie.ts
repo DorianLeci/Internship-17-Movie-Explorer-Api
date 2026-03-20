@@ -3,6 +3,6 @@ export interface Movie {
   rating: number;
   title: string;
   releaseDate: string;
-  posterUrl: string;
+  posterUrl: string | null;
   isFavorite: boolean | undefined;
 }

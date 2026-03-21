@@ -30,7 +30,27 @@ git clone git@github.com:DorianLeci/Internship-17-Movie-Explorer-Api.git
 cd Internship-17-Movie-Explorer-Api
 ```
 
+## Environment Variables
+
+1. Navigate into backend folder:
+   ```
+   cd apps/backend
+   ```
+3. Copy the example environment file and create .env file:
+   ```
+   cp .env.example .env
+   ```
+   Read instructions in .env.example to generate JWT secret key for signing access tokens
+
+4. Open .env and add your key: JWT_SECRET=your_secret_here
+
+
+## Finally
 3. Run with docker compose:
+   Navigate into root folder:
+   ```
+   cd ..
+   ``` 
 -  Windows/Mac
    ```
    docker compose up --build

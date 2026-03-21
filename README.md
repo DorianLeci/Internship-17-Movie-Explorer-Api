@@ -31,10 +31,6 @@ cd Internship-17-Movie-Explorer-Api
 ```
 
 3. Run with docker compose:
-   Navigate into root folder:
-   ```
-   cd ..
-   ``` 
 -  Windows/Mac
    ```
    docker compose up --build

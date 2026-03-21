@@ -1,10 +1,10 @@
-# Internship-15-Movie-Explorer
-**React App for exploring movies using The Movie Database (TMDB) API**
+# Internship-17-Movie-Explorer-Api
+**React App for exploring movies using local database which is populated from TMDB**
 
 ---
 
 ## Features
-- Browse popular movies with pagination
+- Browse popular movies
 
 - Search for movies with filters (release date, rating, popularity)
 
@@ -16,43 +16,61 @@
 ## Requirements
 - Node.js (v18+ recommended)
 - npm (Node Package Manager)
-
+- Docker & Docker Compose:
 ---
 
 ## Installation
 1. Clone the repository:
 ```
-git clone git@github.com:DorianLeci/Internship-15-Movie-Explorer.git
+git clone git@github.com:DorianLeci/Internship-17-Movie-Explorer-Api.git
 ```
 
 2. Navigate into the project folder:
 ```
-cd Internship-15-Movie-Explorer
-```
-
-3. Install dependencies:
-```
-npm install
+cd Internship-17-Movie-Explorer-Api
 ```
 
 ## Environment Variables
+1. Navigate into the backend folder:
+   ```
+   cd apps/backend
+   ```
 
-1. Copy the example environment file:
+2. Copy the example environment file content into .env:
    ```
    cp .env.example .env
    ```
+   Follow instructions from .env.example to generate secure JWT secret for signing access tokens
 
-2. Open .env and add your TMDB key: VITE_TMDB_API_KEY=YOUR_KEY_HERE
+3. Open .env and add your JWT secret: JWT_SECRET=your_secret_here
 
-3. If you don’t have a key yet, you can create a free account and generate one here: https://developer.themoviedb.org/docs/getting-started
-
-## Final
-
-1. Run the app:
+## Finally
+1. Navigate into the root folder:
    ```
-   npm run dev
+   cd ..
    ```
-2. Open the browser and visit: http://localhost:5173/ (by default) or click on the link from your terminal
+2. Run with docker compose:
+-  Windows/Mac
+   ```
+   docker compose up --build
+   ```
+-  Linux
+   ```
+   sudo usermod -aG docker $USER
+   docker compose up --build
+   ```
+---
+
+## Access
+
+   Frontend:
+   ```
+   http://localhost:5173/
+   ```
+   Backend Swagger documentation:
+   ```
+   http://localhost:3000/api
+   ```
 
 
 

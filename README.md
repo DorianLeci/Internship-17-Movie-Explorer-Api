@@ -30,6 +30,9 @@ git clone git@github.com:DorianLeci/Internship-17-Movie-Explorer-Api.git
 cd Internship-17-Movie-Explorer-Api
 ```
 3. Switch to the `user_model` branch (this branch is not yet merged into main):
+   ```
+   git switch -c user_model origin/user_model
+   ```
 
 ## Environment Variables
 1. Navigate into the backend folder:

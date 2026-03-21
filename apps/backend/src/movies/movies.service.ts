@@ -111,7 +111,7 @@ export class MoviesService {
     movieId: number,
     updateMovieDto: UpdateMovieDto,
   ): Promise<UpdateMovieResponse> {
-    if (Object.keys(UpdateMovieDto).length === 0)
+    if (Object.keys(updateMovieDto).length === 0)
       throw new BadRequestException('No fields to update');
 
     const existingMovie = await this.prisma.movie.findUnique({

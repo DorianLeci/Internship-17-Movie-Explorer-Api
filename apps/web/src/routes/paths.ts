@@ -7,5 +7,6 @@ export enum AppPaths {
   MOVIE_DETAIL = '/movies/:id',
   FAVORITES = '/favorites',
   NOT_FOUND = '/not-found',
+  FORBIDDEN = '/forbidden',
   NON_EXSTING = '*',
 }

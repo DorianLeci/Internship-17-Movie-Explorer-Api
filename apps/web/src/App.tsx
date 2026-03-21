@@ -25,6 +25,8 @@ const RegisterPage = lazy(() => import('@pages/Register/RegisterPage'));
 
 const LoginPage = lazy(() => import('@pages/Login/LoginPage'));
 
+const ForbiddenPage = lazy(() => import('@pages/Forbidden/ForbiddenPage'));
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -69,6 +71,7 @@ function App() {
               element={<MovieDetailsPage />}
             />
             <Route path={AppPaths.NOT_FOUND} element={<NotFoundPage />} />
+            <Route path={AppPaths.FORBIDDEN} element={<ForbiddenPage />} />
             <Route path={AppPaths.NON_EXSTING} element={<NotFoundPage />} />
           </Routes>
         </Layout>

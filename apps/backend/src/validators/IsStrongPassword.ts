@@ -13,11 +13,11 @@ export function IsStrongPassword(validationOptions?: ValidationOptions) {
       options: validationOptions,
       validator: {
         validate(value: any, args: ValidationArguments) {
-          const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+          const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
           return typeof value === 'string' && passwordRegex.test(value);
         },
         defaultMessage(args: ValidationArguments) {
-          return 'Password must be at least 8 characters long and contain both letters and numbers';
+          return 'Password must have 8 characters and  contain at least one letter, one number and one special character';
         },
       },
     });

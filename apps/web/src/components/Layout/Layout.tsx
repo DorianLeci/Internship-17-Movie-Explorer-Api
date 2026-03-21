@@ -1,6 +1,7 @@
 import useAuth from '@hooks/useAuth';
 import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { FaSignOutAlt } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 import { NavItems } from '../../helpers/NavItems';
 import styles from './Layout.module.scss';
@@ -49,7 +50,12 @@ export const Layout = ({ children }: LayoutProps) => {
               guestOnly={item.guestOnly}
             ></NavItem>
           ))}
-          {isLoggedIn && <button onClick={logout}>Logout</button>}
+          {isLoggedIn && (
+            <button className={styles.logoutButton} onClick={logout}>
+              <FaSignOutAlt size={30}></FaSignOutAlt>
+              <span>Logout</span>
+            </button>
+          )}
         </nav>
       </header>
       <main className={styles.main}>{children}</main>

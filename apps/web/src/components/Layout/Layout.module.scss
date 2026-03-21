@@ -45,6 +45,26 @@ container {
   font-size: 24px;
 }
 
+.logoutButton {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 24px;
+  text-shadow: 4px 0px 2px black;
+  color: white;
+  font-weight: bold;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: text-shadow 0.3s ease;
+
+  &:hover {
+    text-shadow:
+      0 0 4px white,
+      4px 2px 4px black;
+  }
+}
+
 .main {
   background: var(--bg-dark);
 }

@@ -1,4 +1,5 @@
 import useAuth from '@hooks/useAuth';
+import { AppPaths } from '@routes/paths';
 import type { Roles } from 'enums /Roles';
 import type { ReactNode } from 'react';
 import { Navigate, type RouteProps } from 'react-router-dom';
@@ -14,7 +15,7 @@ const PrivateRoute = ({ children, allowedRoles }: PrivateRouteProps) => {
   const userRole = user?.role;
 
   if (!allowedRoles.includes(userRole as Roles))
-    return <Navigate to="unauthorized" replace />;
+    return <Navigate to={AppPaths.FORBIDDEN} replace />;
 
   return <>{children}</>;
 };

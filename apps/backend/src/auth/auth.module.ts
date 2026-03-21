@@ -1,3 +1,4 @@
+import ACCESS_TOKEN_VALIDITY_DURATION_IN_SEC from '@constants/token-duration';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
@@ -16,11 +17,7 @@ import { LocalStrategy } from './strategy/local.strategy';
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: parseInt(
-            configService.getOrThrow<string>(
-              'ACCESS_TOKEN_VALIDITY_DURATION_IN_SEC',
-            ),
-          ),
+          expiresIn: ACCESS_TOKEN_VALIDITY_DURATION_IN_SEC,
         },
       }),
       inject: [ConfigService],

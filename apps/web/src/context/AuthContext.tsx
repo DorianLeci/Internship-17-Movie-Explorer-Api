@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
   user: AccessToken | undefined;
+  isLoading: boolean;
   logout: () => void;
   isLoggedIn: boolean;
   register: ReturnType<typeof useMutation<AuthResponse, any, AuthCredentials>>;
@@ -26,7 +27,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 const LOGIN_TIMEOUT = 2500;
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { data: user } = useMe();
+  const { data: user, isLoading } = useMe();
   const [_, setValue] = useLocalStorage<string | null>({
     key: LocalStorage.accessTokenKey,
     initialValue: null,
@@ -43,7 +44,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     toast.success('Successfully logged out');
 
     queryClient.setQueryData([QueryKeys.ME], null);
-    navigate(AppPaths.HOME, { replace: true });
   };
 
   const login = useMutation({
@@ -78,6 +78,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     <AuthContext.Provider
       value={{
         user,
+        isLoading,
         logout,
         isLoggedIn,
         login,

@@ -17,7 +17,7 @@ export function IsStrongPassword(validationOptions?: ValidationOptions) {
           return typeof value === 'string' && passwordRegex.test(value);
         },
         defaultMessage(args: ValidationArguments) {
-          return 'Password must have 8 characters and  contain at least one letter, one number and one special character';
+          return 'Password must have 8 characters and contain at least one letter, one number and one special character';
         },
       },
     });

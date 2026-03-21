@@ -9,7 +9,7 @@ export class RegisterRequestDto {
 
   @ApiProperty({
     description:
-      'User password, minimum 8 characters. Must have one at least one character and one number',
+      'User password, minimum 8 characters. Must have one at least one character, one number and one special character',
     minLength: 8,
   })
   @IsStrongPassword()

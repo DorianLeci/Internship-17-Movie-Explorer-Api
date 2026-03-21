@@ -1,3 +1,4 @@
+import Spinner from '@components/Spinner';
 import useAuth from '@hooks/useAuth';
 import { AppPaths } from '@routes/paths';
 import type { Roles } from 'enums /Roles';
@@ -10,7 +11,10 @@ type PrivateRouteProps = RouteProps & {
 };
 
 const PrivateRoute = ({ children, allowedRoles }: PrivateRouteProps) => {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) return <Spinner />;
+  if (!user) return <Navigate to={AppPaths.LOGIN} replace />;
 
   const userRole = user?.role;
 

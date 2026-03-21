@@ -45,7 +45,11 @@ const MoviesPage = ({ isAdmin = false }: MoviesPageProps) => {
         <MovieSearch />
         <MovieSort />
         <MovieFilter />
-        {isAdmin && <button onClick={openCreateModal}>+ Add Movie</button>}
+        {isAdmin && (
+          <button className={styles.addButton} onClick={openCreateModal}>
+            Add Movie
+          </button>
+        )}
       </div>
 
       <CreateMovieModal isOpen={isCreateModalOpen} onClose={closeCreateModal} />

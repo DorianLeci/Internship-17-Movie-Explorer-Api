@@ -1,6 +1,7 @@
 import { useGenres } from '@api/genres';
 import FormInput from '@components/FormInput';
 import MultiSelectInput from '@components/MultiSelectInput';
+import MOVIE_LIMITS from '@constants/movie';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Typography } from '@mui/material';
 import useEditMovie from '@pages/Movies/hooks/useEditMovie';
@@ -97,7 +98,7 @@ const EditMovieModal = ({ movieId, isOpen, onClose }: EditMovieModalProps) => {
             />
 
             <FormInput
-              label="Runtime (minutes)"
+              label={`Runtime (${MOVIE_LIMITS.RUNTIME.MIN}- ${MOVIE_LIMITS.RUNTIME.MAX}) minutes`}
               type="number"
               fullWidth
               margin="normal"
@@ -105,12 +106,12 @@ const EditMovieModal = ({ movieId, isOpen, onClose }: EditMovieModalProps) => {
               error={!!errors.runtime}
               helperText={errors.runtime?.message}
               slotProps={{
-                htmlInput: { min: 1 },
+                htmlInput: { step: MOVIE_LIMITS.RUNTIME.STEP },
               }}
             />
 
             <FormInput
-              label="Rating (1-10)"
+              label={`Rating (${MOVIE_LIMITS.RATING.MIN}- ${MOVIE_LIMITS.RATING.MAX})`}
               type="number"
               fullWidth
               margin="normal"
@@ -118,12 +119,12 @@ const EditMovieModal = ({ movieId, isOpen, onClose }: EditMovieModalProps) => {
               error={!!errors.rating}
               helperText={errors.rating?.message}
               slotProps={{
-                htmlInput: { min: 1, max: 10, step: 0.5 },
+                htmlInput: { step: MOVIE_LIMITS.RATING.STEP },
               }}
             />
 
             <FormInput
-              label="Popularity (0-10)"
+              label={`Popularity (${MOVIE_LIMITS.POPULARITY.MIN}- ${MOVIE_LIMITS.POPULARITY.MAX})`}
               type="number"
               fullWidth
               margin="normal"
@@ -131,7 +132,7 @@ const EditMovieModal = ({ movieId, isOpen, onClose }: EditMovieModalProps) => {
               error={!!errors.popularity}
               helperText={errors.popularity?.message}
               slotProps={{
-                htmlInput: { min: 0, max: 10, step: 0.5 },
+                htmlInput: { step: MOVIE_LIMITS.POPULARITY.STEP },
               }}
             />
 

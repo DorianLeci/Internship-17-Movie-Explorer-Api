@@ -12,6 +12,7 @@ import {
   Max,
   Min,
 } from 'class-validator';
+import MOVIE_LIMITS from 'src/constants/movie';
 
 export class CreateMovieDto {
   @ApiProperty()
@@ -24,21 +25,25 @@ export class CreateMovieDto {
   @IsNotEmpty({ message: 'Description cannot be empty' })
   description: string;
 
-  @ApiProperty({ description: 'Runtime in minutes', default: 1 })
+  @ApiProperty({
+    description: 'Runtime in minutes',
+    default: MOVIE_LIMITS.RUNTIME.DEFAULT_VALUE,
+  })
   @IsNumber()
-  @Min(1)
+  @Min(MOVIE_LIMITS.RUNTIME.MIN)
+  @Max(MOVIE_LIMITS.RUNTIME.MAX)
   runtime: number;
 
-  @ApiProperty({ default: 1 })
+  @ApiProperty({ default: MOVIE_LIMITS.RATING.DEFAULT_VALUE })
   @IsNumber()
-  @Min(1)
-  @Max(10)
+  @Min(MOVIE_LIMITS.RATING.MIN)
+  @Max(MOVIE_LIMITS.RATING.MAX)
   rating: number;
 
-  @ApiProperty()
+  @ApiProperty({ default: MOVIE_LIMITS.POPULARITY.DEFAULT_VALUE })
   @IsNumber()
-  @Min(0)
-  @Max(10)
+  @Min(MOVIE_LIMITS.POPULARITY.MIN)
+  @Max(MOVIE_LIMITS.POPULARITY.MAX)
   popularity: number;
 
   @ApiProperty({ required: false })

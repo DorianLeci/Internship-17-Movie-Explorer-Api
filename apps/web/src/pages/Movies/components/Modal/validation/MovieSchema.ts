@@ -1,3 +1,4 @@
+import MOVIE_LIMITS from '@constants/movie';
 import * as yup from 'yup';
 
 const movieSchema = yup
@@ -10,15 +11,29 @@ const movieSchema = yup
         originValue === '' ? undefined : value,
       )
       .required('Runtime is required')
-      .min(1, 'Runtime must be at least one minute'),
+      .min(
+        MOVIE_LIMITS.RUNTIME.MIN,
+        `Runtime must be at least ${MOVIE_LIMITS.RUNTIME.MIN} minute`,
+      )
+      .max(
+        MOVIE_LIMITS.RUNTIME.MAX,
+        `Runtime cannot exceed ${MOVIE_LIMITS.RUNTIME.MAX}`,
+      ),
+
     rating: yup
       .number()
       .transform((value, originValue) =>
         originValue === '' ? undefined : value,
       )
       .required('Rating is required')
-      .min(1, 'Rating must be at least 0')
-      .max(10, 'Rating cannot exceed 10'),
+      .min(
+        MOVIE_LIMITS.RATING.MIN,
+        `Rating must be at least ${MOVIE_LIMITS.RATING.MIN}`,
+      )
+      .max(
+        MOVIE_LIMITS.RATING.MAX,
+        `Rating cannot exceed ${MOVIE_LIMITS.RATING.MAX}`,
+      ),
 
     popularity: yup
       .number()
@@ -26,8 +41,14 @@ const movieSchema = yup
         originValue === '' ? undefined : value,
       )
       .required('Popularity is required')
-      .min(0, 'Popularity must be at least 0')
-      .max(10, 'Popularity cannot exceed 10'),
+      .min(
+        MOVIE_LIMITS.POPULARITY.MIN,
+        `Popularity must be at least ${MOVIE_LIMITS.POPULARITY.MIN}`,
+      )
+      .max(
+        MOVIE_LIMITS.POPULARITY.MAX,
+        `Popularity cannot exceed ${MOVIE_LIMITS.POPULARITY.MAX}`,
+      ),
 
     posterUrl: yup
       .string()
@@ -78,20 +99,40 @@ export const editMovieSchema = yup.object({
     .number()
     .transform((value, originValue) => (originValue === '' ? undefined : value))
     .optional()
-    .min(1, 'Runtime must be at least one minute'),
+    .min(
+      MOVIE_LIMITS.RUNTIME.MIN,
+      `Runtime must be at least ${MOVIE_LIMITS.RUNTIME.MIN} minute`,
+    )
+    .max(
+      MOVIE_LIMITS.RUNTIME.MAX,
+      `Runtime cannot exceed ${MOVIE_LIMITS.RUNTIME.MAX}`,
+    ),
+
   rating: yup
     .number()
     .transform((value, originValue) => (originValue === '' ? undefined : value))
     .optional()
-    .min(1, 'Rating must be at least 0')
-    .max(10, 'Rating cannot exceed 10'),
+    .min(
+      MOVIE_LIMITS.RATING.MIN,
+      `Rating must be at least ${MOVIE_LIMITS.RATING.MIN}`,
+    )
+    .max(
+      MOVIE_LIMITS.RATING.MAX,
+      `Rating cannot exceed ${MOVIE_LIMITS.RATING.MAX}`,
+    ),
 
   popularity: yup
     .number()
     .transform((value, originValue) => (originValue === '' ? undefined : value))
     .optional()
-    .min(0, 'Popularity must be at least 0')
-    .max(10, 'Popularity cannot exceed 10'),
+    .min(
+      MOVIE_LIMITS.POPULARITY.MIN,
+      `Popularity must be at least ${MOVIE_LIMITS.POPULARITY.MIN}`,
+    )
+    .max(
+      MOVIE_LIMITS.POPULARITY.MAX,
+      `Popularity cannot exceed ${MOVIE_LIMITS.POPULARITY.MAX}`,
+    ),
 
   posterUrl: yup
     .string()

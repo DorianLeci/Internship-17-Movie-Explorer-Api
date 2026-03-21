@@ -25,7 +25,7 @@ const FormInput = (props: TextFieldProps) => {
         },
 
         '& label.MuiInputLabel-root': {
-          color: 'white',
+          color: 'rgba(255,255,255,0.7)',
           fontSize: '24px',
         },
 

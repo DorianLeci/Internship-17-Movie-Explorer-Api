@@ -19,7 +19,8 @@
       "@assets/*": ["assets/*"],
       "@helpers/*": ["helpers/*"],
       "@context/*": ["context/*"],
-      "@routes/*": ["routes/*"]
+      "@routes/*": ["routes/*"],
+      "@constants/*": ["constants/*"]
     },
 
     /* Bundler mode */

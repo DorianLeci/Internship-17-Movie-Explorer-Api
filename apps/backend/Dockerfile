@@ -8,9 +8,9 @@ RUN npm install
 
 COPY . .
 
-RUN chmod +x docker-entrypoint.sh
+RUN chmod +x ./docker-entrypoint.sh
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["sh","./docker-entrypoint.sh"]
 
 EXPOSE 3000
 

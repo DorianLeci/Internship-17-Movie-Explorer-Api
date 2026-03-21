@@ -1,3 +1,4 @@
+import MOVIE_LIMITS from '@constants/movie';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotPastDate } from '@validators/IsNotPastDate';
 import {
@@ -12,7 +13,6 @@ import {
   Max,
   Min,
 } from 'class-validator';
-import MOVIE_LIMITS from 'src/constants/movie';
 
 export class CreateMovieDto {
   @ApiProperty()
@@ -62,7 +62,9 @@ export class CreateMovieDto {
   )
   trailerKey?: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    default: new Date(new Date().setHours(23, 59, 59, 999)).toISOString(),
+  })
   @IsDateString()
   @IsNotPastDate()
   releaseDate: string;

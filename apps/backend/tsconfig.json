@@ -23,7 +23,8 @@
       "@tstypes/*": ["src/types/*"],
       "@validators/*": ["src/validators/*"],
       "@guards/*": ["src/guards/*"],
-      "@roles/*": ["src/roles/*"]
+      "@roles/*": ["src/roles/*"],
+      "@constants/*": ["src/constants/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

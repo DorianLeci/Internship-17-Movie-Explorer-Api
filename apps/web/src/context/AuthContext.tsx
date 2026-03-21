@@ -44,6 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     toast.success('Successfully logged out');
 
     queryClient.setQueryData([QueryKeys.ME], null);
+    navigate(AppPaths.LOGIN);
   };
 
   const login = useMutation({

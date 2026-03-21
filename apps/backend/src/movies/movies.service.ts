@@ -1,5 +1,9 @@
 import SortOrder from '@enums/SortOrder';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '@prisma/prisma.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { FindMoviesDto } from './dto/find-movies.dto';
@@ -83,7 +87,6 @@ export class MoviesService {
   }
 
   async create(createMovieDto: CreateMovieDto): Promise<number> {
-    console.log('Dto: ', createMovieDto);
     const movie = await this.prisma.movie.create({
       data: {
         title: createMovieDto.title,
@@ -108,6 +111,9 @@ export class MoviesService {
     movieId: number,
     updateMovieDto: UpdateMovieDto,
   ): Promise<UpdateMovieResponse> {
+    if (Object.keys(UpdateMovieDto).length === 0)
+      throw new BadRequestException('No fields to update');
+
     const existingMovie = await this.prisma.movie.findUnique({
       where: { id: movieId },
     });
@@ -129,5 +135,18 @@ export class MoviesService {
       id: movieId,
       updatedFields: updateMovieDto,
     };
+  }
+
+  async delete(movieId: number): Promise<void> {
+    const existingMovie = await this.prisma.movie.findUnique({
+      where: { id: movieId },
+    });
+
+    if (!existingMovie)
+      throw new NotFoundException(`Movie with id ${movieId} not found`);
+
+    await this.prisma.movie.delete({
+      where: { id: movieId },
+    });
   }
 }

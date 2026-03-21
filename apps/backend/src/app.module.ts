@@ -1,6 +1,7 @@
+import { CustomThrottlerGuard } from '@guards/custom-throttler.guard';
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { seconds, ThrottlerModule } from '@nestjs/throttler';
 import { PrismaModule } from '@prisma/prisma.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -22,7 +23,7 @@ import { UsersModule } from './users/users.module';
       throttlers: [
         {
           ttl: seconds(60),
-          limit: 100,
+          limit: 30,
         },
       ],
     }),
@@ -32,7 +33,7 @@ import { UsersModule } from './users/users.module';
     AppService,
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard,
+      useClass: CustomThrottlerGuard,
     },
   ],
 })

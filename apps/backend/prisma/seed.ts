@@ -38,6 +38,9 @@ const adapter = new PrismaPg({
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+  const movieCount = await prisma.movie.count();
+  if (movieCount > 0) return;
+
   const hashedAdmin = await bcrypt.hash('admin123', 10);
 
   await prisma.user.upsert({

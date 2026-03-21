@@ -2,6 +2,7 @@ import { OptionalTokenGuard } from '@guards/optional-token.gaurd';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -14,6 +15,7 @@ import {
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
 } from '@nestjs/swagger';
@@ -83,7 +85,7 @@ export class MoviesController {
   @Patch(':id')
   @ApiBearerAuth('access-token')
   @ApiCreatedResponse({
-    description: 'Movie succesfully updated',
+    description: 'Movie successfully updated',
     type: MovieEntity,
   })
   update(
@@ -91,5 +93,16 @@ export class MoviesController {
     @Body() dto: UpdateMovieDto,
   ) {
     return this.moviesService.update(movieId, dto);
+  }
+
+  @AuthRoles(Role.ADMIN)
+  @Delete(':id')
+  @ApiBearerAuth('access-token')
+  @ApiNoContentResponse({
+    description: 'Movie successfully deleted',
+    type: MovieEntity,
+  })
+  delete(@Param('id', ParseIntPipe) movieId: number) {
+    return this.moviesService.delete(movieId);
   }
 }

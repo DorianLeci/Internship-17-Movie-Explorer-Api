@@ -10,16 +10,16 @@ import loginSchema from './validation/LoginSchema';
 type LoginFormValues = yup.InferType<typeof loginSchema>;
 
 const LoginPage = () => {
-  const { loginMutation } = useAuth();
+  const { login } = useAuth();
 
   const {
-    register: login,
+    register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormValues>({ resolver: yupResolver(loginSchema) });
 
   const onSubmit: SubmitHandler<LoginFormValues> = (data) => {
-    loginMutation.mutate({
+    login.mutate({
       email: data.email,
       password: data.password,
     });
@@ -31,9 +31,9 @@ const LoginPage = () => {
           maxWidth: 400,
           margin: '0px auto',
           padding: 4,
-          boxShadow: 'var(--card-shadow)',
+          boxShadow: 'var(--form-shadow)',
           borderRadius: 2,
-          background: 'var(--card-bg)',
+          background: 'var(--bg-dark)',
         }}
       >
         <Typography
@@ -41,7 +41,7 @@ const LoginPage = () => {
           sx={{
             mb: 4,
             fontSize: '28px',
-            textShadow: 'var(--text-shadow-black)',
+            fontWeight: 'bold',
             textAlign: 'center',
           }}
         >
@@ -53,7 +53,7 @@ const LoginPage = () => {
             label="Email"
             fullWidth
             margin="normal"
-            {...login('email')}
+            {...register('email')}
             error={!!errors.email}
             helperText={errors.email?.message}
           />
@@ -62,7 +62,7 @@ const LoginPage = () => {
             type="password"
             fullWidth
             margin="normal"
-            {...login('password')}
+            {...register('password')}
             error={!!errors.password}
             helperText={errors.password?.message}
           />
@@ -77,7 +77,7 @@ const LoginPage = () => {
               backgroundColor: 'var(--color-peach)',
             }}
           >
-            {loginMutation.isPending ? 'Logging in...' : 'Login'}
+            {login.isPending ? 'Logging in...' : 'Login'}
           </Button>
         </form>
       </Box>

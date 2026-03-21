@@ -1,4 +1,5 @@
 import { Layout } from '@components/Layout/Layout';
+import { AuthProvider } from '@context/AuthContext';
 import { MovieProvider } from '@context/MoviesContext';
 import { AppPaths } from '@routes/paths';
 import PrivateRoute from '@routes/Private/PrivateRoute';
@@ -27,46 +28,51 @@ const LoginPage = lazy(() => import('@pages/Login/LoginPage'));
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Layout>
-        <Routes>
-          <Route path={AppPaths.REGISTER} element={<RegisterPage />} />
-          <Route path={AppPaths.LOGIN} element={<LoginPage />} />
-          <Route path={AppPaths.HOME} element={<HomePage />} />
+      <AuthProvider>
+        <Layout>
+          <Routes>
+            <Route path={AppPaths.REGISTER} element={<RegisterPage />} />
+            <Route path={AppPaths.LOGIN} element={<LoginPage />} />
+            <Route path={AppPaths.HOME} element={<HomePage />} />
 
-          <Route
-            path={AppPaths.MOVIES}
-            element={
-              <MovieProvider>
-                <MoviesPage />
-              </MovieProvider>
-            }
-          />
-
-          <Route
-            path={AppPaths.FAVORITES}
-            element={
-              <PrivateRoute allowedRoles={[Roles.USER, Roles.ADMIN]}>
-                <FavoriteMoviesPage />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path={AppPaths.ADMIN_MOVIES}
-            element={
-              <PrivateRoute allowedRoles={[Roles.ADMIN]}>
+            <Route
+              path={AppPaths.MOVIES}
+              element={
                 <MovieProvider>
-                  <MoviesPage isAdmin={true} />
+                  <MoviesPage />
                 </MovieProvider>
-              </PrivateRoute>
-            }
-          />
+              }
+            />
 
-          <Route path={AppPaths.MOVIE_DETAIL} element={<MovieDetailsPage />} />
-          <Route path={AppPaths.NOT_FOUND} element={<NotFoundPage />} />
-          <Route path={AppPaths.NON_EXSTING} element={<NotFoundPage />} />
-        </Routes>
-      </Layout>
+            <Route
+              path={AppPaths.FAVORITES}
+              element={
+                <PrivateRoute allowedRoles={[Roles.USER, Roles.ADMIN]}>
+                  <FavoriteMoviesPage />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path={AppPaths.ADMIN_MOVIES}
+              element={
+                <PrivateRoute allowedRoles={[Roles.ADMIN]}>
+                  <MovieProvider>
+                    <MoviesPage isAdmin={true} />
+                  </MovieProvider>
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path={AppPaths.MOVIE_DETAIL}
+              element={<MovieDetailsPage />}
+            />
+            <Route path={AppPaths.NOT_FOUND} element={<NotFoundPage />} />
+            <Route path={AppPaths.NON_EXSTING} element={<NotFoundPage />} />
+          </Routes>
+        </Layout>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

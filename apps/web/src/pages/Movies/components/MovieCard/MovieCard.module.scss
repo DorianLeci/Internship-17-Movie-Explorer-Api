@@ -79,14 +79,30 @@
 
 .editButton {
   position: absolute;
-  top: -20px;
+  top: -30px;
   left: -10px;
   color: var(--color-peach);
   border: none;
   background: none;
   cursor: pointer;
+  transition: transform 0.2s ease;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.2);
+  }
+}
+
+.deleteButton {
+  position: absolute;
+  top: -30px;
+  left: 50px;
+  color: var(--color-peach);
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.2);
   }
 }

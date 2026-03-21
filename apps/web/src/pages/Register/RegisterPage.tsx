@@ -10,7 +10,7 @@ import registerSchema from './validation/RegisterSchema';
 type RegisterFormValues = yup.InferType<typeof registerSchema>;
 
 const RegisterPage = () => {
-  const { registerMutation } = useAuth();
+  const { register: registerMutation } = useAuth();
 
   const {
     register,
@@ -32,9 +32,9 @@ const RegisterPage = () => {
           maxWidth: 400,
           margin: '0px auto',
           padding: 4,
-          boxShadow: 'var(--card-shadow)',
+          boxShadow: 'var(--form-shadow)',
           borderRadius: 2,
-          background: 'var(--card-bg)',
+          background: 'var(--bg-dark)',
         }}
       >
         <Typography
@@ -42,7 +42,7 @@ const RegisterPage = () => {
           sx={{
             mb: 4,
             fontSize: '28px',
-            textShadow: 'var(--text-shadow-black)',
+            fontWeight: 'bold',
             textAlign: 'center',
           }}
         >

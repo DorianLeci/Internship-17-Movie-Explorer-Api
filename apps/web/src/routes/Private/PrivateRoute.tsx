@@ -1,5 +1,4 @@
-import { useMe } from '@api/useMe';
-import Spinner from '@components/Spinner';
+import useAuth from '@hooks/useAuth';
 import type { Roles } from 'enums /Roles';
 import type { ReactNode } from 'react';
 import { Navigate, type RouteProps } from 'react-router-dom';
@@ -10,11 +9,9 @@ type PrivateRouteProps = RouteProps & {
 };
 
 const PrivateRoute = ({ children, allowedRoles }: PrivateRouteProps) => {
-  const { data, isLoading } = useMe();
+  const { user } = useAuth();
 
-  if (isLoading) return <Spinner />;
-
-  const userRole = data?.role;
+  const userRole = user?.role;
 
   if (!allowedRoles.includes(userRole as Roles))
     return <Navigate to="unauthorized" replace />;

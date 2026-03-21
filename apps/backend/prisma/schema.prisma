@@ -100,7 +100,7 @@ model TopCast{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   movieId Int
-  movie Movie @relation(fields: [movieId], references: [id])
+  movie Movie @relation(fields: [movieId], references: [id],onDelete: Cascade)
 }
 
 model TopCrew{
@@ -110,7 +110,7 @@ model TopCrew{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   movieId Int
-  movie Movie @relation(fields: [movieId], references: [id])
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
 }
 
 model Review{
@@ -120,5 +120,5 @@ model Review{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt  
   movieId Int
-  movie Movie @relation(fields: [movieId], references: [id])  
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)  
 }

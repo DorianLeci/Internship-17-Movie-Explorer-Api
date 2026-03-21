@@ -1,0 +1,31 @@
+.popup {
+  background: var(--card-bg);
+  border-radius: 40px;
+  color: white;
+  font-family: 'Inter', sans-serif;
+}
+
+.confirm,
+.cancel {
+  width: 100px;
+  padding: 10px 20px;
+  font-size: 28px;
+  text-align: center;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  background: var(--bg-dark);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 6px 2px var(--color-peach);
+  }
+}
+
+:global(.swal2-actions) {
+  justify-content: center;
+  gap: 1rem;
+}

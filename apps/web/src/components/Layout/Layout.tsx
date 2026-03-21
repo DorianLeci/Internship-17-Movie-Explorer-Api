@@ -1,57 +1,19 @@
-import LocalStorage from '@api/helpers/LocalStorage';
-import { QueryKeys } from '@api/QueryKeys';
-import { useMe } from '@api/useMe';
-import { useLocalStorage } from '@hooks/useLocalStorage';
-import { AppPaths } from '@routes/paths';
-import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useMemo } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import useAuth from '@hooks/useAuth';
+import { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
+import { useLocation } from 'react-router-dom';
 import { NavItems } from '../../helpers/NavItems';
 import styles from './Layout.module.scss';
+import NavItem from './components/NavItem/NavItem';
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-const LOGOUT_TIMEOUT = 2500;
-
 export const Layout = ({ children }: LayoutProps) => {
   const { pathname } = useLocation();
-  const [_, setValue] = useLocalStorage<string | null>({
-    key: LocalStorage.accessTokenKey,
-    initialValue: null,
-  });
 
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
-
-  const { data } = useMe();
-  const isLoggedIn = !!data;
-
-  const filteredNavItems = useMemo(() => {
-    return NavItems.filter((item) => {
-      if (
-        isLoggedIn &&
-        (item.path === AppPaths.REGISTER || item.path === AppPaths.LOGIN)
-      )
-        return false;
-
-      if (!isLoggedIn && item.path === AppPaths.FAVORITES) return false;
-
-      return true;
-    });
-  }, [data]);
-
-  const handleLogout = () => {
-    setValue(null);
-    localStorage.removeItem(LocalStorage.accessTokenKey);
-    toast.success('Successfully logged out');
-
-    queryClient.setQueryData([QueryKeys.ME], null);
-
-    setTimeout(() => navigate(AppPaths.HOME), LOGOUT_TIMEOUT);
-  };
+  const { isLoggedIn, logout } = useAuth();
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -78,18 +40,16 @@ export const Layout = ({ children }: LayoutProps) => {
       <header className={styles.header}>
         <h1>Movie Explorer</h1>
         <nav className={styles.nav}>
-          {filteredNavItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              className={({ isActive }) =>
-                `${styles.link}  ${isActive ? styles.active : ''}`
-              }
-            >
-              {item.label}
-            </NavLink>
+          {NavItems.map((item) => (
+            <NavItem
+              key={item.label}
+              path={item.path}
+              label={item.label}
+              roles={item.roles}
+              guestOnly={item.guestOnly}
+            ></NavItem>
           ))}
-          {isLoggedIn && <button onClick={handleLogout}>Logout</button>}
+          {isLoggedIn && <button onClick={logout}>Logout</button>}
         </nav>
       </header>
       <main className={styles.main}>{children}</main>

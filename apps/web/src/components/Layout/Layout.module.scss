@@ -45,50 +45,6 @@ container {
   font-size: 24px;
 }
 
-.link {
-  position: relative;
-  z-index: 0;
-  color: white;
-  font-weight: 600;
-  text-decoration: none;
-  text-shadow: 4px 0px 2px black;
-  transition:
-    color 0.3s ease,
-    text-shadow 0.3s ease;
-
-  &::after {
-    content: '';
-    position: absolute;
-    z-index: -1;
-    left: 0px;
-    bottom: 2px;
-    width: 100%;
-    height: 5px;
-    opacity: 0;
-    background-color: var(--color-aqua);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition:
-      transform 0.3s ease,
-      opacity 0.3s ease;
-  }
-
-  &:hover {
-    text-shadow:
-      0 0 4px white,
-      4px 2px 4px black;
-  }
-
-  &.active {
-    position: relative;
-
-    &::after {
-      transform: scaleX(1);
-      opacity: 1;
-    }
-  }
-}
-
 .main {
   background: var(--bg-dark);
 }
